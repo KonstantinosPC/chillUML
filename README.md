@@ -21,6 +21,6 @@ docker start/stop chillDB
 To run the spring boot app after you succesfully started the database you need to go into the program folder and run the maven command to start it.
 ```
 cd chillUML
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 
