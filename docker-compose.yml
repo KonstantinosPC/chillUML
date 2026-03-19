@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: chillDB
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: chilluml
+      MARIADB_USER: chilluml_user
+      MARIADB_PASSWORD: ch1ll_u3l_f4ck3rs
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./chillDB:/var/lib/mysql
