@@ -6,23 +6,50 @@
     </head>
     <body>
         
+        <script>
+            function profileDrop(){
+                if(document.getElementById("profile-drop").style.display == "none"){
+                    document.getElementById("profile-drop").style.display = "unset";
+                }else{
+                    document.getElementById("profile-drop").style.display = "none";
+                }
+            }
+        </script>
+
         <nav>
             <div class="left">
                 <a href="./index.html"><img src="./assets/img/logo.png" alt=""></a>
             </div>
             <div class="right">
-                <div class="profile">
-                    <span>Konstantinos Iliopoulos</span>
+                <button onclick="profileDrop()" class="profile">
+                    <span>Konstantinos</span>
                     <img src="./assets/img/panda-coffee.png" alt="">
-                </div>
+                </button>
             </div>
 
-            <div class="profile-drop">
+            <div id="profile-drop" class="profile-drop">
                 <button class="username" disabled>Konstantinos Iliopoulos</button>
                 <button>Profile Settings</button>
                 <button class="logout">Log Out</button>
             </div>
         </nav>
+
+
+        <main>
+            <div class="projects-container">
+                <div class="task-bar">
+                    <div class="search-bar">
+                        <input placeholder="Search Project" type="text">
+                    </div>
+                    <div class="actions">
+                        <button>Create New</button>
+                        <button>Edit</button>
+                        <button>Delete</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
 
     </body>
 </html>
