@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import chill.guys.chillUML.domain.User;
 import chill.guys.chillUML.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserServicesImpl implements UserService {
 
-    CharSequence specialChars =
-            "+-*/%=!<>&|^~(){}[];,.?:@_$";
+    CharSequence specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
     @Autowired
     private final PasswordEncoder passwordEncoder = new MessageDigestPasswordEncoder("SHA-256");
 
