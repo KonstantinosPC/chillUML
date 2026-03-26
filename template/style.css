@@ -6,6 +6,8 @@ main{
     left: 0;
 }
 
+/* Login */
+
 .login{
     padding: 10px;
     width: 30%;
@@ -19,6 +21,18 @@ main{
     .login{
         width: 80%;
     }
+}
+
+.login p{
+    font-family: sans-serif;
+}
+
+.login p a{
+    color: rgb(0, 148, 148);
+}
+
+.login h1{
+    font-family: sans-serif;
 }
 
 .login .error{
@@ -37,8 +51,10 @@ main{
     margin-bottom: 5px;
     padding: 10px;
     border-radius: 5px;
-    border: none;
+    border: solid 0.1px rgba(255, 255, 255, 0);
     box-shadow: 0px 0px 5px -3px black;
+    outline: none;
+    
 }
 
 .login button{
@@ -53,6 +69,48 @@ main{
     transition: 100ms;
 }
 
+/* Sign Up - Password Strength */
+
+.strength-container {
+    width: 90%;
+    height: 8px;
+    background-color: #ddd;
+    margin: 10px auto;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#strength-bar {
+    height: 100%;
+    width: 0%;
+    transition: 0.3s ease-in-out;
+}
+
+
+.checklist {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    width: 90%;
+    margin: 10px auto;
+    font-family: sans-serif;
+    font-size: 0.85rem;
+}
+
+.checklist li {
+    color: #888;
+    margin-bottom: 5px;
+    transition: 0.3s;
+}
+
+.checklist li.valid {
+    color: #2ecc71;
+}
+
+.checklist li.valid::before {
+    content: "✔ ";
+}
+
 /* Notification */
 
 @keyframes notification {
@@ -60,25 +118,26 @@ main{
         max-width: 0;
         padding: 0;
         opacity: 0;
-        border-right: none;
+        border-right-width: none;
     }10%{
         max-width: 100%;
         padding: 3px 15px 3px 15px;
         opacity: 1;
-        border-right: solid 5px rgb(58, 58, 58);
+        border-right-width: 5px ;
 
     }90%{
         max-width: 100%;
         padding: 3px 15px 3px 15px;
         opacity: 1;
-        border-right: solid 5px rgb(58, 58, 58);
+        border-right-width: 5px;
     }100%{
         max-width: 0;
         padding: 0;
         opacity: 0;
-        border-right: none;
+        border-right-width: 0;
     }
 }
+
 
 .notifications{
     position: absolute;
@@ -90,6 +149,12 @@ main{
     align-items: flex-end;
     gap: 10px;
     pointer-events: none;
+}
+
+@media screen and (max-width: 900px) {
+    .notifications{
+        max-width: 80%;
+    }
 }
 
 .notification{
@@ -105,7 +170,10 @@ main{
     transition: 500ms;
     overflow: hidden;
     animation: forwards 5s notification;
+    box-shadow: 0px 0px 5px 0px black;
 }
+
+
 
 .info span{
     color:deepskyblue;
@@ -117,4 +185,13 @@ main{
 
 .check span{
     color: lime;
+}
+
+.critical{
+    background: rgb(92, 0, 0);
+    border-right: solid 5px rgb(141, 0, 0);
+}
+
+.critical span{
+    color: red;
 }
