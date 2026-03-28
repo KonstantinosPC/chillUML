@@ -323,13 +323,73 @@ main{
     width: 65%;
     border-radius: 10px;
     box-shadow: 0px 0px 5px -3px black;
+    margin-top: 100px;
     max-height: 80%;
     overflow-y: scroll;
     overflow-x: hidden;
     scrollbar-width: none;
 }
 
+@media screen and (max-width: 900px) {
+    .selected-project{
+        width: 90%;
+    }
+}
+
 .selected-project .project-info{
     width: 100%;
     padding: 10px;
+}
+
+/* Project Material */
+.project-material{
+    margin: auto;
+    scrollbar-width: none;
+    display: flex;
+    gap: 10px;
+    width: 90%;
+    overflow: hidden;
+    overflow-x: scroll;
+}
+
+.project-material .crc{
+    width: 260px;
+    background: rgb(255, 244, 225);
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px -3px black;
+    padding: 5px;
+    min-height: 300px;
+    max-height: 400px;
+    overflow: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
+
+.project-material .crc .title, .project-material .uc .title{
+    margin: 0;
+    width: 100%;
+    font-size: 20px;
+    background: rgb(255, 230, 187);
+    border-radius: 5px;
+}
+
+.project-material .crc h2, .project-material .uc h2{
+    margin: 0;
+    font-weight: lighter;
+    font-size: 15px;
+    
+}
+
+.project-material .crc td, .project-material .crc th{
+    width: 49%;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0px 0px 5px -3px black;
+    padding: 5px;
+    text-align: center;
+}
+
+.project-material .crc th{
+    background: rgb(0, 126, 194);
+    color: white;
 }
