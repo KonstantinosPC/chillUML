@@ -51,7 +51,7 @@ public class UserServicesImpl implements UserServices {
             userDAO.save(user);
             return null;
         } else {
-            model.addAttribute("errors","The password and the password confirmation do not match");
+            model.addAttribute("errors","The password and the confirmation password do not match");
             return model;
         }
     }
