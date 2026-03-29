@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 public interface UserServices {
     public Model saveUser(User user,String confirmationPassword);
     public boolean isUserPresent(String username);
-    public boolean login(String username,String password);
+    public Model login(String username,String password);
     public User findById(int id);
     public User findByEmail(String email);
 }

@@ -10,13 +10,14 @@ import org.springframework.ui.Model;
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+
 @Service
 public class UserServicesImpl implements UserServices {
 
     CharSequence specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
     @Autowired
     private final PasswordEncoder passwordEncoder = new MessageDigestPasswordEncoder("SHA-256");
-
+    Model model;
     @Autowired
     private UserRepository userDAO;
 
@@ -24,39 +25,34 @@ public class UserServicesImpl implements UserServices {
     public Model saveUser(User user, String confirmationPassword) {
         if (!isUserPresent(user.getUsername())) {
             if (user.getUsername().length() > 15) {
-                // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-                System.out.print("This username is over 15 characters long");
-                // Kwstaki kanto na mhn proxwraei
+                model.addAttribute("errors","This username is over 15 characters long");
+                return model;
             }
         } else {
-            // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-            System.out.print("This username already exists");
-            // Kwstaki kanto na mhn proxwraei
+            model.addAttribute("errors","This username already exists");
+            return model;
         }
         if (findByEmail(user.getEmail()) != null) {
-            // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-            System.out.print("This email is already in use");
-            // Kwstaki kanto na mhn proxwraei
+            model.addAttribute("errors","This email is already in use");
+            return model;
         }
         if (user.verifyPassword(confirmationPassword)) {
             if (confirmationPassword.length() < 8) {
-                // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-                System.out.print("Password >= 8 characters long");
-                // Kwstaki kanto na mhn proxwraei
+                model.addAttribute("errors","Password >= 8 characters long");
+                return model;
             }
             if (!(confirmationPassword.contains(specialChars))) {
-                // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-                System.out.print("Please use at least one special character");
-                // Kwstaki kanto na mhn proxwraei
+                model.addAttribute("errors","Please use at least one special character");
+                return model;
             }
 
             String hashed = passwordEncoder.encode(confirmationPassword);
             user.setPassword(hashed);
             userDAO.save(user);
+            return null;
         } else {
-            // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-            System.out.print("The password and the password confirmation do not match");
-            // Kwstaki kanto na mhn proxwraei
+            model.addAttribute("errors","The password and the password confirmation do not match");
+            return model;
         }
     }
 
@@ -66,23 +62,20 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public boolean login(String username, String password) {
+    public Model login(String username, String password) {
         String hashed = passwordEncoder.encode(password);
         User user = findByUsername(username);
         if(user != null){
             if(user.verifyPassword(hashed)){
-                return true;
+                return null;
             }else{
-                // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-                System.out.print("The password is incorect");
-                // Kwstaki kanto na mhn proxwraei
+                model.addAttribute("errors","The password is incorrect");
+                return model;
             }
         }else{
-            // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-            System.out.print("This user does not exist");
-            // Kwstaki kanto na mhn proxwraei
+            model.addAttribute("errors","This user does not exist");
+            return model;
         }
-        return user.verifyPassword(hashed);
     }
 
     @Override
