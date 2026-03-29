@@ -352,7 +352,7 @@ main{
     overflow-x: scroll;
 }
 
-.project-material .crc{
+.project-material .crc, .project-material .uc{
     width: 260px;
     background: rgb(255, 244, 225);
     border-radius: 5px;
