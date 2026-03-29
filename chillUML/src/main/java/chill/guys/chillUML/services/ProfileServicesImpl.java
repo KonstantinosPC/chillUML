@@ -15,8 +15,7 @@ public class ProfileServicesImpl implements ProfileServices {
     private UserRepository userDAO;
 
     private final PasswordEncoder passwordEncoder = new MessageDigestPasswordEncoder("SHA-256");
-
-    // Βοηθητική μέθοδος για να βρίσκουμε τον τρέχοντα συνδεδεμένο χρήστη
+    
     private User getAuthenticatedUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return userDAO.findByUsername(username);
