@@ -22,6 +22,7 @@ public class UserServicesImpl implements UserService {
 
     @Autowired
     private UserRepository userDAO;
+
     @Override
     public void saveUser(User user, String confirmationPassword) {
         if (!isUserPresent(user)) {
@@ -61,7 +62,7 @@ public class UserServicesImpl implements UserService {
             // Kwstaki kanto na mhn proxwraei
         }
     }
-    
+
     @Override
     public boolean isUserPresent(User user) {
         return userDAO.findByUsername(user.getUsername()) != null;
@@ -71,6 +72,19 @@ public class UserServicesImpl implements UserService {
     public boolean login(String username, String password) {
         String hashed = passwordEncoder.encode(password);
         User user = findByUsername(username);
+        if(user != null){
+            if(user.verifyPassword(hashed)){
+                return true;
+            }else{
+                // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
+                System.out.print("The password is incorect");
+                // Kwstaki kanto na mhn proxwraei
+            }
+        }else{
+            // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
+            System.out.print("This user does not exist");
+            // Kwstaki kanto na mhn proxwraei
+        }
         return user.verifyPassword(hashed);
     }
 
@@ -87,6 +101,5 @@ public class UserServicesImpl implements UserService {
     public User findByUsername(String username) {
         return userDAO.findByUsername(username);
     }
-
 
 }
