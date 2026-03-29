@@ -16,8 +16,8 @@ public class ProfileServicesImpl implements ProfileServices {
     private final PasswordEncoder passwordEncoder = new MessageDigestPasswordEncoder("SHA-256");
 
     @Override
-    public void changeProfilePicture(int userId, String profilePicture) {
-        User user = userDAO.findById(userId);
+    public void changeProfilePicture(User user, String profilePicture) {
+        //User user = userDAO.findById(userId);
         if (user != null) {
             user.setProfilePicture(profilePicture);
             userDAO.save(user);
@@ -25,8 +25,8 @@ public class ProfileServicesImpl implements ProfileServices {
     }
 
     @Override
-    public void changeProfileUsername(int userId, String username) {
-        User user = userDAO.findById(userId);
+    public void changeProfileUsername(User user, String username) {
+        //User user = userDAO.findById(userId);
         if (user != null) {
             user.setUsername(username);
             userDAO.save(user);
@@ -34,8 +34,8 @@ public class ProfileServicesImpl implements ProfileServices {
     }
 
     @Override
-    public void changeProfileEmail(int userId, String email) {
-        User user = userDAO.findById(userId);
+    public void changeProfileEmail(User user, String email) {
+        //User user = userDAO.findById(userId);
         if (user != null) {
             user.setEmail(email);
             userDAO.save(user);
@@ -43,20 +43,12 @@ public class ProfileServicesImpl implements ProfileServices {
     }
 
     @Override
-    public void changeProfilePassword(int userId, String currentPassword, String newPassword) {
-        User user = userDAO.findById(userId);
-
+    public void changeProfilePassword(User  user, String currentPassword, String newPassword) {
+        //User user = userDAO.findById(userId);
         if (user != null) {
-            // 1. Κρυπτογραφούμε τον τρέχοντα κωδικό που έδωσε ο χρήστης
             String hashedCurrent = passwordEncoder.encode(currentPassword);
-
-            // 2. Ελέγχουμε αν ταιριάζει με αυτόν που έχει η βάση (χρήση της verifyPassword του User)
             if (user.verifyPassword(hashedCurrent)) {
-
-                // 3. Αν είναι σωστός, κρυπτογραφούμε τον ΝΕΟ κωδικό
                 String hashedNew = passwordEncoder.encode(newPassword);
-
-                // 4. Ενημέρωση και αποθήκευση
                 user.setPassword(hashedNew);
                 userDAO.save(user);
                 System.out.println("Password updated successfully.");

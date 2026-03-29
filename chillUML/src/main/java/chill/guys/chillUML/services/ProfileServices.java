@@ -1,8 +1,10 @@
 package chill.guys.chillUML.services;
 
+import chill.guys.chillUML.domain.User;
+
 public interface ProfileServices {
-    void changeProfilePicture(int userId, String profilePicture);
-    void changeProfileUsername(int userId, String username);
-    void changeProfileEmail(int userId, String email);
-    void changeProfilePassword(int userId, String currentPassword, String newPassword);
+    void changeProfilePicture(User user, String profilePicture);
+    void changeProfileUsername(User user, String username);
+    void changeProfileEmail(User user, String email);
+    void changeProfilePassword(User user, String currentPassword, String newPassword);
 }
