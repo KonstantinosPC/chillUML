@@ -5,6 +5,7 @@ import chill.guys.chillUML.domain.User;
 import chill.guys.chillUML.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,8 +21,8 @@ public class UserServicesImpl implements UserServices {
     private UserRepository userDAO;
 
     @Override
-    public void saveUser(User user, String confirmationPassword) {
-        if (!isUserPresent(user)) {
+    public Model saveUser(User user, String confirmationPassword) {
+        if (!isUserPresent(user.getUsername())) {
             if (user.getUsername().length() > 15) {
                 // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
                 System.out.print("This username is over 15 characters long");
@@ -60,8 +61,8 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public boolean isUserPresent(User user) {
-        return userDAO.findByUsername(user.getUsername()) != null;
+    public boolean isUserPresent(String username) {
+        return userDAO.findByUsername(username) != null;
     }
 
     @Override
