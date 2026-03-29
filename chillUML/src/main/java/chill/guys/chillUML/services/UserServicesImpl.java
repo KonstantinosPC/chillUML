@@ -1,20 +1,16 @@
 package chill.guys.chillUML.services;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import chill.guys.chillUML.domain.User;
 import chill.guys.chillUML.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
-public class UserServicesImpl implements UserService {
+public class UserServicesImpl implements UserServices {
 
     CharSequence specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
     @Autowired

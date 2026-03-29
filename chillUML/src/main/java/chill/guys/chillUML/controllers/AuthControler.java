@@ -2,9 +2,9 @@ package chill.guys.chillUML.controllers;
 
 
 import chill.guys.chillUML.domain.User;
-import chill.guys.chillUML.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import chill.guys.chillUML.services.UserServices;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 
