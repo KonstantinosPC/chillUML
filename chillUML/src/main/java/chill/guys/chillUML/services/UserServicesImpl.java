@@ -23,8 +23,8 @@ public class UserServicesImpl implements UserService {
     @Autowired
     private UserRepository userDAO;
     @Override
-    public void saveUser(User user, String confirmaionPassword) {
-        if (findByUsername(user.getUsername()) == null) {
+    public void saveUser(User user, String confirmationPassword) {
+        if (!isUserPresent(user)) {
             if (user.getUsername().length() > 15) {
                 // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
                 System.out.print("This username is over 15 characters long");
@@ -40,20 +40,21 @@ public class UserServicesImpl implements UserService {
             System.out.print("This email is already in use");
             // Kwstaki kanto na mhn proxwraei
         }
-        if (user.verifyPassword(confirmaionPassword)) {
-            if (confirmaionPassword.length() < 8) {
+        if (user.verifyPassword(confirmationPassword)) {
+            if (confirmationPassword.length() < 8) {
                 // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
                 System.out.print("Password >= 8 characters long");
                 // Kwstaki kanto na mhn proxwraei
             }
-            if (!(confirmaionPassword.contains(specialChars))) {
+            if (!(confirmationPassword.contains(specialChars))) {
                 // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
                 System.out.print("Please use at least one special character");
                 // Kwstaki kanto na mhn proxwraei
             }
 
-            String hashed = passwordEncoder.encode(confirmaionPassword);
+            String hashed = passwordEncoder.encode(confirmationPassword);
             user.setPassword(hashed);
+            userDAO.save(user);
         } else {
             // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
             System.out.print("The password and the password confirmation do not match");
@@ -63,27 +64,28 @@ public class UserServicesImpl implements UserService {
 
     @Override
     public boolean isUserPresent(User user) {
-        return false;
+        return userDAO.findByUsername(user.getUsername()) != null;
     }
 
     @Override
     public boolean login(String username, String password) {
-        return false;
+        String hashed = passwordEncoder.encode(password);
+        User user = findByUsername(username);
+        return user.verifyPassword(hashed);
     }
 
     @Override
     public User findById(int id) {
-        return
-                userDAO.findById(id);
+        return userDAO.findById(id);
     }
 
     @Override
     public User findByEmail(String email) {
-        return null;
+        return userDAO.findByEmail(email);
     }
 
     public User findByUsername(String username) {
-        return null;
+        return userDAO.findByUsername(username);
     }
 
 
