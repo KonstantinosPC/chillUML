@@ -1,7 +1,7 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Login | ChillUML</title>
-        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" th:href="@{/css/style.css}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     </head>
@@ -16,12 +16,12 @@
         </style>
 
         <main>
-            <form class="login">
+            <form th:action="@{/auth/login}" method="post" class="login">
                 <h1>Login</h1>
                 <input type="text" placeholder="Username" required>
                 <input type="password" name="" id="" placeholder="Password" required>
                 <button>Submit</button>
-                <p>Don't have an account? <a href="./signup.html">Sign Up Here</a></p>
+                <p>Don't have an account? <a th:href="@{/auth/signup}">Sign Up Here</a></p>
             </form>
 
             <div class="notifications">
