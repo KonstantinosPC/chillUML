@@ -61,7 +61,7 @@ public class UserServicesImpl implements UserService {
             // Kwstaki kanto na mhn proxwraei
         }
     }
-
+    
     @Override
     public boolean isUserPresent(User user) {
         return userDAO.findByUsername(user.getUsername()) != null;
