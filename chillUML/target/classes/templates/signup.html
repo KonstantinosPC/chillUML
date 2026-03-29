@@ -8,6 +8,9 @@
     <body>
 
         <style>
+            body{
+                background: black;
+            }
             main{
                 display: flex;
                 align-items: center;
@@ -16,10 +19,10 @@
         </style>
 
         <main>
-            <form th:action="@{/auth/signup}" method="post" class="login">
+            <form th:action="@{/auth/save}" method="post" class="login">
                 <h1>Sign Up</h1>
-                <input type="text" placeholder="Username" required>
-                <input type="email" placeholder="Email" required>
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" id="password" placeholder="Password" required>
                 
                 <div class="strength-container">
@@ -31,13 +34,13 @@
                     <li id="has-number">Τουλάχιστον έναν αριθμό</li>
                     <li id="has-special">Έναν ειδικό χαρακτήρα (!@#$%^&*)</li>
                 </ul>
-                <input type="password" name="conf-password" id="conf-password" placeholder="Confirm Password">
+                <input type="password" name="confpassword" id="confpassword" placeholder="Confirm Password">
                 <div class="tos">
-                    <input type="checkbox" name="" id="terms" style="width: initial;">
+                    <input type="checkbox" name="" id="terms" required style="width: initial;">
                     <label for="terms" >Agree to the <a href="">Terms and Conditions</a></label>
                 </div>
                 <button id="submit">Submit</button>
-                <p>Already have an account? <a href="./login.html">Sign In</a></p>
+                <p>Already have an account? <a th:href="@{/auth/login}">Sign In</a></p>
             </form>
 
             <div class="notifications">
@@ -48,7 +51,7 @@
         <script>
             
             const passwordInput = document.getElementById('password');
-            const confPassword = document.getElementById('conf-password');
+            const confPassword = document.getElementById('confpassword');
             const strengthBar = document.getElementById('strength-bar');
             const charLength = document.getElementById('char-length');
             const hasNumber = document.getElementById('has-number');

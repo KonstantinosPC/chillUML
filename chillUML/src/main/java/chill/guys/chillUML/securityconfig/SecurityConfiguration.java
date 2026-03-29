@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import jakarta.servlet.DispatcherType;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -46,7 +47,7 @@ public class SecurityConfiguration {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/auth/login", "/auth/signup", "/auth/save", "/auth/logout").permitAll()
+                        .requestMatchers("/auth/login", "/auth/signup", "/auth/save", "/auth/loguser", "/auth/logout", "/error").permitAll()
                         .requestMatchers("/css/**", "/assets/**", "/static/**").permitAll()
                 )
                 .formLogin(form -> form
