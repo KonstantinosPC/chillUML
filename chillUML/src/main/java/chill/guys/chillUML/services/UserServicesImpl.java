@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
+@Service
 public class UserServicesImpl implements UserService {
 
     CharSequence specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
