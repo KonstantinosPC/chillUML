@@ -6,12 +6,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.NonNull;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 public class CustomSecurityConfiguration extends SimpleUrlAuthenticationSuccessHandler {
+
 
     @Override
     protected void handle(
@@ -26,12 +28,9 @@ public class CustomSecurityConfiguration extends SimpleUrlAuthenticationSuccessH
     }
 
     private String determineTargetUrl(Authentication authentication) {
-        String url = "/auth/login?error=true";
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        User user = (User) authentication.getPrincipal();
-
-        return "/projects";
+        return "/dashboard";
     }
-;;
 
 }

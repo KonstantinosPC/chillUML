@@ -89,10 +89,14 @@ public class UserServicesImpl implements UserServices, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails) userRepository.findByUsername(username).orElseThrow(
-                ()-> new UsernameNotFoundException(
-                        String.format("USER_NOT_FOUND", username)
-                ));
+        return userRepository.findByUsername(username)
+
+                .map(myUser -> org.springframework.security.core.userdetails.User.builder()
+                        .username(myUser.getUsername())
+                        .password(myUser.getPassword())
+                        .roles("USER")
+                        .build())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
     @Override
