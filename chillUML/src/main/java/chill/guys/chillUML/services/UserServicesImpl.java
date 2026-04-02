@@ -1,91 +1,116 @@
 package chill.guys.chillUML.services;
 
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
+
+import chill.guys.chillUML.domain.RegistrationForm;
 import chill.guys.chillUML.domain.User;
 import chill.guys.chillUML.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+@Service
+public class UserServicesImpl implements UserServices, UserDetailsService {
+
+    String specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
 
 
-public class UserServicesImpl implements UserService {
-
-    CharSequence specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
-    @Autowired
     private final PasswordEncoder passwordEncoder = new MessageDigestPasswordEncoder("SHA-256");
 
     @Autowired
-    private UserRepository userDAO;
+    private UserRepository userRepository;
+
     @Override
-    public void saveUser(User user, String confirmationPassword) {
-        if (!isUserPresent(user)) {
-            if (user.getUsername().length() > 15) {
-                // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-                System.out.print("This username is over 15 characters long");
-                // Kwstaki kanto na mhn proxwraei
+    @Transactional
+    public void saveUser(RegistrationForm form, RedirectAttributes redirectAttributes) {
+        if (!isUserPresent(form.getUsername())) {
+            if (form.getUsername().length() > 15) {
+                redirectAttributes.addFlashAttribute("error","This username is over 15 characters long");
+                return ;
             }
         } else {
-            // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-            System.out.print("This username already exists");
-            // Kwstaki kanto na mhn proxwraei
+            redirectAttributes.addFlashAttribute("error","This username already exists");
+            return ;
         }
-        if (findByEmail(user.getEmail()) != null) {
-            // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-            System.out.print("This email is already in use");
-            // Kwstaki kanto na mhn proxwraei
+        if (!(findByEmail(form.getEmail()).isEmpty())) {
+            redirectAttributes.addFlashAttribute("error","This email is already in use");
+            return ;
         }
-        if (user.verifyPassword(confirmationPassword)) {
-            if (confirmationPassword.length() < 8) {
-                // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-                System.out.print("Password >= 8 characters long");
-                // Kwstaki kanto na mhn proxwraei
+        if (form.getPassword().equals(form.getConfirmPassword())) {
+            if (form.getPassword().length() < 8) {
+                redirectAttributes.addFlashAttribute("error","Password >= 8 characters long");
+                return ;
             }
-            if (!(confirmationPassword.contains(specialChars))) {
-                // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-                System.out.print("Please use at least one special character");
-                // Kwstaki kanto na mhn proxwraei
+            if (form.getPassword().chars().noneMatch(ch->specialChars.indexOf(ch) >= 0)) {
+                redirectAttributes.addFlashAttribute("error","Please use at least one special character");
+                return ;
             }
 
-            String hashed = passwordEncoder.encode(confirmationPassword);
+            String hashed = passwordEncoder.encode(form.getPassword());
+            User user = new User();
+            user.setUsername(form.getUsername());
+            user.setEmail(form.getEmail());
             user.setPassword(hashed);
-            userDAO.save(user);
+            userRepository.save(user);
+            redirectAttributes.addFlashAttribute("success","The user " + user.getUsername() + " has been created successfully");
         } else {
-            // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-            System.out.print("The password and the password confirmation do not match");
-            // Kwstaki kanto na mhn proxwraei
+            redirectAttributes.addFlashAttribute("error","The password and the confirmation password do not match");
         }
+        return ;
     }
-    
+
     @Override
-    public boolean isUserPresent(User user) {
-        return userDAO.findByUsername(user.getUsername()) != null;
+    public boolean isUserPresent(String username) {
+        return userRepository.findByUsername(username).isPresent();
     }
 
     @Override
     public boolean login(String username, String password) {
         String hashed = passwordEncoder.encode(password);
-        User user = findByUsername(username);
-        return user.verifyPassword(hashed);
+        Optional<User> user = findByUsername(username);
+        if(user.isEmpty() || hashed != null){
+            return false;
+        }else{
+            return user.get().verifyPassword(hashed);
+        }
     }
 
     @Override
-    public User findById(int id) {
-        return userDAO.findById(id);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+
+                .map(myUser -> org.springframework.security.core.userdetails.User.builder()
+                        .username(myUser.getUsername())
+                        .password(myUser.getPassword())
+                        .roles("USER")
+                        .build())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userDAO.findByEmail(email);
+    public Optional<User> findById(int id) {
+        return userRepository.findById(id);
     }
 
-    public User findByUsername(String username) {
-        return userDAO.findByUsername(username);
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
 

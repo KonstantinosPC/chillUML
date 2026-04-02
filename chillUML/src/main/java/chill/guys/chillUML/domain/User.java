@@ -35,6 +35,9 @@ public class User{
         return email;
     }
 
+    public String getPassword(){
+        return this.password;
+    }
     public boolean verifyPassword(String newPassword){
         return newPassword.equals(this.password);
     }
