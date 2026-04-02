@@ -1,89 +1,99 @@
 package chill.guys.chillUML.services;
 
 
-import java.io.Serial;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
-
+import chill.guys.chillUML.domain.RegistrationForm;
 import chill.guys.chillUML.domain.User;
 import chill.guys.chillUML.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 
 @Service
-public class UserServicesImpl implements UserService, UserDetailsService {
+public class UserServicesImpl implements UserServices, UserDetailsService {
 
     CharSequence specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
 
-
+    @Autowired
     private final PasswordEncoder passwordEncoder = new MessageDigestPasswordEncoder("SHA-256");
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userDAO;
 
     @Override
-    public void saveUser(User user, String confirmationPassword) {
-        if (!isUserPresent(user.getUsername())) {
-            if (user.getUsername().length() > 15) {
-                // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-                System.out.print("This username is over 15 characters long");
-                // Kwstaki kanto na mhn proxwraei
+    @Transactional
+    public void saveUser(RegistrationForm form, RedirectAttributes redirectAttributes) {
+        if (!isUserPresent(form.getUsername())) {
+            if (form.getUsername().length() > 15) {
+                redirectAttributes.addAttribute("errors","This username is over 15 characters long");
+                return ;
             }
         } else {
-            // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-            System.out.print("This username already exists");
-            // Kwstaki kanto na mhn proxwraei
+            redirectAttributes.addAttribute("errors","This username already exists");
+            return ;
         }
-        if (!(findByEmail(user.getEmail()).isEmpty())) {
-            // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-            System.out.print("This email is already in use");
-            // Kwstaki kanto na mhn proxwraei
+        if (findByEmail(form.getEmail()).isEmpty()) {
+            redirectAttributes.addAttribute("errors","This email is already in use");
+            return ;
         }
-        if (user.verifyPassword(confirmationPassword)) {
-            if (confirmationPassword.length() < 8) {
-                // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-                System.out.print("Password >= 8 characters long");
-                // Kwstaki kanto na mhn proxwraei
+        if (form.getPassword().equals(form.getConfirmPassword())) {
+            if (form.getConfirmPassword().length() < 8) {
+                redirectAttributes.addAttribute("errors","Password >= 8 characters long");
+                return ;
             }
-            if (!(confirmationPassword.contains(specialChars))) {
-                // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-                System.out.print("Please use at least one special character");
-                // Kwstaki kanto na mhn proxwraei
+            if (!(form.getConfirmPassword().contains(specialChars))) {
+                redirectAttributes.addAttribute("errors","Please use at least one special character");
+                return ;
             }
 
-            String hashed = passwordEncoder.encode(confirmationPassword);
+            String hashed = passwordEncoder.encode(form.getPassword());
+            User user = new User();
+            user.setUsername(form.getUsername());
+            user.setEmail(form.getEmail());
             user.setPassword(hashed);
-            userRepository.save(user);
+            userDAO.save(user);
         } else {
-            // Kanto opws thes gia na bgainoun ta mhnymata ekei pou thes <3
-            System.out.print("The password and the password confirmation do not match");
-            // Kwstaki kanto na mhn proxwraei
+            redirectAttributes.addAttribute("errors","The password and the confirmation password do not match");
         }
+        return ;
     }
-    
+
     @Override
     public boolean isUserPresent(String username) {
-        return userRepository.findByUsername(username).isPresent();
+        return userDAO.findByUsername(username).isPresent();
     }
 
     @Override
-    public boolean login(String username, String password) {
-        String hashed = passwordEncoder.encode(password);
-        Optional<User> user = findByUsername(username);
-        return user.get().verifyPassword(hashed);
+    public void login(String username, String password) {
+//        String hashed = passwordEncoder.encode(password);
+//        User user = findByUsername(username).get();
+//        if(user != null){
+//            if(user.verifyPassword(hashed)){
+//                return null;
+//            }else{
+//                model.addAttribute("errors","The password is incorrect");
+//                return model;
+//            }
+//        }else{
+//            model.addAttribute("errors","This user does not exist");
+//            return model;
+//        }
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails) userRepository.findByUsername(username).orElseThrow(
+        return (UserDetails) userDAO.findByUsername(username).orElseThrow(
                 ()-> new UsernameNotFoundException(
                         String.format("USER_NOT_FOUND", username)
                 ));
@@ -91,17 +101,16 @@ public class UserServicesImpl implements UserService, UserDetailsService {
 
     @Override
     public Optional<User> findById(int id) {
-        return userRepository.findById(id);
+        return userDAO.findById(id);
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userDAO.findByEmail(email);
     }
 
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userDAO.findByUsername(username);
     }
-
 
 }

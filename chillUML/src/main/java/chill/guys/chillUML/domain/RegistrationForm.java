@@ -34,7 +34,7 @@ public class RegistrationForm {
         return this.password;
     }
 
-    public boolean checkConfirmPassword(){
-        return this.password.equals(confirmPassword);
+    public String getConfirmPassword(){
+        return this.confirmPassword;
     }
 }

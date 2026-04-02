@@ -82,7 +82,7 @@
         <span th:if="${message}"><strong>Μήνυμα:</strong> <span th:text="${message}">Λεπτομέρειες...</span></span>
     </div>
 
-    <a href="/auth/login" class="btn">Επιστροφή στο Login</a>
+    <a th:href="@{/auth/login}" class="btn">Επιστροφή στο Login</a>
 </div>
 
 </body>

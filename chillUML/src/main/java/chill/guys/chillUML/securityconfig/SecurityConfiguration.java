@@ -1,5 +1,6 @@
 package chill.guys.chillUML.securityconfig;
 
+import chill.guys.chillUML.services.UserServices;
 import chill.guys.chillUML.services.UserServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

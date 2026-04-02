@@ -3,12 +3,10 @@ package chill.guys.chillUML.controllers;
 
 import chill.guys.chillUML.domain.RegistrationForm;
 import chill.guys.chillUML.domain.User;
-import chill.guys.chillUML.services.UserService;
+import chill.guys.chillUML.services.UserServices;
+import chill.guys.chillUML.services.UserServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authorization.method.AuthorizeReturnObject;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -20,7 +18,7 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    UserService userService;
+    UserServicesImpl userServices;
 
     @GetMapping("/auth/login")
     public String showLogin(){
@@ -33,6 +31,7 @@ public class AuthController {
         return "signup";
     }
 
+
     @PostMapping("/auth/login")
     public String login(@RequestParam("username")String username, @RequestParam("password")String password, Model model, RedirectAttributes redirectAttributes){
         Map<String, String> errors = new HashMap<>();
@@ -44,7 +43,7 @@ public class AuthController {
     @PostMapping("/auth/save")
     public String saveUser(@ModelAttribute("user")RegistrationForm form, Model model, RedirectAttributes redirectAttributes){
         Map<String, String> errors = new HashMap<>();
-        System.out.println("Nigga here --------------------------------------------------------------------------------------------->" + form.getUsername());
+        userServices.saveUser(form, redirectAttributes);
         return "redirect:/auth/signup";
     }
 

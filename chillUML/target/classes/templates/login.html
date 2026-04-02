@@ -19,10 +19,10 @@
         </style>
 
         <main>
-            <form th:action="@{/auth/loguser}" method="post" class="login">
+            <form th:action="@{/auth/login}" method="post" class="login">
                 <h1>Login</h1>
-                <input type="text" placeholder="Username" required>
-                <input type="password" name="" id="" placeholder="Password" required>
+                <input type="text" name="username" id="username" placeholder="Username" required>
+                <input type="password" name="password" id="password" placeholder="Password" required>
                 <button>Submit</button>
                 <p>Don't have an account? <a th:href="@{/auth/signup}">Sign Up Here</a></p>
             </form>
