@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="el">
+    <head>
+        <title>Dashboard | Chill UML</title>
+        <link rel="stylesheet" href="./style.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        
+        <script>
+            function profileDrop(){
+                const drop = document.getElementById("profile-drop");
+                // Καλύτερος τρόπος ελέγχου για την εμφάνιση/απόκρυψη
+                if(drop.style.display === "flex"){
+                    drop.style.display = "none";
+                } else {
+                    drop.style.display = "flex";
+                }
+            }
+        </script>
+
+        <nav>
+            <div class="left">
+                <a href="./index.html" class="logo-text">Chill UML</a>
+            </div>
+            
+            <div class="right">
+                <button onclick="profileDrop()" class="profile">
+                    <span>Konstantinos</span>
+                    <img src="https://ui-avatars.com/api/?name=KP&background=38bdf8&color=fff" alt="Profile">
+                </button>
+            </div>
+
+            <div id="profile-drop" class="profile-drop">
+                <button class="username" disabled>Konstantinos Iliopoulos</button>
+                <button class="menu-btn">Profile Settings</button>
+                <div class="divider"></div>
+                <button class="menu-btn logout">Log Out</button>
+            </div>
+        </nav>
+
+        <main>
+            <div class="projects-container">
+                <div class="task-bar">
+                    <div class="search-bar">
+                        <input placeholder="Search Project..." type="text">
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-primary">Create New</button>
+                        <button class="btn btn-secondary">Edit</button>
+                        <button class="btn btn-danger">Delete</button>
+                    </div>
+                </div>
+                
+                <div class="projects-content">
+                    <p style="text-align: center; color: var(--text-muted); padding: 40px;">Δεν υπάρχουν project ακόμα.</p>
+                </div>
+            </div>
+        </main>
+
+    </body>
+</html>
