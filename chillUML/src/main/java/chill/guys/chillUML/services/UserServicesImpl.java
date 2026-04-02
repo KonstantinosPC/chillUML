@@ -37,24 +37,24 @@ public class UserServicesImpl implements UserServices, UserDetailsService {
     public void saveUser(RegistrationForm form, RedirectAttributes redirectAttributes) {
         if (!isUserPresent(form.getUsername())) {
             if (form.getUsername().length() > 15) {
-                redirectAttributes.addAttribute("errors","This username is over 15 characters long");
+                redirectAttributes.addFlashAttribute("error","This username is over 15 characters long");
                 return ;
             }
         } else {
-            redirectAttributes.addAttribute("errors","This username already exists");
+            redirectAttributes.addFlashAttribute("error","This username already exists");
             return ;
         }
         if (!(findByEmail(form.getEmail()).isEmpty())) {
-            redirectAttributes.addAttribute("errors","This email is already in use");
+            redirectAttributes.addFlashAttribute("error","This email is already in use");
             return ;
         }
         if (form.getPassword().equals(form.getConfirmPassword())) {
             if (form.getPassword().length() < 8) {
-                redirectAttributes.addAttribute("errors","Password >= 8 characters long");
+                redirectAttributes.addFlashAttribute("error","Password >= 8 characters long");
                 return ;
             }
             if (form.getPassword().chars().noneMatch(ch->specialChars.indexOf(ch) >= 0)) {
-                redirectAttributes.addAttribute("errors","Please use at least one special character");
+                redirectAttributes.addFlashAttribute("error","Please use at least one special character");
                 return ;
             }
 
@@ -64,9 +64,9 @@ public class UserServicesImpl implements UserServices, UserDetailsService {
             user.setEmail(form.getEmail());
             user.setPassword(hashed);
             userRepository.save(user);
-
+            redirectAttributes.addFlashAttribute("success","The user " + user.getUsername() + " has been created successfully");
         } else {
-            redirectAttributes.addAttribute("errors","The password and the confirmation password do not match");
+            redirectAttributes.addFlashAttribute("error","The password and the confirmation password do not match");
         }
         return ;
     }
