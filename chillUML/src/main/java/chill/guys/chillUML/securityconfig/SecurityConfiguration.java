@@ -51,6 +51,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/login", "/auth/signup", "/auth/save", "/auth/loguser", "/auth/logout", "/error").permitAll()
                         .requestMatchers("/css/**", "/assets/**", "/static/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")

@@ -32,5 +32,4 @@ public class CustomSecurityConfiguration extends SimpleUrlAuthenticationSuccessH
 
         return "/dashboard";
     }
-
 }
