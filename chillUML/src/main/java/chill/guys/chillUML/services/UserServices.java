@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface UserServices {
     public void saveUser(RegistrationForm form, RedirectAttributes redirectAttributes);
     public boolean isUserPresent(String username);
-    public void login(String username,String password);
+    public boolean login(String username,String password);
     public Optional<User> findById(int id);
     public Optional<User> findByEmail(String email);
 }
