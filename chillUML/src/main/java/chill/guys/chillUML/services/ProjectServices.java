@@ -1,17 +1,5 @@
 package chill.guys.chillUML.services;
-<<<<<<< Updated upstream
-import chill.guys.chillUML.domain.Project;
-import java.util.Optional;
 
-import java.util.List;
-
-public interface ProjectServices {
-    List<Project> viewAllProjects(int userId);
-    void createProject(String projectName);
-    void editProject(String newProjectName);
-    void deleteProject(String projectName);
-    Optional <Project> findByName(String projectName);
-=======
 
 import chill.guys.chillUML.DTO.ProjectDTO;
 import chill.guys.chillUML.domain.Project;
@@ -27,5 +15,4 @@ public interface ProjectServices {
     public void deleteProject(int project_id);
     public void editProjectName(int projectID,String newName, RedirectAttributes redirectAttributes);
     public void editProjectDescription(int projectID,String newDescription,RedirectAttributes redirectAttributes);
->>>>>>> Stashed changes
 }

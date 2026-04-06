@@ -1,11 +1,15 @@
 package chill.guys.chillUML.services;
+import chill.guys.chillUML.domain.RegistrationForm;
 import chill.guys.chillUML.domain.User;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
 
 public interface UserServices {
-    public Model saveUser(User user,String confirmationPassword);
+    public void saveUser(RegistrationForm form, RedirectAttributes redirectAttributes);
     public boolean isUserPresent(String username);
-    public Model login(String username,String password);
-    public User findById(int id);
-    public User findByEmail(String email);
+    public boolean login(String username,String password);
+    public Optional<User> findById(int id);
+    public Optional<User> findByEmail(String email);
 }

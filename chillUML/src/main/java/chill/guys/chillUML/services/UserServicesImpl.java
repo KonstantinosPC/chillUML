@@ -1,95 +1,117 @@
 package chill.guys.chillUML.services;
 
 
+import java.io.Serial;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Optional;
+
+import chill.guys.chillUML.domain.RegistrationForm;
 import chill.guys.chillUML.domain.User;
 import chill.guys.chillUML.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Service
-public class UserServicesImpl implements UserServices {
+public class UserServicesImpl implements UserServices, UserDetailsService {
 
-    CharSequence specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
-    @Autowired
+    String specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
+
+
     private final PasswordEncoder passwordEncoder = new MessageDigestPasswordEncoder("SHA-256");
-    Model model;
+
     @Autowired
-    private UserRepository userDAO;
+    private UserRepository userRepository;
 
     @Override
-    public Model saveUser(User user, String confirmationPassword) {
-        if (!isUserPresent(user.getUsername())) {
-            if (user.getUsername().length() > 15) {
-                model.addAttribute("errors","This username is over 15 characters long");
-                return model;
+    @Transactional
+    public void saveUser(RegistrationForm form, RedirectAttributes redirectAttributes) {
+        if (!isUserPresent(form.getUsername())) {
+            if (form.getUsername().length() > 15) {
+                redirectAttributes.addFlashAttribute("error","This username is over 15 characters long");
+                return ;
             }
         } else {
-            model.addAttribute("errors","This username already exists");
-            return model;
+            redirectAttributes.addFlashAttribute("error","This username already exists");
+            return ;
         }
-        if (findByEmail(user.getEmail()) != null) {
-            model.addAttribute("errors","This email is already in use");
-            return model;
+        if (!(findByEmail(form.getEmail()).isEmpty())) {
+            redirectAttributes.addFlashAttribute("error","This email is already in use");
+            return ;
         }
-        if (user.verifyPassword(confirmationPassword)) {
-            if (confirmationPassword.length() < 8) {
-                model.addAttribute("errors","Password >= 8 characters long");
-                return model;
+        if (form.getPassword().equals(form.getConfirmPassword())) {
+            if (form.getPassword().length() < 8) {
+                redirectAttributes.addFlashAttribute("error","Password >= 8 characters long");
+                return ;
             }
-            if (!(confirmationPassword.contains(specialChars))) {
-                model.addAttribute("errors","Please use at least one special character");
-                return model;
+            if (form.getPassword().chars().noneMatch(ch->specialChars.indexOf(ch) >= 0)) {
+                redirectAttributes.addFlashAttribute("error","Please use at least one special character");
+                return ;
             }
 
-            String hashed = passwordEncoder.encode(confirmationPassword);
+            String hashed = passwordEncoder.encode(form.getPassword());
+            User user = new User();
+            user.setUsername(form.getUsername());
+            user.setEmail(form.getEmail());
             user.setPassword(hashed);
-            userDAO.save(user);
-            return null;
+            userRepository.save(user);
+            redirectAttributes.addFlashAttribute("success","The user " + user.getUsername() + " has been created successfully");
         } else {
-            model.addAttribute("errors","The password and the confirmation password do not match");
-            return model;
+            redirectAttributes.addFlashAttribute("error","The password and the confirmation password do not match");
         }
+        return ;
     }
 
     @Override
     public boolean isUserPresent(String username) {
-        return userDAO.findByUsername(username) != null;
+        return userRepository.findByUsername(username).isPresent();
     }
 
     @Override
-    public Model login(String username, String password) {
+    public boolean login(String username, String password) {
         String hashed = passwordEncoder.encode(password);
-        User user = findByUsername(username);
-        if(user != null){
-            if(user.verifyPassword(hashed)){
-                return null;
-            }else{
-                model.addAttribute("errors","The password is incorrect");
-                return model;
-            }
+        Optional<User> user = findByUsername(username);
+        if(user.isEmpty() || hashed != null){
+            return false;
         }else{
-            model.addAttribute("errors","This user does not exist");
-            return model;
+            return user.get().verifyPassword(hashed);
         }
     }
 
     @Override
-    public User findById(int id) {
-        return userDAO.findById(id);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+
+                .map(myUser -> org.springframework.security.core.userdetails.User.builder()
+                        .username(myUser.getUsername())
+                        .password(myUser.getPassword())
+                        .roles("USER")
+                        .build())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userDAO.findByEmail(email);
+    public Optional<User> findById(int id) {
+        return userRepository.findById(id);
     }
 
-    public User findByUsername(String username) {
-        return userDAO.findByUsername(username);
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
+
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
 
 }
