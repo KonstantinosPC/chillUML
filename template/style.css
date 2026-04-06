@@ -565,7 +565,7 @@ nav {
 }
 
 /* Project Create Container */
-.create-project{
+.create-project, .edit-project{
     padding: 10px;
     width: 30%;
     border-radius: 10px;
@@ -575,7 +575,7 @@ nav {
     display: none;
 }
 
-.create-project input, .create-project button{
+.create-project input, .create-project button, .edit-project input, .edit-project button{
     width: 90%;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -586,7 +586,7 @@ nav {
     outline: none;
 }
 
-.create-project textarea{
+.create-project textarea, .edit-project textarea{
     width: 90%;
     height: 100px;
     padding: 10px;
@@ -598,23 +598,32 @@ nav {
     outline: none;
 }
 
-.create-project button{
+.create-project button, .edit-project button{
     background: rgb(0, 142, 194);
     color: white;
     transition: 500ms;
 }
 
-.create-project button:hover{
+.create-project button:hover, .edit-project button:hover{
     background: rgb(0, 116, 158);
     text-shadow: 0px 0px 9px white;
     transition: 100ms;
 }
 
-.create-project .close{
+.create-project .close, .edit-project .close{
     background: rgb(143, 0, 0);
 
 }
 
-.create-project .close:hover{
+.create-project .close:hover, .edit-project .close:hover{
     background: rgb(90, 0, 0);
+}
+
+.edit-project h1{
+    margin-bottom: 1px;
+}
+
+.edit-project h3{
+    margin: 0;
+    margin-bottom: 5px;
 }

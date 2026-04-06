@@ -45,6 +45,14 @@
                 <button type="submit">Create Project</button>
                 <button onclick="togglePopUp('create-project')" class="close" type="button">Close</button>
             </form>
+            <form id="edit-project" class="edit-project">
+                <h1>Edit Project</h1>
+                <h3>Project A</h3>
+                <input type="text" placeholder="Project Name">
+                <textarea name="" id="" placeholder="Project Description"></textarea>
+                <button type="submit">Submit Changes</button>
+                <button onclick="togglePopUp('edit-project')" class="close" type="button">Close</button>
+            </form>
         </div>
         
 
@@ -53,7 +61,7 @@
                 <div class="toolbar">
                     <input type="text" id="search-project" placeholder="Search Project">
                     <button class="delete" disabled>Delete</button>
-                    <button disabled>Edit</button>
+                    <button onclick="togglePopUp('edit-project')">Edit</button>
                     <button onclick="togglePopUp('create-project')" class="create">Create</button>
                 </div>
                 <div class="project-list">
