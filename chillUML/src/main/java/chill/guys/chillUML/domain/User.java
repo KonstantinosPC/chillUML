@@ -37,8 +37,17 @@ public class User{
         return email;
     }
 
+<<<<<<< Updated upstream
     public String getProfilePicture() {
         return profilePicture;
+=======
+    public String getProfilePicture(){
+        return profilePicture;
+    }
+
+    public String getPassword(){
+        return this.password;
+>>>>>>> Stashed changes
     }
 
     public boolean verifyPassword(String newPassword){
@@ -57,7 +66,12 @@ public class User{
         this.password = newPassword;
     }
 
+<<<<<<< Updated upstream
     public void  setProfilePicture(String newProfilPicture){
         this.profilePicture = newProfilPicture;
+=======
+    public void setProfilePicture(String newProfilePicture) {
+        this.profilePicture = newProfilePicture;
+>>>>>>> Stashed changes
     }
 }
