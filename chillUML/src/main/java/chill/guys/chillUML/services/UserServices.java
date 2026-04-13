@@ -1,7 +1,6 @@
 package chill.guys.chillUML.services;
-import chill.guys.chillUML.domain.RegistrationForm;
+import chill.guys.chillUML.DTO.RegistrationForm;
 import chill.guys.chillUML.domain.User;
-import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
