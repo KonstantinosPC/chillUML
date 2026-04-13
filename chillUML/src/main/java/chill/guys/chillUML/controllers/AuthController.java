@@ -1,9 +1,8 @@
 package chill.guys.chillUML.controllers;
 
 
-import chill.guys.chillUML.domain.RegistrationForm;
+import chill.guys.chillUML.DTO.RegistrationForm;
 import chill.guys.chillUML.domain.User;
-import chill.guys.chillUML.services.UserServices;
 import chill.guys.chillUML.services.UserServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

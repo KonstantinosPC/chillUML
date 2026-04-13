@@ -37,6 +37,24 @@
             </div>
         </nav>
 
+        <div id="pop-up" class="pop-up">
+            <form id="create-project" class="create-project">
+                <h1>Create Project</h1>
+                <input type="text" placeholder="Project Name">
+                <textarea name="" id="" placeholder="Project Description"></textarea>
+                <button type="submit">Create Project</button>
+                <button onclick="togglePopUp('create-project')" class="close" type="button">Close</button>
+            </form>
+            <form id="edit-project" class="edit-project">
+                <h1>Edit Project</h1>
+                <h3>Project A</h3>
+                <input type="text" placeholder="Project Name">
+                <textarea name="" id="" placeholder="Project Description"></textarea>
+                <button type="submit">Submit Changes</button>
+                <button onclick="togglePopUp('edit-project')" class="close" type="button">Close</button>
+            </form>
+        </div>
+
         <main>
             <div class="projects">
                 <div class="toolbar">
@@ -110,6 +128,20 @@
 
                 });
             });
+
+            function togglePopUp(type){
+                const popUp = document.getElementById("pop-up");
+                const windowed = document.getElementById(type);
+
+                if(popUp.style.height == "100%"){
+                    popUp.style.height = 0;
+                    setTimeout(windowed.style.display = 'none', 5000);
+                }else{
+                    popUp.style.height = '100%';
+                    windowed.style.display = 'initial';
+                }
+
+            }
         </script>
     </body>
 </html>

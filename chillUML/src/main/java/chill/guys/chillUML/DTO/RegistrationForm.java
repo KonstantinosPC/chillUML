@@ -1,4 +1,4 @@
-package chill.guys.chillUML.domain;
+package chill.guys.chillUML.DTO;
 
 public class RegistrationForm {
     private String username;

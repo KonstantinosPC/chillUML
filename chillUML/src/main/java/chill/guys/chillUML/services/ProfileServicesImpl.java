@@ -10,14 +10,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
-
+@Service
 public class ProfileServicesImpl implements ProfileServices, UserDetailsService {
 
     String specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
-
 
     private final PasswordEncoder passwordEncoder = new MessageDigestPasswordEncoder("SHA-256");
 
@@ -25,19 +25,17 @@ public class ProfileServicesImpl implements ProfileServices, UserDetailsService 
     private UserRepository userRepository;
 
     @Override
-    public void changeProfilePicture(int userID, String newProfilePicture) {
-        User user = findById(userID).get();
+    public void changeProfilePicture(User user, String newProfilePicture) {
         user.setProfilePicture(newProfilePicture);
         userRepository.save(user);
     }
 
     @Override
     @Transactional
-    public void changeUsername(int userID,String newUsername,RedirectAttributes redirectAttributes) {
+    public void changeUsername(User user,String newUsername,RedirectAttributes redirectAttributes) {
 
         if(userRepository.findByUsername(newUsername).isEmpty()){
             if(newUsername.length()<= 15){
-                User user = findById(userID).get();
                 user.setUsername(newUsername);
                 userRepository.save(user);
             }else{
@@ -47,16 +45,16 @@ public class ProfileServicesImpl implements ProfileServices, UserDetailsService 
         }else{
             redirectAttributes.addFlashAttribute("error","This username already exists");
         }
-
+        redirectAttributes.addFlashAttribute("success","Your username has changed successfully");
 
     }
 
+
     @Override
-    public void changePassword(int userID,String confirmationPassword,String newPassword,String newPasswordConfirmation,RedirectAttributes redirectAttributes) {
+    public void changePassword(User user,String confirmationPassword,String newPassword,String newPasswordConfirmation,RedirectAttributes redirectAttributes) {
 
         String hashed = passwordEncoder.encode(confirmationPassword);
         String newHashed = passwordEncoder.encode(newPassword);
-        User user = findById(userID).get();
         if(!user.verifyPassword(hashed)){
             redirectAttributes.addFlashAttribute("error","Old Password is Wrong");
             return;
@@ -80,10 +78,11 @@ public class ProfileServicesImpl implements ProfileServices, UserDetailsService 
     }
 
     @Override
-    public void changeEmail(int userID,String newEmail,RedirectAttributes redirectAttributes) {
+    public void changeEmail(User user,String newEmail,RedirectAttributes redirectAttributes) {
         if(userRepository.findByEmail(newEmail).isEmpty()){
-            User user = userRepository.findById(userID).get();
             user.setEmail(newEmail);
+            userRepository.save(user);
+            redirectAttributes.addFlashAttribute("success","Your email has changed successfully");
         }else{
             redirectAttributes.addFlashAttribute("error","This email is already in use");
         }
