@@ -53,13 +53,12 @@ public class ProfileServicesImpl implements ProfileServices, UserDetailsService 
     @Override
     public void changePassword(User user,String confirmationPassword,String newPassword,String newPasswordConfirmation,RedirectAttributes redirectAttributes) {
 
-        String hashed = passwordEncoder.encode(confirmationPassword);
         String newHashed = passwordEncoder.encode(newPassword);
-        if(!user.verifyPassword(hashed)){
+        if(!passwordEncoder.matches(confirmationPassword, user.getPassword())){
             redirectAttributes.addFlashAttribute("error","Old Password is Wrong");
             return;
         }
-        if(confirmationPassword.chars().noneMatch(ch->specialChars.indexOf(ch) >= 0)) {
+        if(newPassword.chars().noneMatch(ch->specialChars.indexOf(ch) >= 0)) {
             redirectAttributes.addFlashAttribute("error","Please use at least one special character");
             return;
         }
@@ -67,14 +66,17 @@ public class ProfileServicesImpl implements ProfileServices, UserDetailsService 
             redirectAttributes.addFlashAttribute("error","Password >= 8 characters long");
             return ;
         }
-        if(newHashed.equals(hashed)){
+        if(confirmationPassword.equals(newPassword)){
             redirectAttributes.addFlashAttribute("error","New password is the same as the old one");
             return;
         }
         if(!(newPassword.equals(newPasswordConfirmation))){
             redirectAttributes.addFlashAttribute("error","Confirmation password not the same as the new password");
+            return;
         }
         user.setPassword(newHashed);
+        redirectAttributes.addFlashAttribute("success","Password changed successfully");
+        userRepository.save(user);
     }
 
     @Override

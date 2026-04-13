@@ -58,11 +58,11 @@
                     <button>Change Username</button>
                 </form>
                 <hr>
-                <form action="" class="profile-password">
+                <form th:action="@{/profile/password}" method="post" class="profile-password">
                     <h3>Change Password</h3>
-                    <input type="text" id="old-password" placeholder="Old Password" required>
-                    <input type="text" id="new-password" placeholder="New Password" required>
-                    <input type="text" id="conf-password" placeholder="Confirm Password" required>
+                    <input type="password" name="old-password" id="old-password" placeholder="Old Password" required>
+                    <input type="password" name="new-password" id="new-password" placeholder="New Password" required>
+                    <input type="password" name="conf-password" id="conf-password" placeholder="Confirm Password" required>
                     <button>Change Password</button>
                 </form>
                 <hr>

@@ -74,12 +74,13 @@ public class UserServicesImpl implements UserServices, UserDetailsService {
 
     @Override
     public boolean login(String username, String password) {
-        String hashed = passwordEncoder.encode(password);
         Optional<User> user = findByUsername(username);
-        if(user.isEmpty() || hashed != null){
+
+        if (user.isEmpty()) {
             return false;
-        }else{
-            return user.get().verifyPassword(hashed);
+        } else {
+
+            return passwordEncoder.matches(password, user.get().getPassword());
         }
     }
 

@@ -37,17 +37,12 @@ public class User{
         return email;
     }
 
-
     public String getProfilePicture(){
         return profilePicture;
     }
 
     public String getPassword(){
         return this.password;
-    }
-
-    public boolean verifyPassword(String newPassword){
-        return newPassword.equals(this.password);
     }
 
     public void setEmail(String newEmail){

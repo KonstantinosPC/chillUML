@@ -31,6 +31,13 @@ public class ProfileController {
         return "profile";
     }
 
+    @PostMapping("/profile/password")
+    public String changePassword(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("old-password") String oldPassword, @RequestParam("new-password") String newPassword, @RequestParam("conf-password") String confPassword, RedirectAttributes redirectAttributes){
+        profileServices.changePassword(userServices.findByUsername(userDetails.getUsername()).get(), oldPassword, newPassword, confPassword, redirectAttributes);
+        return "redirect:/profile";
+    }
+
+
     @PostMapping("/profile/username")
     public String changeUsername(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("username") String newUsername, RedirectAttributes redirectAttributes){
         profileServices.changeUsername(userServices.findByUsername(userDetails.getUsername()).get(), newUsername, redirectAttributes);
