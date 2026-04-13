@@ -22,6 +22,8 @@ public class User{
     @Column(name = "email")
     private String email;
 
+    @Column(name = "profilePicture")
+    private String profilePicture;
 
     public int getID(){
         return id;
@@ -35,9 +37,15 @@ public class User{
         return email;
     }
 
+
+    public String getProfilePicture(){
+        return profilePicture;
+    }
+
     public String getPassword(){
         return this.password;
     }
+
     public boolean verifyPassword(String newPassword){
         return newPassword.equals(this.password);
     }
@@ -52,5 +60,9 @@ public class User{
 
     public void setPassword(String newPassword){
         this.password = newPassword;
+    }
+
+    public void setProfilePicture(String newProfilePicture) {
+        this.profilePicture = newProfilePicture;
     }
 }
