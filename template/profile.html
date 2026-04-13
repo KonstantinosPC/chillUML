@@ -10,6 +10,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            background: rgb(233, 233, 233);
         }
     </style>
     <body>
@@ -40,7 +41,36 @@
         <main>
 
             <div class="profile-settings">
-                
+                <center><h1>Profile Settings</h1></center>
+                <hr>
+                <form action="" class="profile-picture">
+                    <h3>Change Profile Picture</h3>
+                    <div class="current">
+                        <img src="./assets/img/profile-1.png" alt="">
+                        <span>Current Profile Picture</span>
+                    </div>
+
+                </form>
+                <hr>
+                <form action="" class="profile-username">
+                    <h3>Change Username</h3>
+                    <input type="text" id="username" placeholder="Username" required>
+                    <button>Change Username</button>
+                </form>
+                <hr>
+                <form action="" class="profile-password">
+                    <h3>Change Password</h3>
+                    <input type="text" id="old-password" placeholder="Old Password" required>
+                    <input type="text" id="new-password" placeholder="New Password" required>
+                    <input type="text" id="conf-password" placeholder="Confirm Password" required>
+                    <button>Change Password</button>
+                </form>
+                <hr>
+                <form action="" class="profile-email">
+                    <h3>Change Email</h3>
+                    <input type="email" name="" id="email" placeholder="Email" required>
+                    <button>Change Email</button>
+                </form>
             </div>
 
         </main>
