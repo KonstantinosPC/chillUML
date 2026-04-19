@@ -45,6 +45,5 @@ public class Project {
 
     public void setOwner(User ownerId){
         this.ownerId = ownerId;
-
     }
 }
