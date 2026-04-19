@@ -10,6 +10,10 @@
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --primary: #2563eb;
+    --success: #22c55e;
+    --text: #334155;
+    --bg: #f8fafc; 
 }
 
 main{
@@ -627,47 +631,143 @@ nav {
     margin-bottom: 5px;
 }
 
-/* Profile */
-.profile-settings{
-    width: 40%;
-    padding: 10px;
-    max-height: 80%;
-    border-radius: 5px;
-    box-shadow: 0px 0px 5px -3px black ;
-    font-family: sans-serif;
-    text-align: center;
+/* Profile Settings */
+
+.settings-card {
     background: white;
-    overflow-x: scroll;
-    scrollbar-width: none;
+    width: 100%;
+    max-width: 550px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    overflow: hidden;
 }
 
-.profile-settings .profile-picture .current{
+.settings-card .header {
+    padding: 25px;
+    border-bottom: 1px solid #f1f5f9;
+    text-align: center; 
+}
+
+.settings-card .header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.settings-card .setting-row {
+    padding: 20px 25px;
+    border-bottom: 1px solid #f1f5f9;
     display: flex;
     flex-direction: column;
+    gap: 10px;
+    position: relative;
+}
+
+.setting-row .row-top {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    width: 25%;
-    font-weight: lighter;
-    font-size: 15px;
-    text-align: center;
+}
+.settings-card .label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.setting-row .value-display {
+  font-size: 1rem;
+  color: #1e293b;
+}
+.setting-row .edit-trigger {
+  cursor: pointer;
+  color: var(--primary);
+  font-size: 1.2rem;
+  transition: transform 0.2s;
+}
+.setting-row .edit-trigger:hover {
+  transform: scale(1.2);
 }
 
-.profile-settings .profile-picture .current span{
-    margin-top: 5px;
+.setting-row .edit-form {
+  display: none;
+  gap: 10px;
+  margin-top: 5px;
+}
+.setting-row .edit-form.active {
+  display: flex;
 }
 
-.profile-settings .profile-picture .current img{
-    width: 100%;
-    border-radius: 100%;
-    box-shadow: 0px 0px 5px -3px black;
+.setting-row input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+}
+.setting-row input:focus {
+  border-color: var(--primary);
+  ring: 2px solid #dbeafe;
 }
 
-.profile-settings input, .profile-settings button{
-    width: 90%;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    padding: 10px;
-    border-radius: 5px;
-    border: solid 0.1px rgba(255, 255, 255, 0);
-    box-shadow: 0px 0px 5px -3px black;
-    outline: none;
+.setting-row .btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: 0.3s;
+}
+.setting-row .btn-save {
+  background: var(--primary);
+  color: white;
+}
+.setting-row .btn-save:hover {
+  background: #1d4ed8;
+}
+.setting-row .btn-pass { 
+  background: #1e293b;
+  color: white;
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Stock Images Style */
+.settings-card .avatar-section {
+  background: #f1f5f9;
+  padding: 20px;
+  text-align: center;
+}
+.settings-card .stock-grid {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 10px;
+}
+.settings-card .stock-img { 
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  border: 3px solid white;
+  cursor: pointer;
+  transition: 0.3s;
+  object-fit: cover;
+}
+.settings-card .stock-img:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+.settings-card .stock-img.selected {
+  border-color: var(--primary);
+  scale: 1.1;
+}
+
+.settings-card .id-badge {
+  background: #d5dbe3;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 14px;
+  color: #475569;
 }

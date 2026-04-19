@@ -32,21 +32,27 @@ public class ProfileController {
     }
 
     @PostMapping("/profile/password")
-    public String changePassword(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("old-password") String oldPassword, @RequestParam("new-password") String newPassword, @RequestParam("conf-password") String confPassword, RedirectAttributes redirectAttributes){
-        profileServices.changePassword(userServices.findByUsername(userDetails.getUsername()).get(), oldPassword, newPassword, confPassword, redirectAttributes);
+    public String changePassword(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("old-password") String oldPassword, @RequestParam("new-password") String newPassword, @RequestParam("conf-password") String confPassword,Model model, RedirectAttributes redirectAttributes){
+        User currentUser = userServices.findByUsername(userDetails.getUsername()).get();
+        profileServices.changePassword(currentUser, oldPassword, newPassword, confPassword, redirectAttributes);
+        model.addAttribute("user",currentUser);
         return "redirect:/profile";
     }
 
 
     @PostMapping("/profile/username")
-    public String changeUsername(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("username") String newUsername, RedirectAttributes redirectAttributes){
-        profileServices.changeUsername(userServices.findByUsername(userDetails.getUsername()).get(), newUsername, redirectAttributes);
+    public String changeUsername(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("username") String newUsername, Model model, RedirectAttributes redirectAttributes){
+        User currentUser = userServices.findByUsername(userDetails.getUsername()).get();
+        profileServices.changeUsername(currentUser, newUsername, redirectAttributes);
+        model.addAttribute("user",currentUser);
         return "redirect:/profile";
     }
 
     @PostMapping("/profile/email")
-    public String changeEmail(@AuthenticationPrincipal UserDetails userDetails,@RequestParam("email") String newEmail, RedirectAttributes redirectAttributes){
-        profileServices.changeEmail(userServices.findByUsername(userDetails.getUsername()).get(), newEmail, redirectAttributes);
+    public String changeEmail(@AuthenticationPrincipal UserDetails userDetails,@RequestParam("email") String newEmail, Model model, RedirectAttributes redirectAttributes){
+        User currentUser = userServices.findByUsername(userDetails.getUsername()).get();
+        profileServices.changeEmail(currentUser, newEmail, redirectAttributes);
+        model.addAttribute("user",currentUser);
         return "redirect:/profile";
     }
 }
