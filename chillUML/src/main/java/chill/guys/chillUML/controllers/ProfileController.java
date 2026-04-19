@@ -39,7 +39,6 @@ public class ProfileController {
         return "redirect:/profile";
     }
 
-
     @PostMapping("/profile/username")
     public String changeUsername(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("username") String newUsername, Model model, RedirectAttributes redirectAttributes){
         User currentUser = userServices.findByUsername(userDetails.getUsername()).get();
@@ -53,6 +52,14 @@ public class ProfileController {
         User currentUser = userServices.findByUsername(userDetails.getUsername()).get();
         profileServices.changeEmail(currentUser, newEmail, redirectAttributes);
         model.addAttribute("user",currentUser);
+        return "redirect:/profile";
+    }
+
+    @PostMapping("/profile/change-avatar")
+    public String changeAvatar(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("avatar") String newAvatar, RedirectAttributes redirectAttributes){
+        User currentUser = userServices.findByUsername(userDetails.getUsername()).get();
+        profileServices.changeProfilePicture(currentUser, newAvatar);
+        redirectAttributes.addFlashAttribute("success","Avatar has changed successfully");
         return "redirect:/profile";
     }
 }

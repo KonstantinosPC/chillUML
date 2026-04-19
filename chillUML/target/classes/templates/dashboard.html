@@ -25,13 +25,13 @@
             <div class="nav-right">
                 <div class="user-dropdown-container">
                     <button class="user-avatar">
-                        <img th:src="@{/assets/image/freddo.png}" alt="User Profile">
+                        <img th:src="@{'/assets/avatars/' + ${user.getProfilePicture()} + '.png'}" alt="User Profile">
                     </button>
                     <div class="dropdown-menu">
-                        <div class="dropdown-header">Ο λογαριασμός μου</div>
-                        <a th:href="@{/profile}" class="dropdown-item">Προφίλ</a>
+                        <div class="dropdown-header">Hello <span th:text="${user.username}"></span></div>
+                        <a th:href="@{/profile}" class="dropdown-item">Profile Settings</a>
                         <div class="dropdown-divider"></div>
-                        <a th:href="@{/auth/logout}" class="dropdown-item text-danger">Αποσύνδεση</a>
+                        <a th:href="@{/auth/logout}" class="dropdown-item text-danger">Log Out</a>
                     </div>
                 </div>
             </div>

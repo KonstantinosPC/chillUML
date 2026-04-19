@@ -29,13 +29,13 @@
             <div class="nav-right">
                 <div class="user-dropdown-container">
                     <button class="user-avatar">
-                        <img th:src="@{/assets/image/freddo.png}" alt="User Profile">
+                        <img th:src="@{'/assets/avatars/' + ${user.getProfilePicture()} + '.png'}" alt="User Profile">
                     </button>
                     <div class="dropdown-menu">
-                        <div class="dropdown-header">Ο λογαριασμός μου</div>
-                        <a th:href="@{/profile}" class="dropdown-item">Προφίλ</a>
+                        <div class="dropdown-header">Hello <span th:text="${user.username}"></span></div>
+                        <a th:href="@{/profile}" class="dropdown-item">Profile Settings</a>
                         <div class="dropdown-divider"></div>
-                        <a th:href="@{/auth/logout}" class="dropdown-item text-danger">Αποσύνδεση</a>
+                        <a th:href="@{/auth/logout}" class="dropdown-item text-danger">Log Out</a>
                     </div>
                 </div>
             </div>
@@ -50,16 +50,22 @@
 
                 <div class="avatar-section">
                     <span class="label">Choose Avatar</span>
+                    <form id="avatarForm" th:action="@{/profile/change-avatar}" method="POST" style="display:none;">
+                        <input type="hidden" name="avatar" id="avatar">
+                    </form>
                     <div class="stock-grid">
-                        <img th:src="@{/assets/image/freddo.png}" class="stock-img selected" onclick="selectAvatar(this, 'Freddo')">
-                        <img th:src="@{/assets/image/catUML.png}" class="stock-img" onclick="selectAvatar(this, 'Penguin')">
+                        <img th:src="@{/assets/avatars/freddo.png}" th:classappend="${user.getProfilePicture() == 'freddo'} ? 'selected' : ''"  class="stock-img" onclick="submitAvatar('freddo')">
+                        <img th:src="@{/assets/avatars/icecream.png}" th:classappend="${user.getProfilePicture() == 'icecream'} ? 'selected' : ''"  class="stock-img" onclick="submitAvatar('icecream')">
+                        <img th:src="@{/assets/avatars/panda.png}" th:classappend="${user.getProfilePicture() == 'panda'} ? 'selected' : ''" class="stock-img" onclick="submitAvatar('panda')">
+                        <img th:src="@{/assets/avatars/penguin.png}" th:classappend="${user.getProfilePicture() == 'penguin'} ? 'selected' : ''" class="stock-img" onclick="submitAvatar('penguin')">
+                        <img th:src="@{/assets/avatars/capibara.png}" th:classappend="${user.getProfilePicture() == 'capibara'} ? 'selected' : ''" class="stock-img" onclick="submitAvatar('capibara')">
                     </div>
                 </div>
 
                 <div class="setting-row">
                     <div class="row-top">
                         <span class="label">User ID</span>
-                        <span class="id-badge" th:text="${user.getID()}"></span>
+                        <span class="id-badge" th:text="'#' + ${user.getID()}"></span>
                     </div>
                 </div>
 
@@ -128,14 +134,9 @@
             display.style.display = form.classList.contains('active') ? 'none' : 'block';
         }
         // Επιλογή Avatar
-        function selectAvatar(element, seed) {
-            // Αφαίρεση του 'selected' από όλα
-            document.querySelectorAll('.stock-img').forEach(img => img.classList.remove('selected'));
-            // Προσθήκη στο επιλεγμένο
-            element.classList.add('selected');
-
-            // Αποστολή στο backend
-            console.log("Στέλνω στο Backend το νέο avatar seed:", seed);
+       function submitAvatar(avatarName) {
+            document.getElementById('avatar').value = avatarName;
+            document.getElementById('avatarForm').submit();
         }
     </script>
 </html>
