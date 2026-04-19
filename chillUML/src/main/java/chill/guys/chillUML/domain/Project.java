@@ -16,12 +16,13 @@ public class Project {
     private String projectDescription;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner")
     private User ownerId;
 
     public int getId() {
         return id;
     }
+
     public String getProjectName(){
         return projectName;
     }
@@ -44,6 +45,5 @@ public class Project {
 
     public void setOwner(User ownerId){
         this.ownerId = ownerId;
-
     }
 }
