@@ -6,11 +6,13 @@ import chill.guys.chillUML.repositories.ProjectRepository;
 import chill.guys.chillUML.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class ProjectServicesImpl implements ProjectServices{
     String specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
 
@@ -24,7 +26,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This project name is over 15 characters long");
             return;
         }
-        if(!(projectRepository.findByIdWithProject(projectDTO.getProjectName(),projectDTO.getOwnerId())){
+        if(!(projectRepository.findByIdWithProject(projectDTO.getProjectName(),projectDTO.getOwnerId()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","There is already a project with this name");
             return;
         }
