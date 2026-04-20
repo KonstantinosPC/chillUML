@@ -38,10 +38,10 @@
         </nav>
 
         <div id="pop-up" class="pop-up">
-            <form id="create-project" class="create-project">
+            <form th:action="@{/project/create-project}" method="POST" id="create-project" class="create-project">
                 <h1>Create Project</h1>
-                <input type="text" placeholder="Project Name">
-                <textarea name="" id="" placeholder="Project Description"></textarea>
+                <input type="text" name="project-name" id="project-name" placeholder="Project Name">
+                <textarea name="project-description" id="project-description" placeholder="Project Description"></textarea>
                 <button type="submit">Create Project</button>
                 <button onclick="togglePopUp('create-project')" class="close" type="button">Close</button>
             </form>
@@ -60,8 +60,8 @@
                 <div class="toolbar">
                     <input type="text" id="search-project" placeholder="Search Project">
                     <button class="delete" disabled>Delete</button>
-                    <button>Edit</button>
-                    <button class="create">Create</button>
+                    <button onclick="togglePopUp('edit-project')">Edit</button>
+                    <button onclick="togglePopUp('create-project')" class="create">Create</button>
                 </div>
                 <div class="project-list">
                     <div class="project">
