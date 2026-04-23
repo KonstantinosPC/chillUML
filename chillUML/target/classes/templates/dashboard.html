@@ -25,23 +25,23 @@
             <div class="nav-right">
                 <div class="user-dropdown-container">
                     <button class="user-avatar">
-                        <img th:src="@{/assets/image/freddo.png}" alt="User Profile">
+                        <img th:src="@{'/assets/avatars/' + ${user.getProfilePicture()} + '.png'}" alt="User Profile">
                     </button>
                     <div class="dropdown-menu">
-                        <div class="dropdown-header">Ο λογαριασμός μου</div>
-                        <a th:href="@{/profile}" class="dropdown-item">Προφίλ</a>
+                        <div class="dropdown-header">Hello <span th:text="${user.username}"></span></div>
+                        <a th:href="@{/profile}" class="dropdown-item">Profile Settings</a>
                         <div class="dropdown-divider"></div>
-                        <a th:href="@{/auth/logout}" class="dropdown-item text-danger">Αποσύνδεση</a>
+                        <a th:href="@{/auth/logout}" class="dropdown-item text-danger">Log Out</a>
                     </div>
                 </div>
             </div>
         </nav>
 
         <div id="pop-up" class="pop-up">
-            <form id="create-project" class="create-project">
+            <form th:action="@{/project/create-project}" method="POST" id="create-project" class="create-project">
                 <h1>Create Project</h1>
-                <input type="text" placeholder="Project Name">
-                <textarea name="" id="" placeholder="Project Description"></textarea>
+                <input type="text" name="project-name" id="project-name" placeholder="Project Name">
+                <textarea name="project-description" id="project-description" placeholder="Project Description"></textarea>
                 <button type="submit">Create Project</button>
                 <button onclick="togglePopUp('create-project')" class="close" type="button">Close</button>
             </form>
@@ -60,8 +60,8 @@
                 <div class="toolbar">
                     <input type="text" id="search-project" placeholder="Search Project">
                     <button class="delete" disabled>Delete</button>
-                    <button>Edit</button>
-                    <button class="create">Create</button>
+                    <button onclick="togglePopUp('edit-project')">Edit</button>
+                    <button onclick="togglePopUp('create-project')" class="create">Create</button>
                 </div>
                 <div class="project-list">
                     <div class="project">
@@ -107,6 +107,14 @@
 
 
             <div class="notifications">
+                <div th:if="${error}" class="notification error">
+                    <span class="material-symbols-outlined">close</span>
+                    <p th:text="${error}">This user already exists</p>
+                </div>
+                <div th:if="${success}" class="notification check">
+                    <span class="material-symbols-outlined">check</span>
+                    <p th:text="${success}"></p>
+                </div>
             </div>
         </main>
 

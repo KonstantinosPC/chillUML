@@ -11,6 +11,9 @@
             justify-content: center;
             align-items: center;
             background: rgb(233, 233, 233);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
         }
     </style>
     <body>
@@ -40,41 +43,92 @@
 
         <main>
 
-            <div class="profile-settings">
-                <center><h1>Profile Settings</h1></center>
-                <hr>
-                <form action="" class="profile-picture">
-                    <h3>Change Profile Picture</h3>
-                    <div class="current">
-                        <img src="./assets/img/profile-1.png" alt="">
-                        <span>Current Profile Picture</span>
-                    </div>
+            <div class="settings-card">
+                <div class="header">
+                    <h2>Profile Settings</h2>
+                </div>
 
-                </form>
-                <hr>
-                <form action="" class="profile-username">
-                    <h3>Change Username</h3>
-                    <input type="text" id="username" placeholder="Username" required>
-                    <button>Change Username</button>
-                </form>
-                <hr>
-                <form action="" class="profile-password">
-                    <h3>Change Password</h3>
-                    <input type="text" id="old-password" placeholder="Old Password" required>
-                    <input type="text" id="new-password" placeholder="New Password" required>
-                    <input type="text" id="conf-password" placeholder="Confirm Password" required>
-                    <button>Change Password</button>
-                </form>
-                <hr>
-                <form action="" class="profile-email">
-                    <h3>Change Email</h3>
-                    <input type="email" name="" id="email" placeholder="Email" required>
-                    <button>Change Email</button>
-                </form>
+                <div class="avatar-section">
+                    <span class="label">Choose Avatar</span>
+                    <div class="stock-grid">
+                        <img src="./assets/img/panda-coffee.png" class="stock-img selected" onclick="selectAvatar(this, 'Panda')">
+                        <img src="./assets/img/profile-1.png" class="stock-img" onclick="selectAvatar(this, 'Penguin')">
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <div class="row-top">
+                        <span class="label">User ID</span>
+                        <span class="id-badge">#882931</span>
+                    </div>
+                </div>
+
+                <div class="setting-row" id="row-username">
+                    <div class="row-top">
+                        <div>
+                            <div class="label">Username</div>
+                            <div class="value-display" id="val-username">Alex_Dev</div>
+                        </div>
+                        <span class="edit-trigger" onclick="toggleEdit('username')">✎</span>
+                    </div>
+                    <form class="edit-form" onsubmit="saveField(event, 'username')">
+                        <input type="text" id="input-username" value="Alex_Dev" required>
+                        <button type="submit" class="btn btn-save">Save</button>
+                    </form>
+                </div>
+
+                <div class="setting-row" id="row-email">
+                    <div class="row-top">
+                        <div>
+                            <div class="label">Email Address</div>
+                            <div class="value-display" id="val-email">alex@example.com</div>
+                        </div>
+                        <span class="edit-trigger" onclick="toggleEdit('email')">✎</span>
+                    </div>
+                    <form class="edit-form" onsubmit="saveField(event, 'email')">
+                        <input type="email" id="input-email" value="alex@example.com" required>
+                        <button type="submit" class="btn btn-save">Save</button>
+                    </form>
+                </div>
+
+                <div class="setting-row">
+                    <span class="label">Change Password</span>
+                    <form onsubmit="saveField(event, 'password')">
+                        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 5px;">
+                            <input type="password" id="old-pass" placeholder="Old Password" required>
+                            <input type="password" id="pass-new" placeholder="New Password" required>
+                            <input type="password" id="pass-confirm" placeholder="Confirm Password" required>
+                        </div>
+                        <button type="submit" class="btn btn-pass">Update Password</button>
+                    </form>
+                </div>
             </div>
 
         </main>
-        <div class="notifications">    
+        <div class="notifications">   
         </div>
     </body>
+
+    <script>
+        // Συνάρτηση για να εμφανίζει/κρύβει το input field
+        function toggleEdit(field) {
+            const row = document.getElementById(`row-${field}`);
+            const form = row.querySelector('.edit-form');
+            const display = row.querySelector('.value-display');
+            
+            form.classList.toggle('active');
+            // Αν το form έγινε active, κρύβουμε το απλό κείμενο
+            display.style.display = form.classList.contains('active') ? 'none' : 'block';
+        }
+        // Επιλογή Avatar
+        function selectAvatar(element, seed) {
+            // Αφαίρεση του 'selected' από όλα
+            document.querySelectorAll('.stock-img').forEach(img => img.classList.remove('selected'));
+            // Προσθήκη στο επιλεγμένο
+            element.classList.add('selected');
+            
+            // Αποστολή στο backend
+            console.log("Στέλνω στο Backend το νέο avatar seed:", seed);
+        }
+    </script>
 </html>

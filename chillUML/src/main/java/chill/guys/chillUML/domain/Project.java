@@ -9,7 +9,7 @@ public class Project {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String projectName;
 
     @Column(name = "projectDescription")

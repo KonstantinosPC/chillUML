@@ -32,7 +32,7 @@ public class ProfileServicesImpl implements ProfileServices, UserDetailsService 
 
     @Override
     @Transactional
-    public void changeUsername(User user,String newUsername,RedirectAttributes redirectAttributes) {
+    public boolean changeUsername(User user,String newUsername,RedirectAttributes redirectAttributes) {
 
         if(userRepository.findByUsername(newUsername).isEmpty()){
             if(newUsername.length()<= 15){
@@ -40,12 +40,15 @@ public class ProfileServicesImpl implements ProfileServices, UserDetailsService 
                 userRepository.save(user);
             }else{
                 redirectAttributes.addFlashAttribute("error","This username is over 15 characters long");
+                return false;
             }
 
         }else{
             redirectAttributes.addFlashAttribute("error","This username already exists");
+            return false;
         }
         redirectAttributes.addFlashAttribute("success","Your username has changed successfully");
+        return true;
 
     }
 

@@ -27,6 +27,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This project name is over 15 characters long");
             return;
         }
+        System.out.println(projectRepository.findByProjectNameAndOwnerId(projectDTO.getProjectName(), projectDTO.getOwnerId()).isEmpty());
         if(!(projectRepository.findByProjectNameAndOwnerId(projectDTO.getProjectName(),projectDTO.getOwnerId()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","There is already a project with this name");
             return;
