@@ -107,6 +107,14 @@
 
 
             <div class="notifications">
+                <div th:if="${error}" class="notification error">
+                    <span class="material-symbols-outlined">close</span>
+                    <p th:text="${error}">This user already exists</p>
+                </div>
+                <div th:if="${success}" class="notification check">
+                    <span class="material-symbols-outlined">check</span>
+                    <p th:text="${success}"></p>
+                </div>
             </div>
         </main>
 

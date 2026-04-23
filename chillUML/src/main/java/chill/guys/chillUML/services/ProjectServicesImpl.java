@@ -27,10 +27,11 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This project name is over 15 characters long");
             return;
         }
-//        if(!(projectRepository.findByProjectNameAndOwnerId(projectDTO.getProjectName(),projectDTO.getOwnerId()).isEmpty())){
-//            redirectAttributes.addFlashAttribute("error","There is already a project with this name");
-//            return;
-//        }
+        System.out.println(projectRepository.findByProjectNameAndOwnerId(projectDTO.getProjectName(), projectDTO.getOwnerId()).isEmpty());
+        if(!(projectRepository.findByProjectNameAndOwnerId(projectDTO.getProjectName(),projectDTO.getOwnerId()).isEmpty())){
+            redirectAttributes.addFlashAttribute("error","There is already a project with this name");
+            return;
+        }
         if(!(projectDTO.getProjectName().chars().noneMatch(ch->specialChars.indexOf(ch) >= 0))){
             redirectAttributes.addFlashAttribute("error","The project name must not contain special characters.");
             return;

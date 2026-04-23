@@ -14,7 +14,5 @@ import org.springframework.stereotype.Repository;
 public interface ProjectRepository extends JpaRepository<Project, Integer>{
     Optional<Project> findByProjectName(String projectName);
     List <Project> findByOwnerId(User ownerId);
-    @Query("select p from Project p where p.projectName = : projectName and p.ownerId = : owner")
-    Optional<Project> findByProjectNameAndOwnerId(@Param("projectName") String projectName, @Param("owner") User owner);
+    Optional<Project> findByProjectNameAndOwnerId(String projectName, User ownerId);
 }
-
