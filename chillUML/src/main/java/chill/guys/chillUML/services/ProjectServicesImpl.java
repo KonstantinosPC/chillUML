@@ -2,15 +2,18 @@ package chill.guys.chillUML.services;
 
 import chill.guys.chillUML.DTO.ProjectDTO;
 import chill.guys.chillUML.domain.Project;
+import chill.guys.chillUML.domain.User;
 import chill.guys.chillUML.repositories.ProjectRepository;
 import chill.guys.chillUML.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class ProjectServicesImpl implements ProjectServices{
     String specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
 
@@ -24,7 +27,8 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This project name is over 15 characters long");
             return;
         }
-        if(!(projectRepository.findByIdWithProject(projectDTO.getProjectName(),projectDTO.getOwnerId())).isEmpty()){
+        System.out.println(projectRepository.findByProjectNameAndOwnerId(projectDTO.getProjectName(), projectDTO.getOwnerId()).isEmpty());
+        if(!(projectRepository.findByProjectNameAndOwnerId(projectDTO.getProjectName(),projectDTO.getOwnerId()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","There is already a project with this name");
             return;
         }
@@ -35,14 +39,14 @@ public class ProjectServicesImpl implements ProjectServices{
         Project project = new Project();
         project.setProjectName(projectDTO.getProjectName());
         project.setProjectDescription(projectDTO.getProjectDescription());
-        project.setOwnerId(projectDTO.getOwnerId());
+        project.setOwner(projectDTO.getOwnerId());
         projectRepository.save(project);
         redirectAttributes.addFlashAttribute("success","The user " + project.getProjectName() + " has been created successfully");
     }
 
     @Override
-    public List<Optional<Project>> viewAllProjects(int ownerId) {
-        return projectRepository.findByOwner(ownerId);
+    public List<Project> viewAllProjects(User ownerId) {
+        return projectRepository.findByOwnerId(ownerId);
     }
 
     @Override
@@ -57,7 +61,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This project name is over 15 characters long");
             return;
         }
-        if(!(projectRepository.findByIdWithProject(newName,project.getOwnerId())).isEmpty()){
+        if(!(projectRepository.findByProjectNameAndOwnerId(newName,project.getOwnerId())).isEmpty()){
             redirectAttributes.addFlashAttribute("error","There is already a project with this name");
             return;
         }

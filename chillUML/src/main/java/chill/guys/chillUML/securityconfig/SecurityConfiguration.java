@@ -1,5 +1,6 @@
 package chill.guys.chillUML.securityconfig;
 
+import chill.guys.chillUML.services.UserServices;
 import chill.guys.chillUML.services.UserServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,8 +10,11 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import jakarta.servlet.DispatcherType;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -47,7 +51,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/login", "/auth/signup", "/auth/save", "/auth/loguser", "/auth/logout", "/error").permitAll()
                         .requestMatchers("/css/**", "/assets/**", "/static/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/dashboard", "/profile", "/profile/**", "/project", "/project/**").authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")

@@ -9,18 +9,20 @@ public class Project {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String projectName;
 
     @Column(name = "projectDescription")
     private String projectDescription;
+
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "owner_id")
-    private int ownerId;
+    @JoinColumn(name = "owner")
+    private User ownerId;
 
     public int getId() {
         return id;
     }
+
     public String getProjectName(){
         return projectName;
     }
@@ -29,7 +31,7 @@ public class Project {
         return projectDescription;
     }
 
-    public int getOwnerId() {
+    public User getOwnerId() {
         return ownerId;
     }
 
@@ -41,8 +43,7 @@ public class Project {
         this.projectDescription = projectDescription;
     }
 
-    public void setOwnerId(int ownerId){
+    public void setOwner(User ownerId){
         this.ownerId = ownerId;
-
     }
 }

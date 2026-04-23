@@ -13,13 +13,57 @@
         }
     </style>
     <body>
+
+        <nav>
+            <div class="nav-left">
+                <div class="logo">
+                    <img src="../assets/img/logo.png" alt="">
+                </div>
+                <h1 class="page-title">Dashboard</h1>
+            </div>
+            
+            <div class="nav-right">
+                <div class="user-dropdown-container">
+                    <button class="user-avatar">
+                        <img src="https://ui-avatars.com/api/?name=NG&background=4f46e5&color=fff" alt="User Profile">
+                    </button>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-header">Ο λογαριασμός μου</div>
+                        <a href="#" class="dropdown-item">Προφίλ</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item text-danger">Αποσύνδεση</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div id="pop-up" class="pop-up">
+            <form id="create-project" class="create-project">
+                <h1>Create Project</h1>
+                <input type="text" placeholder="Project Name">
+                <textarea name="" id="" placeholder="Project Description"></textarea>
+                <button type="submit">Create Project</button>
+                <button onclick="togglePopUp('create-project')" class="close" type="button">Close</button>
+            </form>
+            <form id="edit-project" class="edit-project">
+                <h1>Edit Project</h1>
+                <h3>Project A</h3>
+                <input type="text" placeholder="Project Name">
+                <textarea name="" id="" placeholder="Project Description"></textarea>
+                <button type="submit">Submit Changes</button>
+                <button onclick="togglePopUp('edit-project')" class="close" type="button">Close</button>
+            </form>
+        </div>
+
+        
+
         <main>
             <div class="projects">
                 <div class="toolbar">
                     <input type="text" id="search-project" placeholder="Search Project">
                     <button class="delete" disabled>Delete</button>
-                    <button>Edit</button>
-                    <button class="create">Create</button>
+                    <button onclick="togglePopUp('edit-project')">Edit</button>
+                    <button onclick="togglePopUp('create-project')" class="create">Create</button>
                 </div>
                 <div class="project-list">
                     <div class="project">
@@ -86,6 +130,20 @@
 
                 });
             });
+
+            function togglePopUp(type){
+                const popUp = document.getElementById("pop-up");
+                const windowed = document.getElementById(type);
+
+                if(popUp.style.height == "100%"){
+                    popUp.style.height = 0;
+                    setTimeout(windowed.style.display = 'none', 5000);
+                }else{
+                    popUp.style.height = '100%';
+                    windowed.style.display = 'initial';
+                }
+                
+            }
         </script>
     </body>
 </html>

@@ -10,14 +10,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
-
+@Service
 public class ProfileServicesImpl implements ProfileServices, UserDetailsService {
 
     String specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
-
 
     private final PasswordEncoder passwordEncoder = new MessageDigestPasswordEncoder("SHA-256");
 
@@ -25,43 +25,43 @@ public class ProfileServicesImpl implements ProfileServices, UserDetailsService 
     private UserRepository userRepository;
 
     @Override
-    public void changeProfilePicture(int userID, String newProfilePicture) {
-        User user = findById(userID).get();
+    public void changeProfilePicture(User user, String newProfilePicture) {
         user.setProfilePicture(newProfilePicture);
         userRepository.save(user);
     }
 
     @Override
     @Transactional
-    public void changeUsername(int userID,String newUsername,RedirectAttributes redirectAttributes) {
+    public boolean changeUsername(User user,String newUsername,RedirectAttributes redirectAttributes) {
 
         if(userRepository.findByUsername(newUsername).isEmpty()){
             if(newUsername.length()<= 15){
-                User user = findById(userID).get();
                 user.setUsername(newUsername);
                 userRepository.save(user);
             }else{
                 redirectAttributes.addFlashAttribute("error","This username is over 15 characters long");
+                return false;
             }
 
         }else{
             redirectAttributes.addFlashAttribute("error","This username already exists");
+            return false;
         }
-
+        redirectAttributes.addFlashAttribute("success","Your username has changed successfully");
+        return true;
 
     }
 
-    @Override
-    public void changePassword(int userID,String confirmationPassword,String newPassword,String newPasswordConfirmation,RedirectAttributes redirectAttributes) {
 
-        String hashed = passwordEncoder.encode(confirmationPassword);
+    @Override
+    public void changePassword(User user,String confirmationPassword,String newPassword,String newPasswordConfirmation,RedirectAttributes redirectAttributes) {
+
         String newHashed = passwordEncoder.encode(newPassword);
-        User user = findById(userID).get();
-        if(!user.verifyPassword(hashed)){
+        if(!passwordEncoder.matches(confirmationPassword, user.getPassword())){
             redirectAttributes.addFlashAttribute("error","Old Password is Wrong");
             return;
         }
-        if(confirmationPassword.chars().noneMatch(ch->specialChars.indexOf(ch) >= 0)) {
+        if(newPassword.chars().noneMatch(ch->specialChars.indexOf(ch) >= 0)) {
             redirectAttributes.addFlashAttribute("error","Please use at least one special character");
             return;
         }
@@ -69,21 +69,25 @@ public class ProfileServicesImpl implements ProfileServices, UserDetailsService 
             redirectAttributes.addFlashAttribute("error","Password >= 8 characters long");
             return ;
         }
-        if(newHashed.equals(hashed)){
+        if(confirmationPassword.equals(newPassword)){
             redirectAttributes.addFlashAttribute("error","New password is the same as the old one");
             return;
         }
         if(!(newPassword.equals(newPasswordConfirmation))){
             redirectAttributes.addFlashAttribute("error","Confirmation password not the same as the new password");
+            return;
         }
         user.setPassword(newHashed);
+        redirectAttributes.addFlashAttribute("success","Password changed successfully");
+        userRepository.save(user);
     }
 
     @Override
-    public void changeEmail(int userID,String newEmail,RedirectAttributes redirectAttributes) {
+    public void changeEmail(User user,String newEmail,RedirectAttributes redirectAttributes) {
         if(userRepository.findByEmail(newEmail).isEmpty()){
-            User user = userRepository.findById(userID).get();
             user.setEmail(newEmail);
+            userRepository.save(user);
+            redirectAttributes.addFlashAttribute("success","Your email has changed successfully");
         }else{
             redirectAttributes.addFlashAttribute("error","This email is already in use");
         }

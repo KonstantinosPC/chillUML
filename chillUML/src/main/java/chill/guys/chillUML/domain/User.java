@@ -1,5 +1,8 @@
 package chill.guys.chillUML.domain;
 
+import org.antlr.v4.runtime.misc.NotNull;
+import org.hibernate.annotations.NotFound;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
@@ -23,7 +26,7 @@ public class User{
     private String email;
 
     @Column(name = "profilePicture")
-    private String profilePicture;
+    private String profilePicture = "freddo";
 
     public int getID(){
         return id;
@@ -37,17 +40,12 @@ public class User{
         return email;
     }
 
-
     public String getProfilePicture(){
         return profilePicture;
     }
 
     public String getPassword(){
         return this.password;
-    }
-
-    public boolean verifyPassword(String newPassword){
-        return newPassword.equals(this.password);
     }
 
     public void setEmail(String newEmail){

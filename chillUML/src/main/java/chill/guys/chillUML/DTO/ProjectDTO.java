@@ -5,7 +5,7 @@ import chill.guys.chillUML.domain.User;
 public class ProjectDTO {
     private String projectName;
     private String projectDescription;
-    private int ownerId;
+    private User ownerId;
 
     public String getProjectName() {
         return projectName;
@@ -23,11 +23,11 @@ public class ProjectDTO {
         this.projectDescription = projectDescription;
     }
 
-    public int getOwnerId() {
+    public User getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(int ownerId) {
+    public void setOwnerId(User ownerId) {
         this.ownerId = ownerId;
     }
 }

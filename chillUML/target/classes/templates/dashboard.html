@@ -1,0 +1,155 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Dashboard | ChillUML</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    </head>
+    <style>
+        main{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <body>
+
+        <nav>
+            <div class="nav-left">
+                <div onclick="window.location.href='/dashboard'" class="logo">
+                    <img th:src="@{/assets/image/logo.png}" alt="">
+                </div>
+                <h1 class="page-title">Dashboard</h1>
+            </div>
+            
+            <div class="nav-right">
+                <div class="user-dropdown-container">
+                    <button class="user-avatar">
+                        <img th:src="@{'/assets/avatars/' + ${user.getProfilePicture()} + '.png'}" alt="User Profile">
+                    </button>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-header">Hello <span th:text="${user.username}"></span></div>
+                        <a th:href="@{/profile}" class="dropdown-item">Profile Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a th:href="@{/auth/logout}" class="dropdown-item text-danger">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div id="pop-up" class="pop-up">
+            <form th:action="@{/project/create-project}" method="POST" id="create-project" class="create-project">
+                <h1>Create Project</h1>
+                <input type="text" name="project-name" id="project-name" placeholder="Project Name">
+                <textarea name="project-description" id="project-description" placeholder="Project Description"></textarea>
+                <button type="submit">Create Project</button>
+                <button onclick="togglePopUp('create-project')" class="close" type="button">Close</button>
+            </form>
+            <form id="edit-project" class="edit-project">
+                <h1>Edit Project</h1>
+                <h3>Project A</h3>
+                <input type="text" placeholder="Project Name">
+                <textarea name="" id="" placeholder="Project Description"></textarea>
+                <button type="submit">Submit Changes</button>
+                <button onclick="togglePopUp('edit-project')" class="close" type="button">Close</button>
+            </form>
+        </div>
+
+        <main>
+            <div class="projects">
+                <div class="toolbar">
+                    <input type="text" id="search-project" placeholder="Search Project">
+                    <button class="delete" disabled>Delete</button>
+                    <button onclick="togglePopUp('edit-project')">Edit</button>
+                    <button onclick="togglePopUp('create-project')" class="create">Create</button>
+                </div>
+                <div class="project-list">
+                    <div class="project">
+                        <input type="checkbox">
+                        <span class="project-name">Project A</span>
+                        <span class="project-owner">KonstantinosPC</span>
+                        <span class="project-edition">10 Dec 2025</span>
+                    </div>
+                    <div class="project">
+                        <input type="checkbox">
+                        <span class="project-name">Project B</span>
+                        <span class="project-owner">KonstantinosPC</span>
+                        <span class="project-edition">25 Dec 2025</span>
+                    </div>
+                    <div class="project">
+                        <input type="checkbox">
+                        <span class="project-name">Project C</span>
+                        <span class="project-owner">KonstantinosPC</span>
+                        <span class="project-edition">1 Jan 2026</span>
+                    </div>
+                    
+                </div>
+
+                <h1 class="shared-project">
+                    Shared Projects
+                </h1>
+
+                <div class="project-list">
+                    <div class="project">
+                        <input type="checkbox">
+                        <span class="project-name">Project D</span>
+                        <span class="project-owner">Tasos</span>
+                        <span class="project-edition">30 Jan 2026</span>
+                    </div>
+                    <div class="project">
+                        <input type="checkbox">
+                        <span class="project-name">Project E</span>
+                        <span class="project-owner">Anagno</span>
+                        <span class="project-edition">2 Jan 2026</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="notifications">
+                <div th:if="${error}" class="notification error">
+                    <span class="material-symbols-outlined">close</span>
+                    <p th:text="${error}">This user already exists</p>
+                </div>
+                <div th:if="${success}" class="notification check">
+                    <span class="material-symbols-outlined">check</span>
+                    <p th:text="${success}"></p>
+                </div>
+            </div>
+        </main>
+
+        <script>
+            const searchBar = document.getElementById("search-project");
+            const projects = document.querySelectorAll(".project");
+
+            searchBar.addEventListener('input', () => {
+                const filter = searchBar.value.toLowerCase();
+
+                projects.forEach(project => {
+                    const projectName = project.querySelector(".project-name").textContent.toLowerCase();
+
+                    if(projectName.includes(filter)){
+                        project.style.display = "flex";
+                    }else{
+                        project.style.display = "none";
+                    }
+
+                });
+            });
+
+            function togglePopUp(type){
+                const popUp = document.getElementById("pop-up");
+                const windowed = document.getElementById(type);
+
+                if(popUp.style.height == "100%"){
+                    popUp.style.height = 0;
+                    setTimeout(windowed.style.display = 'none', 5000);
+                }else{
+                    popUp.style.height = '100%';
+                    windowed.style.display = 'initial';
+                }
+
+            }
+        </script>
+    </body>
+</html>

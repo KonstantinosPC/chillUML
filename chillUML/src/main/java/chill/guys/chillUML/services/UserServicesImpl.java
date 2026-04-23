@@ -1,17 +1,13 @@
 package chill.guys.chillUML.services;
 
 
-import java.io.Serial;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 
-import chill.guys.chillUML.domain.RegistrationForm;
+import chill.guys.chillUML.DTO.RegistrationForm;
 import chill.guys.chillUML.domain.User;
 import chill.guys.chillUML.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -78,12 +74,13 @@ public class UserServicesImpl implements UserServices, UserDetailsService {
 
     @Override
     public boolean login(String username, String password) {
-        String hashed = passwordEncoder.encode(password);
         Optional<User> user = findByUsername(username);
-        if(user.isEmpty() || hashed != null){
+
+        if (user.isEmpty()) {
             return false;
-        }else{
-            return user.get().verifyPassword(hashed);
+        } else {
+
+            return passwordEncoder.matches(password, user.get().getPassword());
         }
     }
 
