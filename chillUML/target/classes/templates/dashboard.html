@@ -45,11 +45,12 @@
                 <button type="submit">Create Project</button>
                 <button onclick="togglePopUp('create-project')" class="close" type="button">Close</button>
             </form>
-            <form id="edit-project" class="edit-project">
+            <form th:action="@{/project/edit-project}" method="POST" id="edit-project" class="edit-project">
                 <h1>Edit Project</h1>
-                <h3>Project A</h3>
-                <input type="text" placeholder="Project Name">
-                <textarea name="" id="" placeholder="Project Description"></textarea>
+                <h3 id="edit-project-info">Project A</h3>
+                <input type="hidden" name="edit-id" id="edit-id">
+                <input type="text" name="edit-name" id="edit-name" placeholder="Project Name">
+                <textarea name="edit-description" id="edit-description" placeholder="Project Description"></textarea>
                 <button type="submit">Submit Changes</button>
                 <button onclick="togglePopUp('edit-project')" class="close" type="button">Close</button>
             </form>
@@ -59,30 +60,17 @@
             <div class="projects">
                 <div class="toolbar">
                     <input type="text" id="search-project" placeholder="Search Project">
-                    <button class="delete" disabled>Delete</button>
-                    <button onclick="togglePopUp('edit-project')">Edit</button>
+                    <button id="btn-delete" class="delete" disabled onclick="confirmDelete()">Delete</button>
+                    <button id="btn-edit" disabled onclick="openEditModal()">Edit</button>
                     <button onclick="togglePopUp('create-project')" class="create">Create</button>
                 </div>
                 <div class="project-list">
-                    <div class="project">
-                        <input type="checkbox">
-                        <span class="project-name">Project A</span>
-                        <span class="project-owner">KonstantinosPC</span>
+                    <div th:each="project : ${projects}" class="project">
+                        <input class="project-checkbox" type="checkbox" th:data-id="${project.getId()}" th:data-name="${project.getProjectName()}" th:data-desc="${project.getProjectDescription()}">
+                        <a class="project-name" th:href="@{/project/{id}(id=${project.getProjectName()})}" ><span th:text="${project.getProjectName()}"></span></a>
+                        <span class="project-owner" th:text="${project.getOwnerId().getUsername()}" >KonstantinosPC</span>
                         <span class="project-edition">10 Dec 2025</span>
                     </div>
-                    <div class="project">
-                        <input type="checkbox">
-                        <span class="project-name">Project B</span>
-                        <span class="project-owner">KonstantinosPC</span>
-                        <span class="project-edition">25 Dec 2025</span>
-                    </div>
-                    <div class="project">
-                        <input type="checkbox">
-                        <span class="project-name">Project C</span>
-                        <span class="project-owner">KonstantinosPC</span>
-                        <span class="project-edition">1 Jan 2026</span>
-                    </div>
-                    
                 </div>
 
                 <h1 class="shared-project">
@@ -122,6 +110,20 @@
             const searchBar = document.getElementById("search-project");
             const projects = document.querySelectorAll(".project");
 
+            const deleteBtn = document.getElementById('btn-delete');
+            const editBtn = document.getElementById('btn-edit');
+            const checkboxes = document.querySelectorAll('.project-checkbox');
+
+            checkboxes.forEach(ch => {
+                ch.addEventListener('change', () => {
+                    const selectedCount = document.querySelectorAll('.project-checkbox:checked').length;
+
+                    deleteBtn.disabled = selectedCount === 0;
+
+                    editBtn.disabled = selectedCount !== 1;
+                });
+            });
+
             searchBar.addEventListener('input', () => {
                 const filter = searchBar.value.toLowerCase();
 
@@ -148,7 +150,34 @@
                     popUp.style.height = '100%';
                     windowed.style.display = 'initial';
                 }
+            }
 
+            // DELETE με επιβεβαίωση
+            function confirmDelete() {
+                const selected = document.querySelectorAll('.project-checkbox:checked');
+                const ids = Array.from(selected).map(ch => ch.dataset.id);
+
+                if (confirm(`Είσαι σίγουρος ότι θέλεις να διαγράψεις ${selected.length} project;`)) {
+                    // Εδώ θα κάνεις το post στη βάση (π.χ. μέσω window.location ή fetch)
+                    console.log("Διαγραφή των IDs:", ids);
+                    // Παράδειγμα: window.location.href = '/project/delete?ids=' + ids.join(',');
+                }
+            }
+
+            function openEditModal() {
+                const selected = document.querySelector('.project-checkbox:checked');
+                if (!selected) return;
+
+                const id = selected.dataset.id;
+                const name = selected.dataset.name;
+                const desc = selected.dataset.desc;
+
+                document.getElementById("edit-project-info").innerText = `${name} | #${id}`;
+                document.getElementById("edit-id").value = id;
+                document.getElementById("edit-name").value = name;
+                document.getElementById("edit-description").value = desc;
+
+                togglePopUp('edit-project');
             }
         </script>
     </body>

@@ -629,6 +629,9 @@ nav {
 .edit-project h3{
     margin: 0;
     margin-bottom: 5px;
+    font-weight: lighter;
+    font-family: sans-serif;
+    text-transform: uppercase;
 }
 
 /* Profile */
