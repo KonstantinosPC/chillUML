@@ -452,7 +452,15 @@ nav {
         font-weight: bold;
         flex: 2;
         text-align: left;
+        text-decoration: none;
         padding-left: 10px;
+        color: black;
+        transition: 500ms;
+    }
+
+    .project .project-name:hover{
+        color: #00a6ff;
+        transition: 100ms;
     }
 
     .project .project-owner, .project .project-edition{
@@ -568,7 +576,7 @@ nav {
 }
 
 /* Project Create Container */
-.create-project, .edit-project{
+.create-project, .edit-project, .delete-project{
     padding: 10px;
     width: 30%;
     border-radius: 10px;
@@ -578,7 +586,7 @@ nav {
     display: none;
 }
 
-.create-project input, .create-project button, .edit-project input, .edit-project button{
+.create-project input, .create-project button, .edit-project input, .edit-project button, .delete-project button{
     width: 90%;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -607,10 +615,14 @@ nav {
     transition: 500ms;
 }
 
-.create-project button:hover, .edit-project button:hover{
+.create-project button:hover, .edit-project button:hover, .delete-project button:hover{
     background: rgb(0, 116, 158);
     text-shadow: 0px 0px 9px white;
     transition: 100ms;
+}
+
+.create-project button:disabled{
+    background: gray;
 }
 
 .create-project .close, .edit-project .close{
@@ -618,8 +630,13 @@ nav {
 
 }
 
-.create-project .close:hover, .edit-project .close:hover{
+.create-project .close:hover, .edit-project .close:hover, .delete-project .delete:hover {
     background: rgb(90, 0, 0);
+}
+
+.create-project .forced-name{
+    color: #009dff;
+    font-family: sans-serif;
 }
 
 .edit-project h1{
@@ -632,6 +649,28 @@ nav {
     font-weight: lighter;
     font-family: sans-serif;
     text-transform: uppercase;
+}
+
+
+.delete-project h1{
+    margin-bottom: 1px;
+}
+
+.delete-project h3{
+    margin: 0;
+    margin-bottom: 5px;
+    font-weight: lighter;
+    font-family: sans-serif;
+    text-transform: uppercase;
+}
+
+.delete-project button{
+    width: 40%;
+}
+
+.delete-project .delete{
+    color: white;
+    background: #bc1717;
 }
 
 /* Profile */

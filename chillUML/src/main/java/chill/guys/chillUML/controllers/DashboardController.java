@@ -28,6 +28,11 @@ public class DashboardController {
     @Autowired
     ProjectServicesImpl projectServices;
 
+    @GetMapping("/")
+    public String redirectToDashboard(){
+        return "redirect:/dashboard";
+    }
+
     @GetMapping("/dashboard")
     public String toDashboard(@AuthenticationPrincipal UserDetails userDetails, Model model){
         User currentUser = userServices.findByUsername(userDetails.getUsername()).orElse(null);
@@ -54,4 +59,11 @@ public class DashboardController {
         return "redirect:/dashboard";
     }
 
+    @PostMapping("/project/delete-project")
+    public String deleteProject(@RequestParam("projectIds")List<Integer> projectsIds){
+        for(Integer projectId: projectsIds){
+            projectServices.deleteProject(projectId);
+        }
+        return "redirect:/dashboard";
+    }
 }

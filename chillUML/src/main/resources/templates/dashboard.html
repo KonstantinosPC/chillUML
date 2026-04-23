@@ -40,9 +40,12 @@
         <div id="pop-up" class="pop-up">
             <form th:action="@{/project/create-project}" method="POST" id="create-project" class="create-project">
                 <h1>Create Project</h1>
-                <input type="text" name="project-name" id="project-name" placeholder="Project Name">
+                <input type="text"  id="project-name-user" placeholder="Project Name">
+                <input type="hidden" name="project-name" id="project-name-system">
+                <br>
+                <span class="forced-name" id="forced-name"></span>
                 <textarea name="project-description" id="project-description" placeholder="Project Description"></textarea>
-                <button type="submit">Create Project</button>
+                <button type="submit" id="create-project-button" onsubmit="createProject()" disabled>Create Project</button>
                 <button onclick="togglePopUp('create-project')" class="close" type="button">Close</button>
             </form>
             <form th:action="@{/project/edit-project}" method="POST" id="edit-project" class="edit-project">
@@ -53,6 +56,16 @@
                 <textarea name="edit-description" id="edit-description" placeholder="Project Description"></textarea>
                 <button type="submit">Submit Changes</button>
                 <button onclick="togglePopUp('edit-project')" class="close" type="button">Close</button>
+            </form>
+            <form th:action="@{/project/delete-project}" method="POST" id="delete-project" class="delete-project">
+                <h1>Delete Project(s)</h1>
+                <span>Are you sure you want to delete this/these projects:</span>
+                <ul id="enlisted-projects">
+
+                </ul>
+                <input type="hidden" name="projectIds" id="delete-projects">
+                <button type="button" onclick="togglePopUp('delete-project')">Cancel</button>
+                <button type="submit" class="delete">Delete</button>
             </form>
         </div>
 
@@ -103,16 +116,19 @@
                     <span class="material-symbols-outlined">check</span>
                     <p th:text="${success}"></p>
                 </div>
+                <div  th:if="${critical}" class="notification critical">
+                    <span class="material-symbols-outlined">dangerous</span>
+                    <p th:text="${critical}"></p>
+                </div>
             </div>
         </main>
 
         <script>
             const searchBar = document.getElementById("search-project");
             const projects = document.querySelectorAll(".project");
-
             const deleteBtn = document.getElementById('btn-delete');
             const editBtn = document.getElementById('btn-edit');
-            const checkboxes = document.querySelectorAll('.project-checkbox');
+            const checkboxes = document.querySelectorAll('.project-checkbox')
 
             checkboxes.forEach(ch => {
                 ch.addEventListener('change', () => {
@@ -123,6 +139,8 @@
                     editBtn.disabled = selectedCount !== 1;
                 });
             });
+
+
 
             searchBar.addEventListener('input', () => {
                 const filter = searchBar.value.toLowerCase();
@@ -139,6 +157,29 @@
                 });
             });
 
+            const projectCreationName = document.getElementById("project-name-user")
+            const forceName = document.getElementById("forced-name");
+            const createButton = document.getElementById("create-project-button");
+            projectCreationName.addEventListener('input', () => {
+                const changed = projectCreationName.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+                if(changed.length > 0) {
+                    if (changed.length > 15) {
+                        forceName.style.color = "#ca0018";
+                        createButton.disabled = true;
+                        forceName.innerHTML = `The name <b>${changed}</b> is too long`;
+                    } else {
+                        forceName.style.color = "#009dff";
+                        createButton.disabled = false;
+                        forceName.innerHTML = `The name of you project is <b>${changed}</b>`;
+                        document.getElementById("project-name-system").value = changed;
+                    }
+                }else{
+                    forceName.innerText = "";
+                    createButton.disabled = true;
+                }
+
+            })
+
             function togglePopUp(type){
                 const popUp = document.getElementById("pop-up");
                 const windowed = document.getElementById(type);
@@ -154,14 +195,16 @@
 
             // DELETE με επιβεβαίωση
             function confirmDelete() {
+                const deleteProjectList = document.getElementById("enlisted-projects");
                 const selected = document.querySelectorAll('.project-checkbox:checked');
-                const ids = Array.from(selected).map(ch => ch.dataset.id);
+                const hiddenInput = document.getElementById("delete-projects");
+                const names = Array.from(selected).map(ch => ch.dataset.name);
 
-                if (confirm(`Είσαι σίγουρος ότι θέλεις να διαγράψεις ${selected.length} project;`)) {
-                    // Εδώ θα κάνεις το post στη βάση (π.χ. μέσω window.location ή fetch)
-                    console.log("Διαγραφή των IDs:", ids);
-                    // Παράδειγμα: window.location.href = '/project/delete?ids=' + ids.join(',');
-                }
+                deleteProjectList.innerHTML = names.map(name => `<li>${name}</li>`).join('');
+
+                const ids = Array.from(selected).map(ch => ch.dataset.id);
+                hiddenInput.value = ids.join(',');
+                togglePopUp('delete-project')
             }
 
             function openEditModal() {
