@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 public class ProjectServicesImpl implements ProjectServices{
-    String specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
+    String specialChars = "+*/%=!<>&|^~(){}[];,.?:@_$";
 
     @Autowired
     private ProjectRepository projectRepository;
