@@ -2,12 +2,11 @@ package chill.guys.chillUML.services;
 
 
 import chill.guys.chillUML.DTO.ProjectDTO;
-import chill.guys.chillUML.domain.Project;
 import chill.guys.chillUML.domain.User;
+import chill.guys.chillUML.domain.Project;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProjectServices {
 
