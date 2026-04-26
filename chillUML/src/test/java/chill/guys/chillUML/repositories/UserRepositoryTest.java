@@ -42,7 +42,7 @@ class UserRepositoryTest {
 
     public void testDeleteUser() {
 
-        int userId = 1;
+        int userId = 2;
 
         userRepository.deleteById(userId);
         Optional<User> deletedUser = userRepository.findById(userId);

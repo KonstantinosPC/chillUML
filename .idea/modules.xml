@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/chillUML.iml" filepath="$PROJECT_DIR$/.idea/chillUML.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/chillMain.iml" filepath="$PROJECT_DIR$/.idea/chillMain.iml" />
     </modules>
   </component>
 </project>
