@@ -41,7 +41,7 @@ public class ProjectServicesImpl implements ProjectServices{
         project.setProjectDescription(projectDTO.getProjectDescription());
         project.setOwner(projectDTO.getOwnerId());
         projectRepository.save(project);
-        redirectAttributes.addFlashAttribute("success","The user " + project.getProjectName() + " has been created successfully");
+        redirectAttributes.addFlashAttribute("success","The project " + project.getProjectName() + " has been created successfully");
     }
 
     @Override
