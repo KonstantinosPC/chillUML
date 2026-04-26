@@ -1,13 +1,8 @@
 package chill.guys.chillUML.services;
 
-import chill.guys.chillUML.DTO.ProjectDTO;
-import chill.guys.chillUML.DTO.UseCaseDTO;
-import chill.guys.chillUML.domain.Project;
-import chill.guys.chillUML.domain.UseCase;
-import chill.guys.chillUML.domain.User;
-import chill.guys.chillUML.repositories.ProjectRepository;
-import chill.guys.chillUML.repositories.UseCaseRepository;
-import chill.guys.chillUML.repositories.UserRepository;
+import chill.guys.chillUML.DTO.*;
+import chill.guys.chillUML.domain.*;
+import chill.guys.chillUML.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +17,16 @@ public class ProjectServicesImpl implements ProjectServices{
 
     @Autowired
     private ProjectRepository projectRepository;
+    @Autowired
     private UseCaseRepository useCaseRepository;
+    @Autowired
+    private CrcRepository crcRepository;
+    @Autowired
+    private CRCResponsibilityRepository crcResponsibilityRepository;
+    @Autowired
+    private CRCLinkRepository crcLinkRepository;
+    @Autowired
+    private CRCCollaboratorRepository crcCollaboratorRepository;
 
     @Override
     @Transactional
@@ -218,5 +222,86 @@ public class ProjectServicesImpl implements ProjectServices{
         redirectAttributes.addFlashAttribute("success","The Use Case " + name + " has been deleted successfully");
     }
 
-    
+    @Override
+    public void createCRC(CrcDTO crcDTO, RedirectAttributes redirectAttributes) {
+        if(crcDTO.getCrcName().isEmpty()){
+            redirectAttributes.addFlashAttribute("error","This Crc name can not be empty");
+            return;
+        }
+        if(crcDTO.getCrcName().length() > 15){
+            redirectAttributes.addFlashAttribute("error","This Crc name is over 15 characters long");
+            return;
+        }
+        if(!(crcDTO.getCrcName().chars().noneMatch(ch->specialChars.indexOf(ch) >= 0))){
+            redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
+            return;
+        }
+        if(crcRepository.findByCrcNameAndProjectId(crcDTO.getCrcName(), crcDTO.getProjectID()).isEmpty()){
+            redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
+            return;
+        }
+        CRC crc = new CRC();
+        crc.setCrcName(crcDTO.getCrcName());
+        crc.setProjectID(crcDTO.getProjectID());
+        crcRepository.save(crc);
+    }
+
+    @Override
+    public void linkUsecaseWithCrc(UseCase usecaseID, CRC crcID) {
+        CRCLink newLink = new CRCLink();
+        newLink.setCrc(crcID);
+        newLink.setUseCase(usecaseID);
+        crcLinkRepository.save(newLink);
+    }
+
+    @Override
+    public void addResponsibility(CRCResponsibilityDTO responsibilityDTO) {
+            CRCResponsibilities responsibilities = new CRCResponsibilities();
+            responsibilities.setCRCID(responsibilityDTO.getCrcId());
+            responsibilities.setDescription(responsibilityDTO.getDescriptiom());
+            crcResponsibilityRepository.save(responsibilities);
+    }
+
+    @Override
+    public void addCollaborator(CRC crcID, CRC collaboratorID) {
+            CRCCollaborator crcCollaborator = new CRCCollaborator();
+            crcCollaborator.setCrc(crcID);
+            crcCollaborator.setCrc_collaborator(collaboratorID);
+            crcCollaboratorRepository.save(crcCollaborator);
+    }
+
+    @Override
+    public void updateCrcName(String newName, int crcID,RedirectAttributes redirectAttributes) {
+        CRC crc = crcRepository.findById(crcID).get();
+        if(newName.isEmpty()){
+            redirectAttributes.addFlashAttribute("error","This Crc name can not be empty");
+            return;
+        }
+        if(newName.length() > 15){
+            redirectAttributes.addFlashAttribute("error","This Crc name is over 15 characters long");
+            return;
+        }
+        if(!(newName.chars().noneMatch(ch->specialChars.indexOf(ch) >= 0))){
+            redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
+            return;
+        }
+        if(crcRepository.findByCrcNameAndProjectId(newName, crc.getProjectID()).isEmpty()){
+            redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
+            return;
+        }
+        crc.setCrcName(newName);
+        crcRepository.save(crc);
+        redirectAttributes.addFlashAttribute("success","The Crcs " + newName + " name has been updated successfully");
+
+    }
+
+    @Override
+    public void deleteCrc(int crcID,RedirectAttributes redirectAttributes) {
+        CRC crc = crcRepository.findById(crcID).get();
+        String name = crc.getCrcName();
+        crcRepository.delete(crc);
+        redirectAttributes.addFlashAttribute("success","The Use Case " + name + " has been deleted successfully");
+    }
+
+
 }
