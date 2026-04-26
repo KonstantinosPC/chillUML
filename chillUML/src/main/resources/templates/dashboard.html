@@ -60,9 +60,9 @@
             <form th:action="@{/project/delete-project}" method="POST" id="delete-project" class="delete-project">
                 <h1>Delete Project(s)</h1>
                 <span>Are you sure you want to delete this/these projects:</span>
-                <ul id="enlisted-projects">
+                <div id="enlisted-projects">
 
-                </ul>
+                </div>
                 <input type="hidden" name="projectIds" id="delete-projects">
                 <button type="button" onclick="togglePopUp('delete-project')">Cancel</button>
                 <button type="submit" class="delete">Delete</button>
@@ -200,7 +200,7 @@
                 const hiddenInput = document.getElementById("delete-projects");
                 const names = Array.from(selected).map(ch => ch.dataset.name);
 
-                deleteProjectList.innerHTML = names.map(name => `<li>${name}</li>`).join('');
+                deleteProjectList.innerHTML = names.map(name => `<div>${name}</div>`).join('');
 
                 const ids = Array.from(selected).map(ch => ch.dataset.id);
                 hiddenInput.value = ids.join(',');

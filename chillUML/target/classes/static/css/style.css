@@ -82,6 +82,8 @@ nav {
     border-radius: 50%;
     overflow: hidden;
     height: 40px;
+    width: 40px;
+    object-fit: cover;
     transition: transform 0.2s;
 }
 
@@ -506,6 +508,10 @@ nav {
     padding: 10px;
 }
 
+.selected-project h1, .selected-project h2, .selected-project p{
+    margin: 0;
+}
+
 /* Project Material */
 .project-material{
     margin: auto;
@@ -515,6 +521,7 @@ nav {
     width: 90%;
     overflow: hidden;
     overflow-x: scroll;
+    font-family: sans-serif;
 }
 
 .project-material .crc, .project-material .uc{
@@ -530,6 +537,10 @@ nav {
     scrollbar-width: none;
 }
 
+.project-material .uc{
+    background: rgb(225 248 255);
+}
+
 .project-material .crc .title, .project-material .uc .title{
     margin: 0;
     width: 100%;
@@ -537,6 +548,11 @@ nav {
     background: rgb(255, 230, 187);
     border-radius: 5px;
 }
+
+.project-material .uc .title{
+    background: rgb(187 231 255);
+}
+
 
 .project-material .crc h2, .project-material .uc h2{
     margin: 0;
@@ -557,6 +573,19 @@ nav {
 .project-material .crc th{
     background: rgb(0, 126, 194);
     color: white;
+}
+
+.project-material .subtitle b{
+    font-weight: 800;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.project-material .uc .value{
+    width: 95%;
+    background: white;
+    padding: 1%;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px -3px black;
+    margin-bottom: 5px;
 }
 
 /* Pop Up - Windows */
