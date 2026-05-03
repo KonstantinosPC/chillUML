@@ -1,6 +1,7 @@
 package chill.guys.chillUML.controllers;
 
 import chill.guys.chillUML.domain.Project;
+import chill.guys.chillUML.domain.User;
 import chill.guys.chillUML.repositories.ProjectRepository;
 import chill.guys.chillUML.services.ProjectServicesImpl;
 import chill.guys.chillUML.services.UserServicesImpl;
@@ -31,9 +32,12 @@ public class ProjectController {
 
     @GetMapping("/project/{name}")
     public String toProject(@PathVariable String name, @AuthenticationPrincipal UserDetails userDetails, Model model, RedirectAttributes redirectAttributes){
-        Optional<Project> currentProject = projectRepository.findByProjectNameAndOwnerId(name, userServices.findByUsername(userDetails.getUsername()).get());
+        User currentUser = userServices.findByUsername(userDetails.getUsername()).get();
+        Optional<Project> currentProject = projectRepository.findByProjectNameAndOwnerId(name, currentUser);
         if(!(currentProject.isEmpty())){
+            model.addAttribute("user",currentUser);
             model.addAttribute("project",currentProject.get());
+            System.out.println(currentProject.get().getOwnerId().getUsername());
             return "project";
         }else{
             redirectAttributes.addFlashAttribute("critical", "This project doesn't exists");
