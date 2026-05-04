@@ -26,10 +26,6 @@ public class ProjectController {
     @Autowired
     ProjectRepository projectRepository;
 
-    @Autowired
-    ProjectServicesImpl projectServices;
-
-
     @GetMapping("/project/{name}")
     public String toProject(@PathVariable String name, @AuthenticationPrincipal UserDetails userDetails, Model model, RedirectAttributes redirectAttributes){
         User currentUser = userServices.findByUsername(userDetails.getUsername()).get();

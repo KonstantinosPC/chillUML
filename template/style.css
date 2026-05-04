@@ -13,7 +13,7 @@
     --primary: #2563eb;
     --success: #22c55e;
     --text: #334155;
-    --bg: #f8fafc; 
+    --bg: #f8fafc;
 }
 
 main{
@@ -454,7 +454,15 @@ nav {
         font-weight: bold;
         flex: 2;
         text-align: left;
+        text-decoration: none;
         padding-left: 10px;
+        color: black;
+        transition: 500ms;
+    }
+
+    .project .project-name:hover{
+        color: #00a6ff;
+        transition: 100ms;
     }
 
     .project .project-owner, .project .project-edition{
@@ -546,6 +554,7 @@ nav {
     background: rgb(187 231 255);
 }
 
+
 .project-material .crc h2, .project-material .uc h2{
     margin: 0;
     font-weight: lighter;
@@ -571,7 +580,6 @@ nav {
     font-weight: 800;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
 .project-material .value{
     width: 95%;
     background: white;
@@ -598,7 +606,7 @@ nav {
 }
 
 /* Project Create Container */
-.create-project, .edit-project{
+.create-project, .edit-project, .delete-project{
     padding: 10px;
     width: 30%;
     border-radius: 10px;
@@ -608,7 +616,7 @@ nav {
     display: none;
 }
 
-.create-project input, .create-project button, .edit-project input, .edit-project button{
+.create-project input, .create-project button, .edit-project input, .edit-project button, .delete-project button{
     width: 90%;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -637,10 +645,14 @@ nav {
     transition: 500ms;
 }
 
-.create-project button:hover, .edit-project button:hover{
+.create-project button:hover, .edit-project button:hover, .delete-project button:hover{
     background: rgb(0, 116, 158);
     text-shadow: 0px 0px 9px white;
     transition: 100ms;
+}
+
+.create-project button:disabled{
+    background: gray;
 }
 
 .create-project .close, .edit-project .close{
@@ -648,8 +660,13 @@ nav {
 
 }
 
-.create-project .close:hover, .edit-project .close:hover{
+.create-project .close:hover, .edit-project .close:hover, .delete-project .delete:hover {
     background: rgb(90, 0, 0);
+}
+
+.create-project .forced-name{
+    color: #009dff;
+    font-family: sans-serif;
 }
 
 .edit-project h1{
@@ -659,8 +676,34 @@ nav {
 .edit-project h3{
     margin: 0;
     margin-bottom: 5px;
+    font-weight: lighter;
+    font-family: sans-serif;
+    text-transform: uppercase;
 }
 
+
+.delete-project h1{
+    margin-bottom: 1px;
+}
+
+.delete-project h3{
+    margin: 0;
+    margin-bottom: 5px;
+    font-weight: lighter;
+    font-family: sans-serif;
+    text-transform: uppercase;
+}
+
+.delete-project button{
+    width: 40%;
+}
+
+.delete-project .delete{
+    color: white;
+    background: #bc1717;
+}
+
+/* Profile */
 /* Profile Settings */
 
 .settings-card {
@@ -675,7 +718,7 @@ nav {
 .settings-card .header {
     padding: 25px;
     border-bottom: 1px solid #f1f5f9;
-    text-align: center; 
+    text-align: center;
 }
 
 .settings-card .header h2 {
@@ -698,106 +741,106 @@ nav {
     align-items: center;
 }
 .settings-card .label {
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 .setting-row .value-display {
-  font-size: 1rem;
-  color: #1e293b;
+    font-size: 1rem;
+    color: #1e293b;
 }
 .setting-row .edit-trigger {
-  cursor: pointer;
-  color: var(--primary);
-  font-size: 1.2rem;
-  transition: transform 0.2s;
+    cursor: pointer;
+    color: var(--primary);
+    font-size: 1.2rem;
+    transition: transform 0.2s;
 }
 .setting-row .edit-trigger:hover {
-  transform: scale(1.2);
+    transform: scale(1.2);
 }
 
 .setting-row .edit-form {
-  display: none;
-  gap: 10px;
-  margin-top: 5px;
+    display: none;
+    gap: 10px;
+    margin-top: 5px;
 }
 .setting-row .edit-form.active {
-  display: flex;
+    display: flex;
 }
 
 .setting-row input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #cbd5e0;
-  border-radius: 8px;
-  outline: none;
-  font-size: 14px;
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
 }
 .setting-row input:focus {
-  border-color: var(--primary);
-  ring: 2px solid #dbeafe;
+    border-color: var(--primary);
+    ring: 2px solid #dbeafe;
 }
 
 .setting-row .btn {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 13px;
-  transition: 0.3s;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: 0.3s;
 }
 .setting-row .btn-save {
-  background: var(--primary);
-  color: white;
+    background: var(--primary);
+    color: white;
 }
 .setting-row .btn-save:hover {
-  background: #1d4ed8;
+    background: #1d4ed8;
 }
-.setting-row .btn-pass { 
-  background: #1e293b;
-  color: white;
-  width: 100%;
-  margin-top: 10px;
+.setting-row .btn-pass {
+    background: #1e293b;
+    color: white;
+    width: 100%;
+    margin-top: 10px;
 }
 
 /* Stock Images Style */
 .settings-card .avatar-section {
-  background: #f1f5f9;
-  padding: 20px;
-  text-align: center;
+    background: #f1f5f9;
+    padding: 20px;
+    text-align: center;
 }
 .settings-card .stock-grid {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  margin-top: 10px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 10px;
 }
-.settings-card .stock-img { 
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  border: 3px solid white;
-  cursor: pointer;
-  transition: 0.3s;
-  object-fit: cover;
+.settings-card .stock-img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: 3px solid white;
+    cursor: pointer;
+    transition: 0.3s;
+    object-fit: cover;
 }
 .settings-card .stock-img:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 .settings-card .stock-img.selected {
-  border-color: var(--primary);
-  scale: 1.1;
+    border-color: var(--primary);
+    scale: 1.1;
 }
 
 .settings-card .id-badge {
-  background: #d5dbe3;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-family: monospace;
-  font-size: 14px;
-  color: #475569;
+    background: #d5dbe3;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 14px;
+    color: #475569;
 }
