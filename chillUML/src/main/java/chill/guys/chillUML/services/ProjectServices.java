@@ -17,9 +17,9 @@ public interface ProjectServices {
     public void createUseCase(UseCaseDTO useCase, RedirectAttributes redirectAttributes );
     public void editUseCaseName(int useCaseID, String newName, RedirectAttributes redirectAttributes );
     public void editActors(int useCaseID, String newActors, RedirectAttributes redirectAttributes );
-    public void editPrecondition(int useCaseID, String newPostcond, RedirectAttributes redirectAttributes );
+    public void editPrecondition(int useCaseID, List<String> newPostcond, RedirectAttributes redirectAttributes );
     public void editMainFlow(int useCaseID, String newMainFlow, RedirectAttributes redirectAttributes );
-    public void editAltFlows(int useCaseID, String newAltFlow, RedirectAttributes redirectAttributes );
+    public void editAltFlows(int useCaseID, List<String> newAltFlow, RedirectAttributes redirectAttributes );
     public void editPostCondition(int useCaseID, String newPostCond, RedirectAttributes redirectAttributes );
     public List<UseCase> viewAllUseCases(Project project);
     public void deleteUseCase(int useCaseID, RedirectAttributes redirectAttributes);

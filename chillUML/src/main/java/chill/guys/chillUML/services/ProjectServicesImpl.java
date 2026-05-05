@@ -84,6 +84,7 @@ public class ProjectServicesImpl implements ProjectServices{
     public void editProjectDescription(int projectID,String newDescription, RedirectAttributes redirectAttributes) {
         Project project = projectRepository.findById(projectID).get();
         project.setProjectDescription(newDescription);
+        projectRepository.save(project);
     }
     @Transactional
     @Override
@@ -96,7 +97,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
             return;
         }
-        if(!(useCaseRepository.findByUseCaseNameAndProjectId(useCaseDTO.getUseCaseName(),useCaseDTO.getProject()).isEmpty())){
+        if(!(useCaseRepository.findByUseCaseNameAndProjectID(useCaseDTO.getUseCaseName(),useCaseDTO.getProject()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
             return;
         }
@@ -145,7 +146,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
             return;
         }
-        if(!(useCaseRepository.findByUseCaseNameAndProjectId(newName,usecase.getProjectID()).isEmpty())){
+        if(!(useCaseRepository.findByUseCaseNameAndProjectID(newName,usecase.getProjectID()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
             return;
         }
@@ -173,7 +174,7 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
-    public void editPrecondition(int useCaseID, String newPostcond, RedirectAttributes redirectAttributes) {
+    public void editPrecondition(int useCaseID, List<String> newPostcond, RedirectAttributes redirectAttributes) {
         UseCase usecase = useCaseRepository.findById(useCaseID).get();
         if(newPostcond.isEmpty()){
             redirectAttributes.addFlashAttribute("error","The Pre-condition filed must not be empty.");
@@ -196,7 +197,7 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
-    public void editAltFlows(int useCaseID, String newAltFlow, RedirectAttributes redirectAttributes) {
+    public void editAltFlows(int useCaseID, List<String> newAltFlow, RedirectAttributes redirectAttributes) {
         UseCase usecase = useCaseRepository.findById(useCaseID).get();
         usecase.setAltFlow(newAltFlow);
         redirectAttributes.addFlashAttribute("success","The Use Case " + usecase.getUseCaseName() + " Alt-Flow has been updated successfully");
@@ -236,7 +237,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
             return;
         }
-        if(crcRepository.findByCrcNameAndProjectId(crcDTO.getCrcName(), crcDTO.getProjectID()).isEmpty()){
+        if(crcRepository.findByCrcNameAndProjectID(crcDTO.getCrcName(), crcDTO.getProjectID()).isEmpty()){
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
             return;
         }
@@ -285,7 +286,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
             return;
         }
-        if(crcRepository.findByCrcNameAndProjectId(newName, crc.getProjectID()).isEmpty()){
+        if(crcRepository.findByCrcNameAndProjectID(newName, crc.getProjectID()).isEmpty()){
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
             return;
         }
