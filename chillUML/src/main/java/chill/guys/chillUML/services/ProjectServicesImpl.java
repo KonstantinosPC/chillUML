@@ -77,5 +77,6 @@ public class ProjectServicesImpl implements ProjectServices{
     public void editProjectDescription(int projectID,String newDescription, RedirectAttributes redirectAttributes) {
         Project project = projectRepository.findById(projectID).get();
         project.setProjectDescription(newDescription);
+        projectRepository.save(project);
     }
 }

@@ -56,7 +56,7 @@ public class ProjectServicesImplTest {
         projectServices.createProject(dto, attributes);
         assertEquals("The project ProjectUM has been created successfully", attributes.getFlashAttributes().get("success"));
 
-        // Βεβαιωνόμαστε ότι σώθηκε στη βάση
+
         assertTrue(projectRepository.findByProjectNameAndOwnerId("ProjectUM", testUser).isPresent());
 
 
