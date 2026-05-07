@@ -3,6 +3,8 @@ package chill.guys.chillUML.domain;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "crc")
 public class CRC {
@@ -18,6 +20,13 @@ public class CRC {
 
     @Column(name = "crc_name")
     private String crcName;
+
+    @Column(name = "crc_responsibilities")
+    private List<String> responsibilities;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Column(name = "crc_linked")
+    private List<UseCase> linkedUseCases;
 
     public int getCrcId() {
         return crcId;

@@ -3,14 +3,17 @@ package chill.guys.chillUML.controllers;
 import chill.guys.chillUML.DTO.ProjectDTO;
 import chill.guys.chillUML.domain.Project;
 import chill.guys.chillUML.domain.User;
+import chill.guys.chillUML.repositories.ProjectRepository;
 import chill.guys.chillUML.services.ProjectServicesImpl;
 import chill.guys.chillUML.services.UserServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -25,6 +28,9 @@ public class DashboardController {
 
     @Autowired
     ProjectServicesImpl projectServices;
+
+    @Autowired
+    ProjectRepository projectRepository;
 
     @GetMapping("/")
     public String redirectToDashboard(){
@@ -52,7 +58,9 @@ public class DashboardController {
 
     @PostMapping("/project/edit-project")
     public String editProject(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("edit-id")int id, @RequestParam("edit-name")String projectName, @RequestParam("edit-description")String projectDescription, RedirectAttributes redirectAttributes){
-        projectServices.editProjectName(id, projectName, redirectAttributes);
+        if(!(projectRepository.findById(id).get().getProjectName().equals(projectName))){
+            projectServices.editProjectName(id, projectName, redirectAttributes);
+        }
         projectServices.editProjectDescription(id, projectDescription, redirectAttributes);
         return "redirect:/dashboard";
     }

@@ -3,6 +3,7 @@ package chill.guys.chillUML.repositories;
 
 import chill.guys.chillUML.domain.Project;
 import chill.guys.chillUML.domain.UseCase;
+import chill.guys.chillUML.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +16,6 @@ import java.util.Optional;
 public interface UseCaseRepository extends JpaRepository<UseCase, Integer> {
     Optional<UseCase> findById(int id);
     List<UseCase> findByProjectID(Project project);
-    @Query("SELECT uc FROM UseCase uc WHERE uc.useCaseName = : useCaseName")
-    Optional<UseCase> findByUseCaseName(@Param("useCaseName") String useCaseName);
+    Optional<UseCase> findByUseCaseNameAndProjectID(String useCaseName, Project projectId);
+
 }

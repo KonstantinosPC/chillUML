@@ -1,9 +1,8 @@
 package chill.guys.chillUML.services;
 
 
-import chill.guys.chillUML.DTO.ProjectDTO;
-import chill.guys.chillUML.domain.User;
-import chill.guys.chillUML.domain.Project;
+import chill.guys.chillUML.DTO.*;
+import chill.guys.chillUML.domain.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -15,4 +14,20 @@ public interface ProjectServices {
     public void deleteProject(int project_id);
     public void editProjectName(int projectID,String newName, RedirectAttributes redirectAttributes);
     public void editProjectDescription(int projectID,String newDescription,RedirectAttributes redirectAttributes);
+    public void createUseCase(UseCaseDTO useCase, RedirectAttributes redirectAttributes );
+    public void editUseCaseName(int useCaseID, String newName, RedirectAttributes redirectAttributes );
+    public void editActors(int useCaseID, String newActors, RedirectAttributes redirectAttributes );
+    public void editPrecondition(int useCaseID, List<String> newPostcond, RedirectAttributes redirectAttributes );
+    public void editMainFlow(int useCaseID, String newMainFlow, RedirectAttributes redirectAttributes );
+    public void editAltFlows(int useCaseID, List<String> newAltFlow, RedirectAttributes redirectAttributes );
+    public void editPostCondition(int useCaseID, String newPostCond, RedirectAttributes redirectAttributes );
+    public List<UseCase> viewAllUseCases(Project project);
+    public void deleteUseCase(int useCaseID, RedirectAttributes redirectAttributes);
+    public void createCRC(CrcDTO crc,RedirectAttributes redirectAttributes);
+    public void linkUsecaseWithCrc(UseCase usecaseID,CRC crcID);
+    public void addResponsibility(CRCResponsibilityDTO responsibilityDTO);
+    public void addCollaborator(CRC crcID, CRC collaboratorID);
+    public void updateCrcName(String newName,int crcID,RedirectAttributes redirectAttributes);
+    public void deleteCrc(int crcID,RedirectAttributes redirectAttributes);
+
 }
