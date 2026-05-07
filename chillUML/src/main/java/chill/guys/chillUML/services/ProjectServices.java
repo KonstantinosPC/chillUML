@@ -29,5 +29,7 @@ public interface ProjectServices {
     public void addCollaborator(CRC crcID, CRC collaboratorID);
     public void updateCrcName(String newName,int crcID,RedirectAttributes redirectAttributes);
     public void deleteCrc(int crcID,RedirectAttributes redirectAttributes);
+    public String generateUsecaseDiagram(String type,Project projectID);
+    public String generateClassDiagram(String type,Project projectID);
 
 }

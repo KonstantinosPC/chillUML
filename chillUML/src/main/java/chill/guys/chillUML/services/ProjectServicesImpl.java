@@ -2,6 +2,8 @@ package chill.guys.chillUML.services;
 
 import chill.guys.chillUML.DTO.*;
 import chill.guys.chillUML.domain.*;
+import chill.guys.chillUML.factories.ClassDiagramGeneratorFactory;
+import chill.guys.chillUML.factories.UseCaseDiagramGeneratorFactory;
 import chill.guys.chillUML.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -301,6 +303,22 @@ public class ProjectServicesImpl implements ProjectServices{
         String name = crc.getCrcName();
         crcRepository.delete(crc);
         redirectAttributes.addFlashAttribute("success","The Use Case " + name + " has been deleted successfully");
+    }
+
+    @Override
+    public String generateUsecaseDiagram(String type, Project projectID) {
+        UseCaseDiagramGeneratorFactory factory = new UseCaseDiagramGeneratorFactory();
+        List<UseCase> usecases = useCaseRepository.findByProjectID(projectID);
+        UseCaseDiagramGenerator generator = factory.createUseCaseDiagramGenerator(type);
+        return generator.generateDiagram(usecases);
+    }
+
+    @Override
+    public String generateClassDiagram(String type, Project projectID) {
+        ClassDiagramGeneratorFactory factory = new ClassDiagramGeneratorFactory();
+        List<CRC> crc = crcRepository.findByProjectId(projectID);
+        ClassDiagramGenerator generator = factory.createClassDiagramGenerator(type);
+        return generator.generateClassDiagram(crc);
     }
 
 

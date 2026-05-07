@@ -5,9 +5,11 @@ import chill.guys.chillUML.domain.Project;
 import chill.guys.chillUML.domain.UseCase;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CrcRepository extends JpaRepository<CRC, Integer> {
     Optional<CRC> findByCrcNameAndProjectId(String crcName, Project projectId);
     Optional<CRC> findById(int crcid);
+    List<CRC> findByProjectId(Project projectId);
 }
