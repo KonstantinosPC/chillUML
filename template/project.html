@@ -15,39 +15,90 @@
         <main>
             
             <nav>
-            <div class="nav-left">
-                <div class="logo">
-                    <img src="../assets/img/logo.png" alt="">
+                <div class="nav-left">
+                    <div class="logo">
+                        <img src="../assets/img/logo.png" alt="">
+                    </div>
+                    <h1 class="page-title">Dashboard</h1>
                 </div>
-                <h1 class="page-title">Dashboard</h1>
-            </div>
-            
-            <div class="nav-right">
-                <div class="user-dropdown-container">
-                    <button class="user-avatar">
-                        <img src="https://ui-avatars.com/api/?name=NG&background=4f46e5&color=fff" alt="User Profile">
-                    </button>
-                    <div class="dropdown-menu">
-                        <div class="dropdown-header">Ο λογαριασμός μου</div>
-                        <a href="#" class="dropdown-item">Προφίλ</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item text-danger">Αποσύνδεση</a>
+                
+                <div class="nav-right">
+                    <div class="user-dropdown-container">
+                        <button class="user-avatar">
+                            <img src="https://ui-avatars.com/api/?name=NG&background=4f46e5&color=fff" alt="User Profile">
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-header">Ο λογαριασμός μου</div>
+                            <a href="#" class="dropdown-item">Προφίλ</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item text-danger">Αποσύνδεση</a>
+                        </div>
                     </div>
                 </div>
+            </nav>
+
+            <div id="pop-up" class="pop-up">
+                <form id="create-uc" class="create-uc">
+                    <h1>Create Use Case</h1>
+
+                    <button type="button" class="close" onclick="togglePopUp('create-uc')">Close</button>
+                </form>
+                <form id="edit-uc" class="edit-uc">
+                    <h1>Edit Use Case</h1>
+                    <button type="button" class="close"  onclick="togglePopUp('edit-uc')">Close</button>
+                </form>
+                <form id="create-crc" class="create-crc">
+                    <h1>Create CRC</h1>
+                    Class:
+                    <select name="" id="">
+                        <option value="">None</option>
+                    </select>
+                    <hr>
+                    <table>
+                        <tr>
+                            <th>Responsibilities</th>
+                            <th>Collaborations</th>
+                        </tr>
+                        <tr>
+                            <td><input type="text"></td>
+                            <td>
+                                <select name="" id="">
+                                    <option value="">None</option>
+                                    <option value="">None</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <button>Create</button>
+                    <button type="button" class="close" onclick="togglePopUp('create-crc')">Close</button>
+                </form>
+                <form id="edit-crc" class="edit-crc">
+                    <h1>Edit CRC</h1>
+                    <button>Save</button>
+                    <button type="button" class="close" onclick="togglePopUp('edit-crc')">Close</button>
+                </form>
             </div>
-        </nav>
 
             <div class="selected-project">
                 <div class="project-info">
-                    <h1 th:text="${project.getProjectName()}"></h1>
+                    <h1 th:text="${project.getProjectName()}">Project</h1>
                     <h2>Owner</h2>
                     <p>Project about material</p>
                 </div>
                 <hr>
+                <div class="tools">
+                    <button onclick="togglePopUp('create-uc')">+ Create Use Case</button>
+                    <button onclick="togglePopUp('create-crc')">+ Create CRC Card</button>
+
+                </div>
                 <div class="project-material">
 
                     <div class="crc">
-                        <h1 class="title">CRC Card #1</h1>
+                        <div class="title">
+                            <h1>CRC Card #1</h1>
+                            <button class="delete">Delete</button>
+                            <button onclick="togglePopUp('edit-crc')">Edit</button>
+                        </div>
                         <div class="subtitle"><b>Class:</b></div>
                         <div class="value">Use Case Nigga</div>
                         <div class="subtitle"><b>Use Case:</b></div>
@@ -65,7 +116,11 @@
                     </div>
 
                     <div class="uc">
-                        <h1 class="title">UC Card #UC12</h1>
+                        <div class="title">
+                            <h1>UC Card #UC12</h1>
+                            <button class="delete">Delete</button>
+                            <button onclick="togglePopUp('edit-uc')">Edit</button>
+                        </div>
                         <h2 class="subtitle"><b>Actor:</b></h2>
                         <h2 class="value">User</h2>
                         <h2 class="subtitle"><b>Pre-Condition:</b></h2>
@@ -88,5 +143,20 @@
 
             <div class="notifications"></div>
         </main>
+        <script>
+            function togglePopUp(type){
+                const popUp = document.getElementById("pop-up");
+                const windowed = document.getElementById(type);
+
+                if(popUp.style.height == "100%"){
+                    popUp.style.height = 0;
+                    setTimeout(windowed.style.display = 'none', 5000);
+                }else{
+                    popUp.style.height = '100%';
+                    windowed.style.display = 'initial';
+                }
+                
+            }
+        </script>
     </body>
 </html>
