@@ -28,6 +28,10 @@ public class CRC {
     @Column(name = "crc_linked")
     private List<UseCase> linkedUseCases;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Column(name = "crc_collaborators")
+    private List<CRC> collaborators;
+
     public int getCrcId() {
         return crcId;
     }
@@ -47,4 +51,6 @@ public class CRC {
     public void setCrcName(String crcName) {
         this.crcName = crcName;
     }
+
+
 }

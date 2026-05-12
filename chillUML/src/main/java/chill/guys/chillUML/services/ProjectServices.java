@@ -24,9 +24,6 @@ public interface ProjectServices {
     public List<UseCase> viewAllUseCases(Project project);
     public void deleteUseCase(int useCaseID, RedirectAttributes redirectAttributes);
     public void createCRC(CrcDTO crc,RedirectAttributes redirectAttributes);
-    public void linkUsecaseWithCrc(UseCase usecaseID,CRC crcID);
-    public void addResponsibility(CRCResponsibilityDTO responsibilityDTO);
-    public void addCollaborator(CRC crcID, CRC collaboratorID);
     public void updateCrcName(String newName,int crcID,RedirectAttributes redirectAttributes);
     public void deleteCrc(int crcID,RedirectAttributes redirectAttributes);
 

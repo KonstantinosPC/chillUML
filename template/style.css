@@ -621,6 +621,10 @@ nav {
     
 }
 
+:is(.project-material .crc, .create-crc, .edit-crc) tbody{
+    width: 100%;
+}
+
 :is(.project-material .crc, .create-crc, .edit-crc)  :is(th,td){
     width: 49%;
     border-radius: 5px;

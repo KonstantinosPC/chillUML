@@ -21,12 +21,6 @@ public class ProjectServicesImpl implements ProjectServices{
     private UseCaseRepository useCaseRepository;
     @Autowired
     private CrcRepository crcRepository;
-    @Autowired
-    private CRCResponsibilityRepository crcResponsibilityRepository;
-    @Autowired
-    private CRCLinkRepository crcLinkRepository;
-    @Autowired
-    private CRCCollaboratorRepository crcCollaboratorRepository;
 
     @Override
     @Transactional
@@ -247,29 +241,6 @@ public class ProjectServicesImpl implements ProjectServices{
         crcRepository.save(crc);
     }
 
-    @Override
-    public void linkUsecaseWithCrc(UseCase usecaseID, CRC crcID) {
-        CRCLink newLink = new CRCLink();
-        newLink.setCrc(crcID);
-        newLink.setUseCase(usecaseID);
-        crcLinkRepository.save(newLink);
-    }
-
-    @Override
-    public void addResponsibility(CRCResponsibilityDTO responsibilityDTO) {
-            CRCResponsibilities responsibilities = new CRCResponsibilities();
-            responsibilities.setCRCID(responsibilityDTO.getCrcId());
-            responsibilities.setDescription(responsibilityDTO.getDescriptiom());
-            crcResponsibilityRepository.save(responsibilities);
-    }
-
-    @Override
-    public void addCollaborator(CRC crcID, CRC collaboratorID) {
-            CRCCollaborator crcCollaborator = new CRCCollaborator();
-            crcCollaborator.setCrc(crcID);
-            crcCollaborator.setCrc_collaborator(collaboratorID);
-            crcCollaboratorRepository.save(crcCollaborator);
-    }
 
     @Override
     public void updateCrcName(String newName, int crcID,RedirectAttributes redirectAttributes) {
