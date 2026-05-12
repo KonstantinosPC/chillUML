@@ -2,8 +2,7 @@ package chill.guys.chillUML.services;
 
 import chill.guys.chillUML.DTO.*;
 import chill.guys.chillUML.domain.*;
-import chill.guys.chillUML.factories.ClassDiagramGeneratorFactory;
-import chill.guys.chillUML.factories.UseCaseDiagramGeneratorFactory;
+import chill.guys.chillUML.factories.*;
 import chill.guys.chillUML.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import java.util.Optional;
 
 @Service
 public class ProjectServicesImpl implements ProjectServices{
-    String specialChars = "+-*/%=!<>&|^~(){}[];,.?:@_$";
+    String specialChars = "+*/%=!<>&|^~(){}[];,.?:@_$";
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -23,12 +22,6 @@ public class ProjectServicesImpl implements ProjectServices{
     private UseCaseRepository useCaseRepository;
     @Autowired
     private CrcRepository crcRepository;
-    @Autowired
-    private CRCResponsibilityRepository crcResponsibilityRepository;
-    @Autowired
-    private CRCLinkRepository crcLinkRepository;
-    @Autowired
-    private CRCCollaboratorRepository crcCollaboratorRepository;
 
     @Override
     @Transactional
@@ -86,6 +79,7 @@ public class ProjectServicesImpl implements ProjectServices{
     public void editProjectDescription(int projectID,String newDescription, RedirectAttributes redirectAttributes) {
         Project project = projectRepository.findById(projectID).get();
         project.setProjectDescription(newDescription);
+        projectRepository.save(project);
     }
     @Transactional
     @Override
@@ -175,7 +169,7 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
-    public void editPrecondition(int useCaseID, String newPostcond, RedirectAttributes redirectAttributes) {
+    public void editPrecondition(int useCaseID, List<String> newPostcond, RedirectAttributes redirectAttributes) {
         UseCase usecase = useCaseRepository.findById(useCaseID).get();
         if(newPostcond.isEmpty()){
             redirectAttributes.addFlashAttribute("error","The Pre-condition filed must not be empty.");
@@ -198,7 +192,7 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
-    public void editAltFlows(int useCaseID, String newAltFlow, RedirectAttributes redirectAttributes) {
+    public void editAltFlows(int useCaseID, List<String> newAltFlow, RedirectAttributes redirectAttributes) {
         UseCase usecase = useCaseRepository.findById(useCaseID).get();
         usecase.setAltFlow(newAltFlow);
         redirectAttributes.addFlashAttribute("success","The Use Case " + usecase.getUseCaseName() + " Alt-Flow has been updated successfully");
@@ -245,32 +239,12 @@ public class ProjectServicesImpl implements ProjectServices{
         CRC crc = new CRC();
         crc.setCrcName(crcDTO.getCrcName());
         crc.setProjectID(crcDTO.getProjectID());
+        crc.setCollaborators(crcDTO.getLinked_crc());
+        crc.setResponsibilities(crcDTO.getResponsibilities());
+        crc.setLinkedUseCases(crcDTO.getUsecases());
         crcRepository.save(crc);
     }
 
-    @Override
-    public void linkUsecaseWithCrc(UseCase usecaseID, CRC crcID) {
-        CRCLink newLink = new CRCLink();
-        newLink.setCrc(crcID);
-        newLink.setUseCase(usecaseID);
-        crcLinkRepository.save(newLink);
-    }
-
-    @Override
-    public void addResponsibility(CRCResponsibilityDTO responsibilityDTO) {
-            CRCResponsibilities responsibilities = new CRCResponsibilities();
-            responsibilities.setCRCID(responsibilityDTO.getCrcId());
-            responsibilities.setDescription(responsibilityDTO.getDescriptiom());
-            crcResponsibilityRepository.save(responsibilities);
-    }
-
-    @Override
-    public void addCollaborator(CRC crcID, CRC collaboratorID) {
-            CRCCollaborator crcCollaborator = new CRCCollaborator();
-            crcCollaborator.setCrc(crcID);
-            crcCollaborator.setCrc_collaborator(collaboratorID);
-            crcCollaboratorRepository.save(crcCollaborator);
-    }
 
     @Override
     public void updateCrcName(String newName, int crcID,RedirectAttributes redirectAttributes) {
@@ -298,13 +272,38 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
+    public void updateCrcResponsibilities(int crcID,List<String> newResponsibiities, RedirectAttributes redirectAttributes) {
+        CRC crc = crcRepository.findById(crcID).get();
+        crc.setResponsibilities(newResponsibiities);
+        crcRepository.save(crc);
+        redirectAttributes.addFlashAttribute("success","The Responsibilities have been updated successfully");
+
+    }
+
+    @Override
+    public void updateCrcColaborators(int crcID,List<CRC> newColaborators, RedirectAttributes redirectAttributes) {
+        CRC crc = crcRepository.findById(crcID).get();
+        crc.setCollaborators(newColaborators);
+        crcRepository.save(crc);
+        redirectAttributes.addFlashAttribute("success","The Collaborators have been updated successfully");
+
+    }
+
+    @Override
+    public void updateCrcLinkedUseCases(int crcID,List<UseCase> newLinkedUseCases, RedirectAttributes redirectAttributes) {
+        CRC crc = crcRepository.findById(crcID).get();
+        crc.setLinkedUseCases(newLinkedUseCases);
+        crcRepository.save(crc);
+        redirectAttributes.addFlashAttribute("success","The Linked UseCases have been updated successfully");
+    }
+
+    @Override
     public void deleteCrc(int crcID,RedirectAttributes redirectAttributes) {
         CRC crc = crcRepository.findById(crcID).get();
         String name = crc.getCrcName();
         crcRepository.delete(crc);
         redirectAttributes.addFlashAttribute("success","The Use Case " + name + " has been deleted successfully");
     }
-
     @Override
     public String generateUsecaseDiagram(String type, Project projectID) {
         UseCaseDiagramGeneratorFactory factory = new UseCaseDiagramGeneratorFactory();

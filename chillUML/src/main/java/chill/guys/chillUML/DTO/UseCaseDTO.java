@@ -2,13 +2,15 @@ package chill.guys.chillUML.DTO;
 
 import chill.guys.chillUML.domain.Project;
 
+import java.util.List;
+
 public class UseCaseDTO {
     private String useCaseName;
     private String mainFlow;
     private String actors;
     private Project project;
-    private String preCond;
-    private String altflow;
+    private List<String> preCond;
+    private List<String> altflow;
     private String postflow;
 
     public Project getProject() {
@@ -43,19 +45,19 @@ public class UseCaseDTO {
         this.actors = actors;
     }
 
-    public String getPreCond() {
+    public List<String> getPreCond() {
         return preCond;
     }
 
-    public void setPreCond(String preCond) {
+    public void setPreCond(List<String> preCond) {
         this.preCond = preCond;
     }
 
-    public String getAltflow() {
+    public List<String> getAltflow() {
         return altflow;
     }
 
-    public void setAltflow(String altflow) {
+    public void setAltflow(List<String> altflow) {
         this.altflow = altflow;
     }
 

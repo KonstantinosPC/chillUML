@@ -3,6 +3,8 @@ package chill.guys.chillUML.domain;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "usecases")
 public class UseCase {
@@ -28,15 +30,15 @@ public class UseCase {
 
     @Lob
     @Column(name = "precond")
-    private String precond;
+    private List<String> precond;
 
     @Lob
     @Column(name = "alt_flow")
-    private String altFlow;
+    private List<String> altFlow;
 
     @Lob
-    @Column(name = "postflow")
-    private String postflow;
+    @Column(name = "postcond")
+    private String postcond;
 
     public Project getProjectID() {
         return projectID;
@@ -62,28 +64,28 @@ public class UseCase {
         this.actors = actors;
     }
 
-    public String getPrecond() {
+    public List<String> getPrecond() {
         return precond;
     }
 
-    public void setPrecond(String precond) {
+    public void setPrecond(List<String> precond) {
         this.precond = precond;
     }
 
-    public String getAltFlow() {
+    public List<String> getAltFlow() {
         return altFlow;
     }
 
-    public void setAltFlow(String altFlow) {
+    public void setAltFlow(List<String> altFlow) {
         this.altFlow = altFlow;
     }
 
     public String getPostflow() {
-        return postflow;
+        return postcond;
     }
 
     public void setPostflow(String postflow) {
-        this.postflow = postflow;
+        this.postcond = postflow;
     }
 
     public int getUseCaseId() {
