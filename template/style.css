@@ -669,7 +669,7 @@ nav {
 }
 
 /* Project Create Container */
-.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc{
+:is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc){
     padding: 10px;
     width: 30%;
     border-radius: 10px;
@@ -677,6 +677,10 @@ nav {
     text-align: center;
     background: white;
     display: none;
+}
+
+:is(.create-crc,.edit-crc) table{
+    width: 100%;
 }
 
 :is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc) :is(input, button) {
