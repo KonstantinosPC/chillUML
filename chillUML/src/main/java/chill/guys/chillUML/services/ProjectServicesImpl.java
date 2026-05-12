@@ -119,7 +119,7 @@ public class ProjectServicesImpl implements ProjectServices{
 
         UseCase usecase = new UseCase();
         usecase.setUseCaseName(useCaseDTO.getUseCaseName());
-        usecase.setProjectID(useCaseDTO.getProject());
+        usecase.setProjectId(useCaseDTO.getProject());
         usecase.setMainFlow(useCaseDTO.getMainFlow());
         usecase.setActors(useCaseDTO.getActors());
         usecase.setPrecond(useCaseDTO.getPreCond());
@@ -141,7 +141,11 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
             return;
         }
+<<<<<<< Updated upstream
         if(!(useCaseRepository.findByUseCaseNameAndProjectId(newName,usecase.getProjectID()).isEmpty())){
+=======
+        if(!(useCaseRepository.findByUseCaseNameAndProjectId(newName,usecase.getProjectId()).isEmpty())){
+>>>>>>> Stashed changes
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
             return;
         }
@@ -207,7 +211,7 @@ public class ProjectServicesImpl implements ProjectServices{
 
     @Override
     public List<UseCase> viewAllUseCases(Project project) {
-        return useCaseRepository.findByProjectID(project);
+        return useCaseRepository.findByProjectId(project);
     }
 
     @Override
@@ -238,10 +242,14 @@ public class ProjectServicesImpl implements ProjectServices{
         }
         CRC crc = new CRC();
         crc.setCrcName(crcDTO.getCrcName());
+<<<<<<< Updated upstream
         crc.setProjectID(crcDTO.getProjectID());
         crc.setCollaborators(crcDTO.getLinked_crc());
         crc.setResponsibilities(crcDTO.getResponsibilities());
         crc.setLinkedUseCases(crcDTO.getUsecases());
+=======
+        crc.setProjectId(crcDTO.getProjectID());
+>>>>>>> Stashed changes
         crcRepository.save(crc);
     }
 
@@ -261,7 +269,11 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
             return;
         }
+<<<<<<< Updated upstream
         if(crcRepository.findByCrcNameAndProjectId(newName, crc.getProjectID()).isEmpty()){
+=======
+        if(crcRepository.findByCrcNameAndProjectId(newName, crc.getProjectId()).isEmpty()){
+>>>>>>> Stashed changes
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
             return;
         }

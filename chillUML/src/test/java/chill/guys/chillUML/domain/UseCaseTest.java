@@ -54,9 +54,15 @@ class UseCaseTest {
         Project umlProject = new Project();
         umlProject.setProjectName("Security Module Design");
 
+<<<<<<< Updated upstream
         uc.setProjectID(umlProject);
         assertNotNull(uc.getProjectID());
         assertEquals("Security Module Design", uc.getProjectID().getProjectName());
+=======
+        uc.setProjectId(umlProject);
+        assertNotNull(uc.getProjectId());
+        assertEquals("Security Module Design", uc.getProjectId().getProjectName());
+>>>>>>> Stashed changes
     }
 
 }

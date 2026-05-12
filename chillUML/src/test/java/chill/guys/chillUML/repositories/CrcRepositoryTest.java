@@ -41,7 +41,11 @@ public class CrcRepositoryTest {
 
         CRC crc = new CRC();
         crc.setCrcName("LoginController");
+<<<<<<< Updated upstream
         crc.setProjectID(project);
+=======
+        crc.setProjectId(project);
+>>>>>>> Stashed changes
         crcRepository.save(crc);
 
         Optional <CRC> found = crcRepository.findByCrcNameAndProjectId("LoginController", project);
@@ -49,7 +53,11 @@ public class CrcRepositoryTest {
         assertTrue(found.isPresent());
         assertEquals("LoginController", found.get().getCrcName());
 
+<<<<<<< Updated upstream
         assertEquals("Chill UML Editor", found.get().getProjectID().getProjectName());
+=======
+        assertEquals("Chill UML Editor", found.get().getProjectId().getProjectName());
+>>>>>>> Stashed changes
     }
 
     @Test
@@ -60,7 +68,11 @@ public class CrcRepositoryTest {
 
         CRC crc = new CRC();
         crc.setCrcName("DataEncryptor");
+<<<<<<< Updated upstream
         crc.setProjectID(BigProject);
+=======
+        crc.setProjectId(BigProject);
+>>>>>>> Stashed changes
         crcRepository.save(crc);
 
         Optional<CRC> result = crcRepository.findById(1);

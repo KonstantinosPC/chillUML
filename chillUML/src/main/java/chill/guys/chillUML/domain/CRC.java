@@ -60,11 +60,19 @@ public class CRC {
         return crcId;
     }
 
+<<<<<<< Updated upstream
     public Project getProjectID() {
         return projectId;
     }
 
     public void setProjectID(Project projectID) {
+=======
+    public Project getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Project projectId) {
+>>>>>>> Stashed changes
         this.projectId = projectId;
     }
 

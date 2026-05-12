@@ -19,7 +19,7 @@ public class UseCase {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
-    private Project projectID;
+    private Project projectId;
 
     @Lob
     @Column(name = "mainflow")
@@ -40,12 +40,12 @@ public class UseCase {
     @Column(name = "postcond")
     private String postcond;
 
-    public Project getProjectID() {
-        return projectID;
+    public Project getProjectId() {
+        return projectId;
     }
 
-    public void setProjectID(Project projectID) {
-        this.projectID = projectID;
+    public void setProjectId(Project projectId) {
+        this.projectId = projectId;
     }
 
     public String getMainFlow() {

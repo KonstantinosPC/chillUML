@@ -38,12 +38,20 @@ public class CRCTest {
 
         CRC crc = new CRC();
         crc.setCrcName("AuthService");
+<<<<<<< Updated upstream
         crc.setProjectID(project);
+=======
+        crc.setProjectId(project);
+>>>>>>> Stashed changes
 
         CRC savedCrc = crcRepository.save(crc);
 
         assertTrue(savedCrc.getCrcId()>0);
         assertEquals("AuthService", savedCrc.getCrcName());
+<<<<<<< Updated upstream
         assertEquals("UML Project", savedCrc.getProjectID().getProjectName());
+=======
+        assertEquals("UML Project", savedCrc.getProjectId().getProjectName());
+>>>>>>> Stashed changes
     }
 }
