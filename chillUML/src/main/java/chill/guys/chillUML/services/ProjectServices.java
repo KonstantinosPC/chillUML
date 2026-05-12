@@ -31,5 +31,6 @@ public interface ProjectServices {
     public void deleteCrc(int crcID,RedirectAttributes redirectAttributes);
     public String generateUsecaseDiagram(String type,Project projectID);
     public String generateClassDiagram(String type,Project projectID);
+    public List<CRC> ViewAllCRC(Project project);
 
 }

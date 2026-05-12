@@ -320,5 +320,10 @@ public class ProjectServicesImpl implements ProjectServices{
         return generator.generateClassDiagram(crc);
     }
 
+    @Override
+    public List<CRC> ViewAllCRC(Project project) {
+        return crcRepository.findByProjectId(project);
+    }
+
 
 }
