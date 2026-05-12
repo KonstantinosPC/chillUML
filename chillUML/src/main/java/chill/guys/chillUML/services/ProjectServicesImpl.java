@@ -2,6 +2,7 @@ package chill.guys.chillUML.services;
 
 import chill.guys.chillUML.DTO.*;
 import chill.guys.chillUML.domain.*;
+import chill.guys.chillUML.factories.*;
 import chill.guys.chillUML.repositories.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,6 @@ public class ProjectServicesImpl implements ProjectServices{
     private UseCaseRepository useCaseRepository;
     @Autowired
     private CrcRepository crcRepository;
-    @Autowired
-    private CRCResponsibilityRepository crcResponsibilityRepository;
-    @Autowired
-    private CRCLinkRepository crcLinkRepository;
-    @Autowired
-    private CRCCollaboratorRepository crcCollaboratorRepository;
 
     @Override
     @Transactional
@@ -97,7 +92,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
             return;
         }
-        if(!(useCaseRepository.findByUseCaseNameAndProjectID(useCaseDTO.getUseCaseName(),useCaseDTO.getProject()).isEmpty())){
+        if(!(useCaseRepository.findByUseCaseNameAndProjectId(useCaseDTO.getUseCaseName(),useCaseDTO.getProject()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
             return;
         }
@@ -146,7 +141,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
             return;
         }
-        if(!(useCaseRepository.findByUseCaseNameAndProjectID(newName,usecase.getProjectID()).isEmpty())){
+        if(!(useCaseRepository.findByUseCaseNameAndProjectId(newName,usecase.getProjectID()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
             return;
         }
@@ -237,39 +232,19 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
             return;
         }
-        if(crcRepository.findByCrcNameAndProjectID(crcDTO.getCrcName(), crcDTO.getProjectID()).isEmpty()){
+        if(crcRepository.findByCrcNameAndProjectId(crcDTO.getCrcName(), crcDTO.getProjectID()).isEmpty()){
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
             return;
         }
         CRC crc = new CRC();
         crc.setCrcName(crcDTO.getCrcName());
         crc.setProjectID(crcDTO.getProjectID());
+        crc.setCollaborators(crcDTO.getLinked_crc());
+        crc.setResponsibilities(crcDTO.getResponsibilities());
+        crc.setLinkedUseCases(crcDTO.getUsecases());
         crcRepository.save(crc);
     }
 
-    @Override
-    public void linkUsecaseWithCrc(UseCase usecaseID, CRC crcID) {
-        CRCLink newLink = new CRCLink();
-        newLink.setCrc(crcID);
-        newLink.setUseCase(usecaseID);
-        crcLinkRepository.save(newLink);
-    }
-
-    @Override
-    public void addResponsibility(CRCResponsibilityDTO responsibilityDTO) {
-            CRCResponsibilities responsibilities = new CRCResponsibilities();
-            responsibilities.setCRCID(responsibilityDTO.getCrcId());
-            responsibilities.setDescription(responsibilityDTO.getDescriptiom());
-            crcResponsibilityRepository.save(responsibilities);
-    }
-
-    @Override
-    public void addCollaborator(CRC crcID, CRC collaboratorID) {
-            CRCCollaborator crcCollaborator = new CRCCollaborator();
-            crcCollaborator.setCrc(crcID);
-            crcCollaborator.setCrc_collaborator(collaboratorID);
-            crcCollaboratorRepository.save(crcCollaborator);
-    }
 
     @Override
     public void updateCrcName(String newName, int crcID,RedirectAttributes redirectAttributes) {
@@ -286,7 +261,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
             return;
         }
-        if(crcRepository.findByCrcNameAndProjectID(newName, crc.getProjectID()).isEmpty()){
+        if(crcRepository.findByCrcNameAndProjectId(newName, crc.getProjectID()).isEmpty()){
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
             return;
         }
@@ -297,11 +272,52 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
+    public void updateCrcResponsibilities(int crcID,List<String> newResponsibiities, RedirectAttributes redirectAttributes) {
+        CRC crc = crcRepository.findById(crcID).get();
+        crc.setResponsibilities(newResponsibiities);
+        crcRepository.save(crc);
+        redirectAttributes.addFlashAttribute("success","The Responsibilities have been updated successfully");
+
+    }
+
+    @Override
+    public void updateCrcColaborators(int crcID,List<CRC> newColaborators, RedirectAttributes redirectAttributes) {
+        CRC crc = crcRepository.findById(crcID).get();
+        crc.setCollaborators(newColaborators);
+        crcRepository.save(crc);
+        redirectAttributes.addFlashAttribute("success","The Collaborators have been updated successfully");
+
+    }
+
+    @Override
+    public void updateCrcLinkedUseCases(int crcID,List<UseCase> newLinkedUseCases, RedirectAttributes redirectAttributes) {
+        CRC crc = crcRepository.findById(crcID).get();
+        crc.setLinkedUseCases(newLinkedUseCases);
+        crcRepository.save(crc);
+        redirectAttributes.addFlashAttribute("success","The Linked UseCases have been updated successfully");
+    }
+
+    @Override
     public void deleteCrc(int crcID,RedirectAttributes redirectAttributes) {
         CRC crc = crcRepository.findById(crcID).get();
         String name = crc.getCrcName();
         crcRepository.delete(crc);
         redirectAttributes.addFlashAttribute("success","The Use Case " + name + " has been deleted successfully");
+    }
+    @Override
+    public String generateUsecaseDiagram(String type, Project projectID) {
+        UseCaseDiagramGeneratorFactory factory = new UseCaseDiagramGeneratorFactory();
+        List<UseCase> usecases = useCaseRepository.findByProjectID(projectID);
+        UseCaseDiagramGenerator generator = factory.createUseCaseDiagramGenerator(type);
+        return generator.generateDiagram(usecases);
+    }
+
+    @Override
+    public String generateClassDiagram(String type, Project projectID) {
+        ClassDiagramGeneratorFactory factory = new ClassDiagramGeneratorFactory();
+        List<CRC> crc = crcRepository.findByProjectId(projectID);
+        ClassDiagramGenerator generator = factory.createClassDiagramGenerator(type);
+        return generator.generateClassDiagram(crc);
     }
 
 

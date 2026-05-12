@@ -16,10 +16,34 @@ public class CRC {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
-    private Project projectID;
+    private Project projectId;
 
     @Column(name = "crc_name")
     private String crcName;
+
+    public List<String> getResponsibilities() {
+        return responsibilities;
+    }
+
+    public void setResponsibilities(List<String> responsibilities) {
+        this.responsibilities = responsibilities;
+    }
+
+    public List<UseCase> getLinkedUseCases() {
+        return linkedUseCases;
+    }
+
+    public void setLinkedUseCases(List<UseCase> linkedUseCases) {
+        this.linkedUseCases = linkedUseCases;
+    }
+
+    public List<CRC> getCollaborators() {
+        return collaborators;
+    }
+
+    public void setCollaborators(List<CRC> collaborators) {
+        this.collaborators = collaborators;
+    }
 
     @Column(name = "crc_responsibilities")
     private List<String> responsibilities;
@@ -28,16 +52,20 @@ public class CRC {
     @Column(name = "crc_linked")
     private List<UseCase> linkedUseCases;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Column(name = "crc_collaborators")
+    private List<CRC> collaborators;
+
     public int getCrcId() {
         return crcId;
     }
 
     public Project getProjectID() {
-        return projectID;
+        return projectId;
     }
 
     public void setProjectID(Project projectID) {
-        this.projectID = projectID;
+        this.projectId = projectId;
     }
 
     public String getCrcName() {
@@ -47,4 +75,6 @@ public class CRC {
     public void setCrcName(String crcName) {
         this.crcName = crcName;
     }
+
+
 }

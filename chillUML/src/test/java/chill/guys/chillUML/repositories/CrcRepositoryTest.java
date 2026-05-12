@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,7 +44,7 @@ public class CrcRepositoryTest {
         crc.setProjectID(project);
         crcRepository.save(crc);
 
-        Optional<CRC> found = crcRepository.findByCrcNameAndProjectID("LoginController", project);
+        Optional <CRC> found = crcRepository.findByCrcNameAndProjectId("LoginController", project);
 
         assertTrue(found.isPresent());
         assertEquals("LoginController", found.get().getCrcName());
@@ -54,8 +55,8 @@ public class CrcRepositoryTest {
     @Test
     public void testFindById() {
 
-        User kgeorgiou = userRepository.findByUsername("kgeorgiou").orElseThrow();
-        Project BigProject = projectRepository.findByProjectNameAndOwnerId("Big Project", kgeorgiou).orElseThrow();
+        User test_user = userRepository.findByUsername("kgeorgiou").orElseThrow();
+        Project BigProject = projectRepository.findByProjectNameAndOwnerId("Big Project", test_user).orElseThrow();
 
         CRC crc = new CRC();
         crc.setCrcName("DataEncryptor");

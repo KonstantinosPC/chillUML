@@ -24,10 +24,12 @@ public interface ProjectServices {
     public List<UseCase> viewAllUseCases(Project project);
     public void deleteUseCase(int useCaseID, RedirectAttributes redirectAttributes);
     public void createCRC(CrcDTO crc,RedirectAttributes redirectAttributes);
-    public void linkUsecaseWithCrc(UseCase usecaseID,CRC crcID);
-    public void addResponsibility(CRCResponsibilityDTO responsibilityDTO);
-    public void addCollaborator(CRC crcID, CRC collaboratorID);
     public void updateCrcName(String newName,int crcID,RedirectAttributes redirectAttributes);
+    public void updateCrcResponsibilities(int crcID, List<String> newResponsibiities,RedirectAttributes redirectAttributes);
+    public void updateCrcColaborators(int crcID,List<CRC> newColaborators,RedirectAttributes redirectAttributes);
+    public void updateCrcLinkedUseCases(int crcID,List<UseCase> newLinkedUseCases,RedirectAttributes redirectAttributes);
     public void deleteCrc(int crcID,RedirectAttributes redirectAttributes);
+    public String generateUsecaseDiagram(String type,Project projectID);
+    public String generateClassDiagram(String type,Project projectID);
 
 }

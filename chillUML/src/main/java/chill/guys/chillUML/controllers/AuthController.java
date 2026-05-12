@@ -32,7 +32,7 @@ public class AuthController {
 
 
     @PostMapping("/auth/save")
-    public String saveUser(@ModelAttribute("user")RegistrationForm form, Model model, RedirectAttributes redirectAttributes){
+    public String saveUser(@ModelAttribute("user") RegistrationForm form, Model model, RedirectAttributes redirectAttributes){
         Map<String, String> errors = new HashMap<>();
         userServices.saveUser(form, redirectAttributes);
         return "redirect:/auth/signup";

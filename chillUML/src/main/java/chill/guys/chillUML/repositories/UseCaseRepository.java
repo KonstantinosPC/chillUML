@@ -16,6 +16,6 @@ import java.util.Optional;
 public interface UseCaseRepository extends JpaRepository<UseCase, Integer> {
     Optional<UseCase> findById(int id);
     List<UseCase> findByProjectID(Project project);
-    Optional<UseCase> findByUseCaseNameAndProjectID(String useCaseName, Project projectId);
+    Optional<UseCase> findByUseCaseNameAndProjectId(String useCaseName, Project projectId);
 
 }
