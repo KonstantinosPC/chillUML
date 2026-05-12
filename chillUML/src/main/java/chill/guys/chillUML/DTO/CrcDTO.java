@@ -3,15 +3,15 @@ package chill.guys.chillUML.DTO;
 import chill.guys.chillUML.domain.Project;
 
 public class CrcDTO {
-    private Project projectID;
+    private Project projectId;
     private String crcName;
 
-    public Project getProjectID() {
-        return projectID;
+    public Project getProjectId() {
+        return projectId;
     }
 
-    public void setProjectID(Project projectID) {
-        this.projectID = projectID;
+    public void setProjectId(Project projectId) {
+        this.projectId = projectId;
     }
 
     public String getCrcName() {

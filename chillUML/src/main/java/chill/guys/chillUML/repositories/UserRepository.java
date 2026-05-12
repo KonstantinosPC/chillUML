@@ -14,6 +14,6 @@ import javax.swing.text.html.Option;
 public interface UserRepository extends JpaRepository<User, Long>{
     Optional<User> findById(int id);
     Optional<User> findByUsername(String username);
-    Optional<User> deleteById(int id);
+    void deleteById(int id);
     Optional<User> findByEmail(String email);
 }

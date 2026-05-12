@@ -40,11 +40,11 @@ public class UseCase {
     @Column(name = "postcond")
     private String postcond;
 
-    public Project getProjectID() {
+    public Project getProjectId() {
         return projectID;
     }
 
-    public void setProjectID(Project projectID) {
+    public void setProjectId(Project projectId) {
         this.projectID = projectID;
     }
 

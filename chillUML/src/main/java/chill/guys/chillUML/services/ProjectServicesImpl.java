@@ -91,7 +91,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
             return;
         }
-        if(!(useCaseRepository.findByUseCaseNameAndProjectID(useCaseDTO.getUseCaseName(),useCaseDTO.getProject()).isEmpty())){
+        if(!(useCaseRepository.findByUseCaseNameAndProjectId(useCaseDTO.getUseCaseName(),useCaseDTO.getProject()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
             return;
         }
@@ -118,7 +118,7 @@ public class ProjectServicesImpl implements ProjectServices{
 
         UseCase usecase = new UseCase();
         usecase.setUseCaseName(useCaseDTO.getUseCaseName());
-        usecase.setProjectID(useCaseDTO.getProject());
+        usecase.setProjectId(useCaseDTO.getProject());
         usecase.setMainFlow(useCaseDTO.getMainFlow());
         usecase.setActors(useCaseDTO.getActors());
         usecase.setPrecond(useCaseDTO.getPreCond());
@@ -140,7 +140,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
             return;
         }
-        if(!(useCaseRepository.findByUseCaseNameAndProjectID(newName,usecase.getProjectID()).isEmpty())){
+        if(!(useCaseRepository.findByUseCaseNameAndProjectId(newName,usecase.getProjectId()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
             return;
         }
@@ -231,13 +231,13 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
             return;
         }
-        if(crcRepository.findByCrcNameAndProjectID(crcDTO.getCrcName(), crcDTO.getProjectID()).isEmpty()){
+        if(crcRepository.findByCrcNameAndProjectId(crcDTO.getCrcName(), crcDTO.getProjectId()).isEmpty()){
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
             return;
         }
         CRC crc = new CRC();
         crc.setCrcName(crcDTO.getCrcName());
-        crc.setProjectID(crcDTO.getProjectID());
+        crc.setProjectId(crcDTO.getProjectId());
         crcRepository.save(crc);
     }
 
@@ -257,7 +257,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
             return;
         }
-        if(crcRepository.findByCrcNameAndProjectID(newName, crc.getProjectID()).isEmpty()){
+        if(crcRepository.findByCrcNameAndProjectId(newName, crc.getProjectId()).isEmpty()){
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
             return;
         }

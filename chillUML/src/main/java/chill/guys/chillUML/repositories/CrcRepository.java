@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface CrcRepository extends JpaRepository<CRC, Integer> {
-    Optional<CRC> findByCrcNameAndProjectID(String crcName, Project projectId);
+    Optional<CRC> findByCrcNameAndProjectId(String crcName, Project projectId);
     Optional<CRC> findById(int crcid);
 }
