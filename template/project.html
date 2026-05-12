@@ -1,6 +1,5 @@
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Project {Selected Project} | ChillUML</title>
+    <head>alksjd    <title>Project {Selected Project} | ChillUML</title>
         <link rel="stylesheet" href="./style.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
@@ -50,31 +49,88 @@
                 <form id="create-crc" class="create-crc">
                     <h1>Create CRC</h1>
                     <input type="text" placeholder="Name">
-                    Class:
-                    <select name="" id="">
-                        <option value="">-</option>
-                    </select>
-
+                    
+                    <h3>Use Cases:</h5>
+                    <div class="custom-multiselect">
+                        <div class="select-box" onclick="toggleCheckboxArea(this)">
+                            <span class="placeholder">Select Use Cases</span>
+                            <span class="material-symbols-outlined">expand_more</span>
+                        </div>
+                        <div class="checkboxes">
+                            <label><input type="checkbox" value="Class1" onchange="updateSelectText(this)">Use Case 1</label>
+                            <label><input type="checkbox" value="Class2" onchange="updateSelectText(this)">Use Case 2</label>
+                            <label><input type="checkbox" value="Class3" onchange="updateSelectText(this)">Use Case 3</label>
+                        </div>
+                    </div>
+                    
+                    <h3>Collaborators</h3>
+                    <div class="custom-multiselect">
+                        <div class="select-box" onclick="toggleCheckboxArea(this)">
+                            <span class="placeholder">Select Collaborators</span>
+                            <span class="material-symbols-outlined">expand_more</span>
+                        </div>
+                        <div class="checkboxes">
+                            <label><input type="checkbox" value="Class1" onchange="updateSelectText(this)">Use Case 1</label>
+                            <label><input type="checkbox" value="Class2" onchange="updateSelectText(this)">Use Case 2</label>
+                            <label><input type="checkbox" value="Class3" onchange="updateSelectText(this)">Use Case 3</label>
+                        </div>
+                    </div>
                     <hr>
                     <table>
                         <tr>
                             <th>Responsibilities</th>
-                            <th>Collaborations</th>
+                            <th></th>
                         </tr>
                         <tr>
                             <td><input type="text" placeholder="Type in a responsibility"></td>
-                            <td>
-                                <select name="" id="">
-                                    <option value="">-</option>
-                                </select>
-                            </td>
+                            <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
                         </tr>
                     </table>
+                    <button type="button" onclick="addRow()">+ Add Row</button>
                     <button>Create</button>
                     <button type="button" class="close" onclick="togglePopUp('create-crc')">Close</button>
                 </form>
                 <form id="edit-crc" class="edit-crc">
                     <h1>Edit CRC</h1>
+                    <input type="text" placeholder="Name">
+                    
+                    <h3>Use Cases:</h5>
+                    <div class="custom-multiselect">
+                        <div class="select-box" onclick="toggleCheckboxArea(this)">
+                            <span class="placeholder">Select Use Cases</span>
+                            <span class="material-symbols-outlined">expand_more</span>
+                        </div>
+                        <div class="checkboxes">
+                            <label><input type="checkbox" value="Class1" onchange="updateSelectText(this)">Use Case 1</label>
+                            <label><input type="checkbox" value="Class2" onchange="updateSelectText(this)">Use Case 2</label>
+                            <label><input type="checkbox" value="Class3" onchange="updateSelectText(this)">Use Case 3</label>
+                        </div>
+                    </div>
+                    
+                    <h3>Collaborators</h3>
+                    <div class="custom-multiselect">
+                        <div class="select-box" onclick="toggleCheckboxArea(this)">
+                            <span class="placeholder">Select Collaborators</span>
+                            <span class="material-symbols-outlined">expand_more</span>
+                        </div>
+                        <div class="checkboxes">
+                            <label><input type="checkbox" value="Class1" onchange="updateSelectText(this)">Use Case 1</label>
+                            <label><input type="checkbox" value="Class2" onchange="updateSelectText(this)">Use Case 2</label>
+                            <label><input type="checkbox" value="Class3" onchange="updateSelectText(this)">Use Case 3</label>
+                        </div>
+                    </div>
+                    <hr>
+                    <table>
+                        <tr>
+                            <th>Responsibilities</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td><input type="text" placeholder="Type in a responsibility"></td>
+                            <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
+                        </tr>
+                    </table>
+                    <button type="button" onclick="addRow()">+ Add Row</button>
                     <button>Save</button>
                     <button type="button" class="close" onclick="togglePopUp('edit-crc')">Close</button>
                 </form>
@@ -158,6 +214,62 @@
                 }
                 
             }
+
+            function toggleCheckboxArea(element) {
+                const checkboxes = element.nextElementSibling;
+                const allMenus = document.querySelectorAll('.checkboxes');
+            
+                allMenus.forEach(menu => {
+                    if (menu !== checkboxes) menu.style.display = "none";
+                });
+
+                checkboxes.style.display = checkboxes.style.display === "block" ? "none" : "block";
+            }
+
+            function updateSelectText(checkbox) {
+                const container = checkbox.closest('.custom-multiselect');
+                const placeholder = container.querySelector('.placeholder');
+                const checkedBoxes = container.querySelectorAll('input[type="checkbox"]:checked');
+                
+                if (checkedBoxes.length > 0) {
+                    const values = Array.from(checkedBoxes).map(cb => cb.value);
+                    placeholder.textContent = values.join(', ');
+                    
+                    const row = checkbox.closest('tr');
+                    if (row && !row.nextElementSibling) {
+                        addNewDynamicRow(row.closest('table'));
+                    }
+                } else {
+                    placeholder.textContent = "Select Options";
+                }
+            }
+
+            function updateDeleteButtons() {
+                const table = document.querySelector('#create-crc table');
+                const rows = table.querySelectorAll('tr');
+                const dataRows = Array.from(rows).slice(1); 
+
+                dataRows.forEach(row => {
+                    const deleteBtn = row.querySelector('.close');
+                    if (deleteBtn) {
+                        deleteBtn.style.display = dataRows.length <= 1 ? 'none' : 'inline-block';
+                    }
+                });
+            }
+
+            function addRow(){
+                const table = document.querySelector('#create-crc table');
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td><input type="text" placeholder="Type in a responsibility"></td>
+                    <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
+                `;
+                table.appendChild(newRow);
+                updateDeleteButtons();
+            }
+
+            updateDeleteButtons();
+            
         </script>
     </body>
 </html>
