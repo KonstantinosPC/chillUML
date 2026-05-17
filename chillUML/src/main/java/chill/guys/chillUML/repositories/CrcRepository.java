@@ -10,10 +10,8 @@ import java.util.Optional;
 
 public interface CrcRepository extends JpaRepository<CRC, Integer> {
     Optional<CRC> findByCrcNameAndProjectId(String crcName, Project projectId);
-<<<<<<< Updated upstream
     Optional<CRC> findById(int crcid);
     List<CRC> findByProjectId(Project projectId);
-=======
-    Optional<CRC> findById(int crcId);
->>>>>>> Stashed changes
+    Optional<CRC> findById(int crcid);
+    List<CRC> findByProjectId(Project projectId);
 }

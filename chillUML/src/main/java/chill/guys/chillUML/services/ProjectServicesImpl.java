@@ -119,7 +119,7 @@ public class ProjectServicesImpl implements ProjectServices{
 
         UseCase usecase = new UseCase();
         usecase.setUseCaseName(useCaseDTO.getUseCaseName());
-        usecase.setProjectId(useCaseDTO.getProject());
+        usecase.setProjectID(useCaseDTO.getProject());
         usecase.setMainFlow(useCaseDTO.getMainFlow());
         usecase.setActors(useCaseDTO.getActors());
         usecase.setPrecond(useCaseDTO.getPreCond());
@@ -141,11 +141,8 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
             return;
         }
-<<<<<<< Updated upstream
         if(!(useCaseRepository.findByUseCaseNameAndProjectId(newName,usecase.getProjectID()).isEmpty())){
-=======
-        if(!(useCaseRepository.findByUseCaseNameAndProjectId(newName,usecase.getProjectId()).isEmpty())){
->>>>>>> Stashed changes
+      
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
             return;
         }
@@ -211,7 +208,7 @@ public class ProjectServicesImpl implements ProjectServices{
 
     @Override
     public List<UseCase> viewAllUseCases(Project project) {
-        return useCaseRepository.findByProjectId(project);
+        return useCaseRepository.findByProjectID(project);
     }
 
     @Override
@@ -242,14 +239,10 @@ public class ProjectServicesImpl implements ProjectServices{
         }
         CRC crc = new CRC();
         crc.setCrcName(crcDTO.getCrcName());
-<<<<<<< Updated upstream
         crc.setProjectID(crcDTO.getProjectID());
         crc.setCollaborators(crcDTO.getLinked_crc());
         crc.setResponsibilities(crcDTO.getResponsibilities());
         crc.setLinkedUseCases(crcDTO.getUsecases());
-=======
-        crc.setProjectId(crcDTO.getProjectID());
->>>>>>> Stashed changes
         crcRepository.save(crc);
     }
 
@@ -269,11 +262,41 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
             return;
         }
-<<<<<<< Updated upstream
         if(crcRepository.findByCrcNameAndProjectId(newName, crc.getProjectID()).isEmpty()){
-=======
-        if(crcRepository.findByCrcNameAndProjectId(newName, crc.getProjectId()).isEmpty()){
->>>>>>> Stashed changes
+            redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
+            return;
+        }
+        crc.setCrcName(newName);
+        crcRepository.save(crc);
+        redirectAttributes.addFlashAttribute("success","The Crcs " + newName + " name has been updated successfully");
+
+    }
+
+    @Override
+        crc.setProjectID(crcDTO.getProjectID());
+        crc.setCollaborators(crcDTO.getLinked_crc());
+        crc.setResponsibilities(crcDTO.getResponsibilities());
+        crc.setLinkedUseCases(crcDTO.getUsecases());
+        crcRepository.save(crc);
+    }
+
+
+    @Override
+    public void updateCrcName(String newName, int crcID,RedirectAttributes redirectAttributes) {
+        CRC crc = crcRepository.findById(crcID).get();
+        if(newName.isEmpty()){
+            redirectAttributes.addFlashAttribute("error","This Crc name can not be empty");
+            return;
+        }
+        if(newName.length() > 15){
+            redirectAttributes.addFlashAttribute("error","This Crc name is over 15 characters long");
+            return;
+        }
+        if(!(newName.chars().noneMatch(ch->specialChars.indexOf(ch) >= 0))){
+            redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
+            return;
+        }
+        if(crcRepository.findByCrcNameAndProjectId(newName, crc.getProjectID()).isEmpty()){
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
             return;
         }
@@ -330,6 +353,11 @@ public class ProjectServicesImpl implements ProjectServices{
         List<CRC> crc = crcRepository.findByProjectId(projectID);
         ClassDiagramGenerator generator = factory.createClassDiagramGenerator(type);
         return generator.generateClassDiagram(crc);
+    }
+
+    @Override
+    public List<CRC> ViewAllCRC(Project project) {
+        return crcRepository.findByProjectId(project);
     }
 
 
