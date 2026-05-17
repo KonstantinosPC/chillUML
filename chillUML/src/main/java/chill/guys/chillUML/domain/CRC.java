@@ -16,7 +16,7 @@ public class CRC {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
-    private Project projectID;
+    private Project projectId;
 
     @Column(name = "crc_name")
     private String crcName;
@@ -60,12 +60,20 @@ public class CRC {
         return crcId;
     }
 
+<<<<<<< Updated upstream
     public Project getProjectID() {
-        return projectID;
+        return projectId;
     }
 
     public void setProjectID(Project projectID) {
-        this.projectID = projectID;
+=======
+    public Project getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Project projectId) {
+>>>>>>> Stashed changes
+        this.projectId = projectId;
     }
 
     public String getCrcName() {

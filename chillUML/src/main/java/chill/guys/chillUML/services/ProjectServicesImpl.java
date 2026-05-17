@@ -142,6 +142,7 @@ public class ProjectServicesImpl implements ProjectServices{
             return;
         }
         if(!(useCaseRepository.findByUseCaseNameAndProjectId(newName,usecase.getProjectID()).isEmpty())){
+      
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
             return;
         }
@@ -238,6 +239,40 @@ public class ProjectServicesImpl implements ProjectServices{
         }
         CRC crc = new CRC();
         crc.setCrcName(crcDTO.getCrcName());
+        crc.setProjectID(crcDTO.getProjectID());
+        crc.setCollaborators(crcDTO.getLinked_crc());
+        crc.setResponsibilities(crcDTO.getResponsibilities());
+        crc.setLinkedUseCases(crcDTO.getUsecases());
+        crcRepository.save(crc);
+    }
+
+
+    @Override
+    public void updateCrcName(String newName, int crcID,RedirectAttributes redirectAttributes) {
+        CRC crc = crcRepository.findById(crcID).get();
+        if(newName.isEmpty()){
+            redirectAttributes.addFlashAttribute("error","This Crc name can not be empty");
+            return;
+        }
+        if(newName.length() > 15){
+            redirectAttributes.addFlashAttribute("error","This Crc name is over 15 characters long");
+            return;
+        }
+        if(!(newName.chars().noneMatch(ch->specialChars.indexOf(ch) >= 0))){
+            redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
+            return;
+        }
+        if(crcRepository.findByCrcNameAndProjectId(newName, crc.getProjectID()).isEmpty()){
+            redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
+            return;
+        }
+        crc.setCrcName(newName);
+        crcRepository.save(crc);
+        redirectAttributes.addFlashAttribute("success","The Crcs " + newName + " name has been updated successfully");
+
+    }
+
+    @Override
         crc.setProjectID(crcDTO.getProjectID());
         crc.setCollaborators(crcDTO.getLinked_crc());
         crc.setResponsibilities(crcDTO.getResponsibilities());
