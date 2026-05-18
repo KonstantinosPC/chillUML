@@ -10,7 +10,7 @@ public class UseCaseDTO {
     private String actors;
     private Project project;
     private List<String> preCond;
-    private List<String> altflow;
+    private List<String> altFlow;
     private String postflow;
 
     public Project getProject() {
@@ -53,12 +53,12 @@ public class UseCaseDTO {
         this.preCond = preCond;
     }
 
-    public List<String> getAltflow() {
-        return altflow;
+    public List<String> getAltFlow() {
+        return altFlow;
     }
 
-    public void setAltflow(List<String> altflow) {
-        this.altflow = altflow;
+    public void setAltFlow(List<String> altFlow) {
+        this.altFlow = altFlow;
     }
 
     public String getPostflow() {

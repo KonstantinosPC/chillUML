@@ -543,6 +543,42 @@ nav {
     transition: 100ms;
 }
 
+.selected-project .generate{
+    width: 100%;
+    text-align: center;
+}
+
+.selected-project .generate :is(select,button){
+    padding: 10px;
+    border-radius: 5px;
+    border: solid 0.1px rgba(255, 255, 255, 0);
+    box-shadow: 0px 0px 5px -3px black;
+    outline: none;
+    resize: vertical;
+    font-family: sans-serif;
+}
+
+
+.selected-project .generate  button{
+    background: rgb(0, 142, 194);
+    color: white;
+    transition: 500ms;
+}
+
+.selected-project .generate  button:hover{
+    background: rgb(0, 116, 158);
+    text-shadow: 0px 0px 9px white;
+    transition: 100ms;
+}
+
+.selected-project .generated-code{
+    width: 90%;
+    margin: 5%;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: sans-serif;
+    resize: none;
+}
 
 /* Project Material */
 .project-material{
@@ -621,11 +657,15 @@ nav {
     
 }
 
-:is(.project-material .crc, .create-crc, .edit-crc) tbody{
+:is(.project-material .crc, .create-crc, .edit-crc, .create-uc) tbody{
     width: 100%;
 }
 
-:is(.project-material .crc, .create-crc, .edit-crc)  :is(th,td){
+:is(.project-material .crc) :is(table,tr){
+    width: 100%;
+}
+
+:is(.project-material .crc, .create-crc, .edit-crc, .create-uc)  :is(th,td){
     width: 90%;
     border-radius: 5px;
     background: white;
@@ -683,11 +723,17 @@ nav {
     font-family: sans-serif;
 }
 
+@media screen and (max-width: 900px) {
+    :is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc){
+        width: 96%;
+    }
+}
+
 :is(.create-crc,.edit-crc) table{
     width: 100%;
 }
 
-:is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc) :is(input, button, select) {
+:is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc) :is(input, button, select, textarea) {
     width: 90%;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -696,6 +742,8 @@ nav {
     border: solid 0.1px rgba(255, 255, 255, 0);
     box-shadow: 0px 0px 5px -3px black;
     outline: none;
+    resize: vertical;
+    font-family: sans-serif;
 }
 
 :is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc) h3{
@@ -966,7 +1014,7 @@ nav {
 }
 
 .checkboxes input {
-    width: auto !important; /* Overriding το default CSS σου */
+    width: auto !important; 
     margin-right: 10px;
     box-shadow: none !important;
 }

@@ -21,6 +21,30 @@ public class CRC {
     @Column(name = "crc_name")
     private String crcName;
 
+    public List<String> getResponsibilities() {
+        return responsibilities;
+    }
+
+    public void setResponsibilities(List<String> responsibilities) {
+        this.responsibilities = responsibilities;
+    }
+
+    public List<UseCase> getLinkedUseCases() {
+        return linkedUseCases;
+    }
+
+    public void setLinkedUseCases(List<UseCase> linkedUseCases) {
+        this.linkedUseCases = linkedUseCases;
+    }
+
+    public List<CRC> getCollaborators() {
+        return collaborators;
+    }
+
+    public void setCollaborators(List<CRC> collaborators) {
+        this.collaborators = collaborators;
+    }
+
     @Column(name = "crc_responsibilities")
     private List<String> responsibilities;
 
@@ -34,6 +58,11 @@ public class CRC {
 
     public int getCrcId() {
         return crcId;
+    }
+
+
+    public Project getProjectID() {
+        return projectId;
     }
 
     public Project getProjectId() {
@@ -51,6 +80,5 @@ public class CRC {
     public void setCrcName(String crcName) {
         this.crcName = crcName;
     }
-
 
 }

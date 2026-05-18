@@ -513,6 +513,73 @@ nav {
     margin: 0;
 }
 
+.selected-project .project-info h2{
+    font-weight: lighter;
+    color: gray;
+}
+
+/* Project Material Tools */
+.selected-project .tools{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.selected-project .tools button{
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    margin: 3px;
+    background: rgb(209, 118, 255);
+    box-shadow: 2px 2px 5px 0px rgb(209, 118, 255);
+    transition: 500ms;
+    color: rgb(255, 255, 255);
+}
+
+.selected-project .tools button:hover{
+    background: rgb(198, 85, 255);
+    box-shadow: 2px 2px 5px 0px rgb(198, 85, 255);
+    transform: translateY(-3px);
+    transition: 100ms;
+}
+
+.selected-project .generate{
+    width: 100%;
+    text-align: center;
+}
+
+.selected-project .generate :is(select,button){
+    padding: 10px;
+    border-radius: 5px;
+    border: solid 0.1px rgba(255, 255, 255, 0);
+    box-shadow: 0px 0px 5px -3px black;
+    outline: none;
+    resize: vertical;
+    font-family: sans-serif;
+}
+
+
+.selected-project .generate  button{
+    background: rgb(0, 142, 194);
+    color: white;
+    transition: 500ms;
+}
+
+.selected-project .generate  button:hover{
+    background: rgb(0, 116, 158);
+    text-shadow: 0px 0px 9px white;
+    transition: 100ms;
+}
+
+.selected-project .generated-code{
+    width: 90%;
+    margin: 5%;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: sans-serif;
+    resize: none;
+}
+
 /* Project Material */
 .project-material{
     margin: auto;
@@ -545,9 +612,37 @@ nav {
 .project-material .crc .title, .project-material .uc .title{
     margin: 0;
     width: 100%;
-    font-size: 20px;
     background: rgb(255, 230, 187);
     border-radius: 5px;
+    display:inline-block;
+    justify-content: center;
+    align-items: center;
+}
+
+.project-material .crc .title h1,.project-material .uc .title h1{
+    font-size: 20px;
+    float: left;
+}
+
+.project-material .crc .title button, .project-material .uc .title button{
+    margin: 3px;
+    float: right;
+    background: rgba(0, 0, 0, 0.123);
+    border: none;
+    border-radius: 5px;
+}
+
+.project-material .crc .title button:hover, .project-material .uc .title button:hover{
+    background: rgba(0, 0, 0, 0.271);
+}
+
+.project-material .crc .title .delete, .project-material .uc .title .delete{
+    background: rgba(255, 0, 0, 0.434);
+}
+
+
+.project-material .crc .title .delete:hover, .project-material .uc .title .delete:hover{
+    background: rgba(255, 0, 0, 0.636);
 }
 
 .project-material .uc .title{
@@ -559,11 +654,19 @@ nav {
     margin: 0;
     font-weight: lighter;
     font-size: 15px;
-    
+
 }
 
-.project-material .crc td, .project-material .crc th{
-    width: 49%;
+:is(.project-material .crc, .create-crc, .edit-crc, .create-uc) tbody{
+    width: 100%;
+}
+
+:is(.project-material .crc) :is(table,tr){
+    width: 100%;
+}
+
+:is(.project-material .crc, .create-crc, .edit-crc, .create-uc)  :is(th,td){
+    width: 90%;
     border-radius: 5px;
     background: white;
     box-shadow: 0px 0px 5px -3px black;
@@ -571,7 +674,7 @@ nav {
     text-align: center;
 }
 
-.project-material .crc th{
+:is(.project-material .crc, .create-crc, .edit-crc) th{
     background: rgb(0, 126, 194);
     color: white;
 }
@@ -606,17 +709,31 @@ nav {
 }
 
 /* Project Create Container */
-.create-project, .edit-project, .delete-project{
+:is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc){
     padding: 10px;
     width: 30%;
+    max-height: 80%;
+    overflow-y: scroll;
+    scrollbar-width: none;
     border-radius: 10px;
     box-shadow: 0px 0px 9px 0px black;
     text-align: center;
     background: white;
     display: none;
+    font-family: sans-serif;
 }
 
-.create-project input, .create-project button, .edit-project input, .edit-project button, .delete-project button{
+@media screen and (max-width: 900px) {
+    :is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc){
+        width: 96%;
+    }
+}
+
+:is(.create-crc,.edit-crc) table{
+    width: 100%;
+}
+
+:is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc) :is(input, button, select, textarea) {
     width: 90%;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -625,6 +742,12 @@ nav {
     border: solid 0.1px rgba(255, 255, 255, 0);
     box-shadow: 0px 0px 5px -3px black;
     outline: none;
+    resize: vertical;
+    font-family: sans-serif;
+}
+
+:is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc) h3{
+    margin: 0;
 }
 
 .create-project textarea, .edit-project textarea{
@@ -639,13 +762,13 @@ nav {
     outline: none;
 }
 
-.create-project button, .edit-project button{
+:is(.create-project, .edit-project, .create-uc, .edit-uc, .create-crc, .edit-crc) button{
     background: rgb(0, 142, 194);
     color: white;
     transition: 500ms;
 }
 
-.create-project button:hover, .edit-project button:hover, .delete-project button:hover{
+:is(.create-project, .edit-project, .create-uc, .edit-uc, .create-crc, .edit-crc) button:hover{
     background: rgb(0, 116, 158);
     text-shadow: 0px 0px 9px white;
     transition: 100ms;
@@ -655,12 +778,12 @@ nav {
     background: gray;
 }
 
-.create-project .close, .edit-project .close{
+:is(.create-project, .edit-project, .create-uc, .edit-uc, .create-crc, .edit-crc) .close{
     background: rgb(143, 0, 0);
 
 }
 
-.create-project .close:hover, .edit-project .close:hover, .delete-project .delete:hover {
+:is(.create-project, .edit-project, .create-uc, .edit-uc, .create-crc, .edit-crc)  .close:hover {
     background: rgb(90, 0, 0);
 }
 
@@ -843,4 +966,55 @@ nav {
     font-family: monospace;
     font-size: 14px;
     color: #475569;
+}
+
+/* Select box */
+.custom-multiselect {
+    position: relative;
+    width: 90%;
+    margin: 5px auto;
+    text-align: left;
+}
+
+.select-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: white;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+}
+
+.checkboxes {
+    display: none;
+    position: absolute;
+    background: white;
+    border: 1px solid var(--border-color);
+    width: 100%;
+    z-index: 10;
+    max-height: 150px;
+    overflow-y: auto;
+    border-radius: 0 0 5px 5px;
+    box-shadow: var(--shadow-md);
+}
+
+.checkboxes label {
+    display: block;
+    padding: 8px 10px;
+    transition: background 0.2s;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.checkboxes label:hover {
+    background: var(--bg-color);
+}
+
+.checkboxes input {
+    width: auto !important;
+    margin-right: 10px;
+    box-shadow: none !important;
 }

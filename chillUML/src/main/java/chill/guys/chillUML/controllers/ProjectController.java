@@ -1,5 +1,7 @@
 package chill.guys.chillUML.controllers;
 
+import chill.guys.chillUML.DTO.CrcDTO;
+import chill.guys.chillUML.DTO.UseCaseDTO;
 import chill.guys.chillUML.domain.Project;
 import chill.guys.chillUML.domain.User;
 import chill.guys.chillUML.repositories.ProjectRepository;
@@ -12,9 +14,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -24,20 +31,56 @@ public class ProjectController {
     UserServicesImpl userServices;
 
     @Autowired
+    ProjectServicesImpl projectServices;
+
+    @Autowired
     ProjectRepository projectRepository;
 
-    @GetMapping("/project/{name}")
-    public String toProject(@PathVariable String name, @AuthenticationPrincipal UserDetails userDetails, Model model, RedirectAttributes redirectAttributes){
+    private List<String> stringToList(String origin){
+        return Arrays.stream(origin.split("\\r?\\n")).map(String::trim).filter(step -> !step.isEmpty()).toList();
+    }
+
+    @GetMapping("/project/{owner}/{name}")
+    public String toProject(@PathVariable String owner ,@PathVariable String name, @AuthenticationPrincipal UserDetails userDetails, Model model, RedirectAttributes redirectAttributes){
         User currentUser = userServices.findByUsername(userDetails.getUsername()).get();
         Optional<Project> currentProject = projectRepository.findByProjectNameAndOwnerId(name, currentUser);
-        if(!(currentProject.isEmpty())){
-            model.addAttribute("user",currentUser);
-            model.addAttribute("project",currentProject.get());
-            System.out.println(currentProject.get().getOwnerId().getUsername());
-            return "project";
-        }else{
+
+        if(!currentUser.getUsername().equals(owner)){
+            redirectAttributes.addFlashAttribute("critical", "This project isn't yours or the owner hasn't shared it with you");
+            return "redirect:/dashboard";
+        }
+
+        if(!currentProject.isPresent()){
             redirectAttributes.addFlashAttribute("critical", "This project doesn't exists");
             return "redirect:/dashboard";
         }
+
+        model.addAttribute("user",currentUser);
+        model.addAttribute("project",currentProject.get());
+        model.addAttribute("crcs",projectServices.viewAllCRC(currentProject.get()));
+        model.addAttribute("usecases",projectServices.viewAllUseCases(currentProject.get()));
+        model.addAttribute("useCaseDTO", new UseCaseDTO());
+        return "project";
+
+    }
+
+    @PostMapping("/project/create-uc/{owner}/{name}")
+    public String createCRC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @PathVariable String name, @ModelAttribute UseCaseDTO useCaseDTO, RedirectAttributes redirectAttributes){
+        if(!userDetails.getUsername().equals(owner)){
+            redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
+            return "redirect:/project/{owner}/{name}";
+        }
+
+        useCaseDTO.setProject(projectRepository.findByProjectNameAndOwnerId(name, userServices.findByUsername(userDetails.getUsername()).get()).get());
+        useCaseDTO.setAltFlow(stringToList(useCaseDTO.getAltFlow().get(0)));
+        useCaseDTO.setPreCond(stringToList(useCaseDTO.getPreCond().get(0)));
+        projectServices.createUseCase(useCaseDTO,redirectAttributes);
+
+        return "redirect:/project/{owner}/{name}";
+    }
+
+    @PostMapping("/project/create-crc/{owner}/{name}")
+    public String createCRC(@PathVariable String owner, @PathVariable String name, @ModelAttribute CrcDTO crcDTO, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes){
+        return "redirect:/project/{owner}/{name}";
     }
 }

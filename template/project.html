@@ -39,13 +39,42 @@
             <div id="pop-up" class="pop-up">
                 <form id="create-uc" class="create-uc">
                     <h1>Create Use Case</h1>
-
+                    <h3>Use Case Name</h3>
+                    <input type="text" placeholder="Enter UseCase Name" name="uc-title" id="uc-title" required>
+                    <h3>Actors</h3>
+                    <input type="text" placeholder="Actor" name="uc-actor" id="uc-actor" required>
+                    <h3>Pre-Condition</h3>
+                    <textarea name="uc-precondition" id="uc-precondition" placeholder="Type a Pre-Condition" required></textarea>
+                    <h3>Main Flow</h3>
+                    <textarea name="uc-mainflow" id="uc-mainflow" placeholder="Type a Main Flow" required></textarea>
+                    <h3>Alternative Flow</h3>
+                    <textarea name="uc-postcondition" id="uc-postcondition" placeholder="Type an alternative flow"></textarea>
+                    <h3>Post Condition</h3>
+                    <textarea name="uc-postcondition" id="uc-postcondition" placeholder="Type a Post Condition" required></textarea>
+                    <button>Create</button>
                     <button type="button" class="close" onclick="togglePopUp('create-uc')">Close</button>
                 </form>
+
+
                 <form id="edit-uc" class="edit-uc">
                     <h1>Edit Use Case</h1>
+                    <h3>Use Case Name</h3>
+                    <input type="text" placeholder="Enter UseCase Name" name="uc-title" id="uc-title" required>
+                    <h3>Actors</h3>
+                    <input type="text" placeholder="Actor" name="uc-actor" id="uc-actor" required>
+                    <h3>Pre-Condition</h3>
+                    <textarea name="uc-precondition" id="uc-precondition" placeholder="Type a Pre-Condition" required></textarea>
+                    <h3>Main Flow</h3>
+                    <textarea name="uc-mainflow" id="uc-mainflow" placeholder="Type a Main Flow" required></textarea>
+                    <h3>Alternative Flow</h3>
+                    <textarea name="uc-postcondition" id="uc-postcondition" placeholder="Type an alternative flow"></textarea>
+                    <h3>Post Condition</h3>
+                    <textarea name="uc-postcondition" id="uc-postcondition" placeholder="Type a Post Condition" required></textarea>
+                    <button>Save</button>
                     <button type="button" class="close"  onclick="togglePopUp('edit-uc')">Close</button>
                 </form>
+
+
                 <form id="create-crc" class="create-crc">
                     <h1>Create CRC</h1>
                     <input type="text" placeholder="Name">
@@ -90,6 +119,8 @@
                     <button>Create</button>
                     <button type="button" class="close" onclick="togglePopUp('create-crc')">Close</button>
                 </form>
+
+
                 <form id="edit-crc" class="edit-crc">
                     <h1>Edit CRC</h1>
                     <input type="text" placeholder="Name">
@@ -160,14 +191,14 @@
                         <div class="value">Use Case Nigga</div>
                         <div class="subtitle"><b>Use Case:</b></div>
                         <div class="value">US Card #1</div>
+                        <div class="subtitle"><b>Collaborators:</b></div>
+                        <div class="value"><td>What</td></div>
                         <table>
                             <tr>
                                 <th>Responsibilities</th>
-                                <th>Collaborations</th>
                             </tr>
                             <tr>
                                 <td>Create a custom data type</td>
-                                <td>What</td>
                             </tr>
                         </table>
                     </div>
@@ -195,6 +226,18 @@
                     </div>
                 </div>
                 <hr>
+                <form class="generate">
+                     <select name="" id="">
+                        <option value="">Plant UML</option>
+                        <option value="">Nomnoml</option>
+                    </select>
+                    <select name="" id="">
+                        <option value="">Class Diagram</option>
+                        <option value="">UseCase Diagram</option>
+                    </select>
+                    <button>Generate Code</button>
+                </form>
+                <textarea name="" id="" class="generated-code"></textarea>
             </div>
 
 

@@ -37,6 +37,139 @@
         </div>
     </nav>
 
+
+
+    <div id="pop-up" class="pop-up">
+        <form id="create-uc" class="create-uc" th:object="${useCaseDTO}" th:action="@{/project/create-uc/{owner}/{name}(owner=${project.getOwnerId().getUsername()}, name=${project.getProjectName()})}" method="post">
+            <h1>Create Use Case</h1>
+            <h3>Use Case Name</h3>
+            <input type="text" th:field="*{useCaseName}" placeholder="Enter UseCase Name" name="uc-title" id="uc-title" required>
+            <h3>Actors</h3>
+            <input type="text" th:field="*{actors}" placeholder="Actor" name="uc-actor" id="uc-actor" required>
+            <h3>Pre-Condition</h3>
+            <textarea th:field="*{preCond}" name="uc-precondition" id="uc-precondition" placeholder="Type a Pre-Condition. Change Line to add an alternative flow" required></textarea>
+            <h3>Main Flow</h3>
+            <textarea name="uc-mainflow" th:field="*{mainFlow}" id="uc-mainflow" placeholder="Type a Main Flow" required></textarea>
+            <h3>Alternative Flow</h3>
+            <textarea name="uc-altflow" th:field="*{altFlow}" id="uc-altflow" placeholder="Type an alternative flow. Change Line to add an alternative flow"></textarea>
+            <h3>Post Condition</h3>
+            <textarea name="uc-postcondition" th:field="*{postflow}" id="uc-postcondition" placeholder="Type a Post Condition" required></textarea>
+            <button>Create</button>
+            <button type="button" class="close" onclick="togglePopUp('create-uc')">Close</button>
+        </form>
+
+
+        <form id="edit-uc" class="edit-uc">
+            <h1>Edit Use Case</h1>
+            <h3>Use Case Name</h3>
+            <input type="text" placeholder="Enter UseCase Name" name="uc-title" id="uc-title" required>
+            <h3>Actors</h3>
+            <input type="text" placeholder="Actor" name="uc-actor" id="uc-actor" required>
+            <h3>Pre-Condition</h3>
+            <textarea name="uc-precondition" id="uc-precondition" placeholder="Type a Pre-Condition" required></textarea>
+            <h3>Main Flow</h3>
+            <textarea name="uc-mainflow" id="uc-mainflow" placeholder="Type a Main Flow" required></textarea>
+            <h3>Alternative Flow</h3>
+            <textarea name="uc-altflow" id="uc-altflow" placeholder="Type an alternative flow"></textarea>
+            <h3>Post Condition</h3>
+            <textarea name="uc-postcondition" id="uc-postcondition" placeholder="Type a Post Condition" required></textarea>
+            <button>Save</button>
+            <button type="button" class="close"  onclick="togglePopUp('edit-uc')">Close</button>
+        </form>
+
+
+        <form id="create-crc" class="create-crc">
+            <h1>Create CRC</h1>
+            <input type="text" placeholder="Name">
+
+            <h3>Use Cases:</h5>
+                <div class="custom-multiselect">
+                    <div class="select-box" onclick="toggleCheckboxArea(this)">
+                        <span class="placeholder">Select Use Cases</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </div>
+                    <div class="checkboxes">
+                        <label><input type="checkbox" value="Class1" onchange="updateSelectText(this)">Use Case 1</label>
+                        <label><input type="checkbox" value="Class2" onchange="updateSelectText(this)">Use Case 2</label>
+                        <label><input type="checkbox" value="Class3" onchange="updateSelectText(this)">Use Case 3</label>
+                    </div>
+                </div>
+
+                <h3>Collaborators</h3>
+                <div class="custom-multiselect">
+                    <div class="select-box" onclick="toggleCheckboxArea(this)">
+                        <span class="placeholder">Select Collaborators</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </div>
+                    <div class="checkboxes">
+                        <label><input type="checkbox" value="Class1" onchange="updateSelectText(this)">Use Case 1</label>
+                        <label><input type="checkbox" value="Class2" onchange="updateSelectText(this)">Use Case 2</label>
+                        <label><input type="checkbox" value="Class3" onchange="updateSelectText(this)">Use Case 3</label>
+                    </div>
+                </div>
+                <hr>
+                <table>
+                    <tr>
+                        <th>Responsibilities</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="Type in a responsibility"></td>
+                        <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
+                    </tr>
+                </table>
+                <button type="button" onclick="addRow()">+ Add Row</button>
+                <button>Create</button>
+                <button type="button" class="close" onclick="togglePopUp('create-crc')">Close</button>
+        </form>
+
+
+        <form id="edit-crc" class="edit-crc">
+            <h1>Edit CRC</h1>
+            <input type="text" placeholder="Name">
+
+            <h3>Use Cases:</h5>
+                <div class="custom-multiselect">
+                    <div class="select-box" onclick="toggleCheckboxArea(this)">
+                        <span class="placeholder">Select Use Cases</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </div>
+                    <div class="checkboxes">
+                        <label><input type="checkbox" value="Class1" onchange="updateSelectText(this)">Use Case 1</label>
+                        <label><input type="checkbox" value="Class2" onchange="updateSelectText(this)">Use Case 2</label>
+                        <label><input type="checkbox" value="Class3" onchange="updateSelectText(this)">Use Case 3</label>
+                    </div>
+                </div>
+
+                <h3>Collaborators</h3>
+                <div class="custom-multiselect">
+                    <div class="select-box" onclick="toggleCheckboxArea(this)">
+                        <span class="placeholder">Select Collaborators</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </div>
+                    <div class="checkboxes">
+                        <label><input type="checkbox" value="Class1" onchange="updateSelectText(this)">Use Case 1</label>
+                        <label><input type="checkbox" value="Class2" onchange="updateSelectText(this)">Use Case 2</label>
+                        <label><input type="checkbox" value="Class3" onchange="updateSelectText(this)">Use Case 3</label>
+                    </div>
+                </div>
+                <hr>
+                <table>
+                    <tr>
+                        <th>Responsibilities</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" placeholder="Type in a responsibility"></td>
+                        <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
+                    </tr>
+                </table>
+                <button type="button" onclick="addRow()">+ Add Row</button>
+                <button>Save</button>
+                <button type="button" class="close" onclick="togglePopUp('edit-crc')">Close</button>
+        </form>
+    </div>
+
     <div class="selected-project">
         <div class="project-info">
             <h1 th:text="${project.getProjectName()}"></h1>
@@ -44,30 +177,21 @@
             <p th:text="${project.getProjectDescription()}">Project about material</p>
         </div>
         <hr>
+        <div class="tools">
+            <button onclick="togglePopUp('create-uc')">+ Create Use Case</button>
+            <button onclick="togglePopUp('create-crc')">+ Create CRC Card</button>
+
+        </div>
         <div class="project-material">
 
-            <div class="crc">
-                <h1 class="title">CRC Card #1</h1>
-                <div class="subtitle"><b>Class:</b></div>
-                <div class="value">Use Case Nigga</div>
-                <div class="subtitle"><b>Use Case:</b></div>
-                <div class="value">US Card #1</div>
-                <table>
-                    <tr>
-                        <th>Responsibilities</th>
-                        <th>Collaborations</th>
-                    </tr>
-                    <tr>
-                        <td>Create a custom data type</td>
-                        <td>What</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="uc">
-                <h1 class="title">UC Card #UC12</h1>
+            <div th:each="usecase : ${usecases}" class="uc">
+                <div class="title">
+                    <h1 th:text="${usecase.getUseCaseName()}"></h1>
+                    <button class="delete">Delete</button>
+                    <button onclick="togglePopUp('edit-uc')">Edit</button>
+                </div>
                 <h2 class="subtitle"><b>Actor:</b></h2>
-                <h2 class="value">User</h2>
+                <h2 class="value" th:text="${usecase.getActors()}">User</h2>
                 <h2 class="subtitle"><b>Pre-Condition:</b></h2>
                 <h2 class="value">The user must be logged in with his credentials and has selected a project from the homepage. Also there must exist at least one use case.</h2>
                 <h2 class="subtitle"><b>Main flow:</b></h2>
@@ -81,12 +205,132 @@
                 <h2 class="subtitle"><b>Post-Condition:</b></h2>
                 <h2 class="value"> The system deletes the use case, if the user chose so.</h2>
             </div>
+
+            <div th:each="crc : ${crcs}" class="crc">
+                <div class="title">
+                    <h1>CRC Card #1</h1>
+                    <button class="delete">Delete</button>
+                    <button onclick="togglePopUp('edit-crc')">Edit</button>
+                </div>
+                <div class="subtitle"><b>Class:</b></div>
+                <div class="value">Use Case Nigga</div>
+                <div class="subtitle"><b>Use Case:</b></div>
+                <div class="value">US Card #1</div>
+                <div class="subtitle"><b>Collaborators:</b></div>
+                <div class="value"><td>What</td></div>
+                <table>
+                    <tr>
+                        <th>Responsibilities</th>
+                    </tr>
+                    <tr>
+                        <td>Create a custom data type</td>
+                    </tr>
+                </table>
+            </div>
+
+
         </div>
         <hr>
+        <form class="generate">
+            <select name="" id="">
+                <option value="">Plant UML</option>
+                <option value="">Nomnoml</option>
+            </select>
+            <select name="" id="">
+                <option value="">Class Diagram</option>
+                <option value="">UseCase Diagram</option>
+            </select>
+            <button>Generate Code</button>
+        </form>
+        <textarea name="" id="" class="generated-code" readonly></textarea>
     </div>
 
 
-    <div class="notifications"></div>
+    <div class="notifications">
+        <div th:if="${error}" class="notification error">
+            <span class="material-symbols-outlined">close</span>
+            <p th:text="${error}">This user already exists</p>
+        </div>
+        <div th:if="${success}" class="notification check">
+            <span class="material-symbols-outlined">check</span>
+            <p th:text="${success}"></p>
+        </div>
+        <div  th:if="${critical}" class="notification critical">
+            <span class="material-symbols-outlined">dangerous</span>
+            <p th:text="${critical}"></p>
+        </div>
+    </div>
 </main>
+<script>
+    function togglePopUp(type){
+        const popUp = document.getElementById("pop-up");
+        const windowed = document.getElementById(type);
+
+        if(popUp.style.height == "100%"){
+            popUp.style.height = 0;
+            setTimeout(windowed.style.display = 'none', 5000);
+        }else{
+            popUp.style.height = '100%';
+            windowed.style.display = 'initial';
+        }
+
+    }
+
+    function toggleCheckboxArea(element) {
+        const checkboxes = element.nextElementSibling;
+        const allMenus = document.querySelectorAll('.checkboxes');
+
+        allMenus.forEach(menu => {
+            if (menu !== checkboxes) menu.style.display = "none";
+        });
+
+        checkboxes.style.display = checkboxes.style.display === "block" ? "none" : "block";
+    }
+
+    function updateSelectText(checkbox) {
+        const container = checkbox.closest('.custom-multiselect');
+        const placeholder = container.querySelector('.placeholder');
+        const checkedBoxes = container.querySelectorAll('input[type="checkbox"]:checked');
+
+        if (checkedBoxes.length > 0) {
+            const values = Array.from(checkedBoxes).map(cb => cb.value);
+            placeholder.textContent = values.join(', ');
+
+            const row = checkbox.closest('tr');
+            if (row && !row.nextElementSibling) {
+                addNewDynamicRow(row.closest('table'));
+            }
+        } else {
+            placeholder.textContent = "Select Options";
+        }
+    }
+
+    function updateDeleteButtons() {
+        const table = document.querySelector('#create-crc table');
+        const rows = table.querySelectorAll('tr');
+        const dataRows = Array.from(rows).slice(1);
+
+        dataRows.forEach(row => {
+            const deleteBtn = row.querySelector('.close');
+            if (deleteBtn) {
+                deleteBtn.style.display = dataRows.length <= 1 ? 'none' : 'inline-block';
+            }
+        });
+    }
+
+    function addRow(){
+        const table = document.querySelector('#create-crc table');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td><input type="text" placeholder="Type in a responsibility"></td>
+            <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
+        `;
+        table.appendChild(newRow);
+        updateDeleteButtons();
+    }
+
+    updateDeleteButtons();
+
+</script>
 </body>
 </html>

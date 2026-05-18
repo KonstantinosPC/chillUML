@@ -80,7 +80,7 @@
                 <div class="project-list">
                     <div th:each="project : ${projects}" class="project">
                         <input class="project-checkbox" type="checkbox" th:data-id="${project.getId()}" th:data-name="${project.getProjectName()}" th:data-desc="${project.getProjectDescription()}">
-                        <a class="project-name" th:href="@{/project/{id}(id=${project.getProjectName()})}" ><span th:text="${project.getProjectName()}"></span></a>
+                        <a class="project-name" th:href="@{/project/{owner}/{id}(id=${project.getProjectName()},owner=${project.getOwnerId().getUsername()})}" ><span th:text="${project.getProjectName()}"></span></a>
                         <span class="project-owner" th:text="${project.getOwnerId().getUsername()}" >KonstantinosPC</span>
                         <span class="project-edition">10 Dec 2025</span>
                     </div>
