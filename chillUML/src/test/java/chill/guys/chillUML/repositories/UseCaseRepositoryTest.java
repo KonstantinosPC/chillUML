@@ -132,17 +132,17 @@ public class UseCaseRepositoryTest {
         usecase.setPostflow("PostCondition");
 
         usecase.setAltFlow(altcond);
-        usecase.setProjectId(project);
+        usecase.setProject(project);
 
 
         useCaseRepository.save(usecase);
-        Optional <UseCase> found = useCaseRepository.findByUseCaseNameAndProjectID("UC1",project);
+        Optional <UseCase> found = useCaseRepository.findByUseCaseNameAndProject("UC1",project);
 
         assertTrue(found.isPresent());
         UseCase uc = found.get();
         RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         projectServices.deleteUseCase(uc.getUseCaseId(), redirectAttributes);
-        found = useCaseRepository.findByUseCaseNameAndProjectID("UC1",project);
+        found = useCaseRepository.findByUseCaseNameAndProject("UC1",project);
         assertFalse(found.isPresent());
 
     }

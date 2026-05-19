@@ -138,7 +138,7 @@ public class ProjectServicesImplTest {
         usecase.setPostflow("PostCondition");
 
         usecase.setAltFlow(altcond);
-        usecase.setProjectId(p);
+        usecase.setProject(p);
 
         useCaseRepository.save(usecase);
         projectServices.deleteProject(p.getId());
