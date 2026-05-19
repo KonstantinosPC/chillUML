@@ -59,21 +59,22 @@
         </form>
 
 
-        <form id="edit-uc" class="edit-uc">
+        <form id="edit-uc" class="edit-uc" th:object="${useCaseDTO}" th:action="@{/project/edit-uc/{owner}/{name}(owner=${project.getOwnerId().getUsername()}, name=${project.getProjectName()})}" method="post">
             <h1>Edit Use Case</h1>
-            <h2 id="edit-uc-main-title">nibba</h2>
+            <h2 id="edit-uc-main-title"></h2>
+            <input type="hidden" name="edit-uc-id" id="edit-uc-id">
             <h3 >Use Case Name</h3>
-            <input type="text" placeholder="Enter UseCase Name" name="uc-title" id="edit-uc-title" required>
+            <input type="text" th:field="*{useCaseName}" placeholder="Enter UseCase Name" name="uc-title" id="edit-uc-title" required>
             <h3>Actors</h3>
-            <input type="text" placeholder="Actor" name="uc-actor" id="edit-uc-actor" required>
+            <input type="text" th:field="*{actors}" placeholder="Actor" name="uc-actor" id="edit-uc-actor" required>
             <h3>Pre-Condition</h3>
-            <textarea name="uc-precondition" id="uc-precondition" placeholder="Type a Pre-Condition" required></textarea>
+            <textarea th:field="*{preCond}" name="uc-precondition" id="edit-uc-precondition" placeholder="Type a Pre-Condition" required></textarea>
             <h3>Main Flow</h3>
-            <textarea name="uc-mainflow" id="uc-mainflow" placeholder="Type a Main Flow" required></textarea>
+            <textarea th:field="*{mainFlow}" name="uc-mainflow" id="edit-uc-mainflow" placeholder="Type a Main Flow" required></textarea>
             <h3>Alternative Flow</h3>
-            <textarea name="uc-altflow" id="uc-altflow" placeholder="Type an alternative flow"></textarea>
+            <textarea th:field="*{altFlow}" name="uc-altflow" id="edit-uc-altflow" placeholder="Type an alternative flow"></textarea>
             <h3>Post Condition</h3>
-            <textarea name="uc-postcondition" id="uc-postcondition" placeholder="Type a Post Condition" required></textarea>
+            <textarea th:field="*{postflow}" name="uc-postcondition" id="edit-uc-postcondition" placeholder="Type a Post Condition" required></textarea>
             <button>Save</button>
             <button type="button" class="close"  onclick="togglePopUp('edit-uc')">Close</button>
         </form>
@@ -90,7 +91,7 @@
             <h1>Create CRC</h1>
             <input type="text" placeholder="Name">
 
-            <h3>Use Cases:</h5>
+            <h3>Use Cases:</h3>
                 <div class="custom-multiselect">
                     <div class="select-box" onclick="toggleCheckboxArea(this)">
                         <span class="placeholder">Select Use Cases</span>
@@ -136,7 +137,7 @@
             <h1>Edit CRC</h1>
             <input type="text" placeholder="Name">
 
-            <h3>Use Cases:</h5>
+            <h3>Use Cases:</h3>
                 <div class="custom-multiselect">
                     <div class="select-box" onclick="toggleCheckboxArea(this)">
                         <span class="placeholder">Select Use Cases</span>
@@ -198,7 +199,10 @@
                     <button th:data-id="${usecase.getUseCaseId()}"
                             th:data-uc-name="${usecase.getUseCaseName()}"
                             th:data-uc-actor="${usecase.getActors()}"
-
+                            th:data-uc-precondition="${usecase.getPrecond()}"
+                            th:data-uc-mainflow="${usecase.getMainFlow()}"
+                            th:data-uc-altflow="${usecase.getAltFlow()}"
+                            th:data-uc-postcondition="${usecase.getPostflow()}"
                             onclick="editUseCase(this)">Edit</button>
                 </div>
                 <h2 class="subtitle"><b>Actor:</b></h2>
@@ -284,11 +288,30 @@
 
     }
 
+    function autoFormat(words){
+        let toReturn = "";
+        let array = words.replace(/[\[\]]/g, '').split(',');
+        for(let i = 0; i < array.length; i++){
+            let word = array[i].trim();
+            if(word !== ""){
+                if(toReturn !== ""){
+                    toReturn += "\n";
+                }
+                toReturn += word;
+            }
+        }
+        return toReturn;
+    }
+
     function editUseCase(usecase){
+        document.getElementById("edit-uc-id").value = usecase.getAttribute('data-id');
         document.getElementById("edit-uc-main-title").innerText = `${usecase.getAttribute('data-uc-name')}#UC${usecase.getAttribute('data-id')}`;
         document.getElementById("edit-uc-title").value = usecase.getAttribute('data-uc-name');
-        usecase.getAttribute('data-uc-actor');
-        alert(usecase.getAttribute('data-uc-name'));
+        document.getElementById("edit-uc-actor").value = usecase.getAttribute('data-uc-actor').replace(/[\[\]]/g, '');
+        document.getElementById("edit-uc-precondition").value = autoFormat(usecase.getAttribute('data-uc-precondition'));
+        document.getElementById("edit-uc-mainflow").value = usecase.getAttribute('data-uc-mainflow');
+        document.getElementById("edit-uc-altflow").value = autoFormat(usecase.getAttribute('data-uc-altflow'));
+        document.getElementById("edit-uc-postcondition").value = usecase.getAttribute('data-uc-postcondition');
         togglePopUp('edit-uc');
     }
 

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +41,7 @@ public class ProjectController {
     UseCaseRepository useCaseRepository;
 
     private List<String> stringToActors(String origin){
-        return Arrays.stream(origin.split(",")).map(String::trim).filter(step -> !step.isEmpty()).toList();
+        return Arrays.asList(origin.split(","));
     }
 
     private List<String> stringToList(String origin){
@@ -78,7 +79,6 @@ public class ProjectController {
         }
 
         useCaseDTO.setProject(projectRepository.findByProjectNameAndOwnerId(name, userServices.findByUsername(userDetails.getUsername()).get()).get());
-        useCaseDTO.setActors(stringToActors(useCaseDTO.getActors().get(0)));
         useCaseDTO.setAltFlow(stringToList(useCaseDTO.getAltFlow().get(0)));
         useCaseDTO.setPreCond(stringToList(useCaseDTO.getPreCond().get(0)));
         projectServices.createUseCase(useCaseDTO,redirectAttributes);
