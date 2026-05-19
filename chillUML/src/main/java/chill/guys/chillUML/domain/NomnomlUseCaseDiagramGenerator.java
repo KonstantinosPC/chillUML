@@ -6,10 +6,10 @@ public class NomnomlUseCaseDiagramGenerator implements UseCaseDiagramGenerator{
     @Override
     public String generateDiagram(List<UseCase> usecases) {
         String returnString = "";
-        String[] actors;
+        List<String> actors;
         returnString += "#direction: right\n#padding: 15\n#spacing: 50\nbendSize: 0.3\n";
         for(UseCase usecase: usecases){
-            actors = usecase.getActors().split(",");
+            actors = usecase.getActors();
             for(String actor:actors){
                 returnString += "[<actor>"+actor+"]\n";
                 returnString += "["+actor+"] -> ["+usecase.getUseCaseName()+"]\n";

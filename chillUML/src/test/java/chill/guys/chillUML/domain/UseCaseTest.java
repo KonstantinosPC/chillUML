@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,9 +18,10 @@ class UseCaseTest {
     @Test
     public void testUseCaseRequirementsModeling() {
         UseCase loginUseCase = new UseCase();
-
+        List<String> actors = new ArrayList<>();
+        actors.add("Registered User");
         loginUseCase.setUseCaseName("User Authentication");
-        loginUseCase.setActors("Registered User");
+        loginUseCase.setActors(actors);
         loginUseCase.setMainFlow("User fill his credentials");
         loginUseCase.setPostflow("System gives access to the user's profile and the user is redirected to the dashboard.");
 
@@ -37,7 +39,7 @@ class UseCaseTest {
 
 
         assertEquals("User Authentication", loginUseCase.getUseCaseName());
-        assertEquals("Registered User", loginUseCase.getActors());
+        assertEquals("Registered User", loginUseCase.getActors().get(0));
 
 
         assertEquals(1, loginUseCase.getPrecond().size());

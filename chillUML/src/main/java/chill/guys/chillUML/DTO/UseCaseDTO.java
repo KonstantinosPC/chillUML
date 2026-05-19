@@ -7,7 +7,7 @@ import java.util.List;
 public class UseCaseDTO {
     private String useCaseName;
     private String mainFlow;
-    private String actors;
+    private List<String> actors;
     private Project project;
     private List<String> preCond;
     private List<String> altFlow;
@@ -37,11 +37,11 @@ public class UseCaseDTO {
         this.mainFlow = mainFlow;
     }
 
-    public String getActors() {
+    public List<String> getActors() {
         return actors;
     }
 
-    public void setActors(String actors) {
+    public void setActors(List<String> actors) {
         this.actors = actors;
     }
 

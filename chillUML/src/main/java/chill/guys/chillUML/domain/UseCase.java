@@ -24,7 +24,7 @@ public class UseCase {
     private String mainFlow;
 
     @Column(name = "Actors")
-    private String actors;
+    private List<String> actors;
 
 
     @ElementCollection
@@ -59,11 +59,11 @@ public class UseCase {
         this.mainFlow = mainFlow;
     }
 
-    public String getActors() {
+    public List<String> getActors() {
         return actors;
     }
 
-    public void setActors(String actors) {
+    public void setActors(List<String> actors) {
         this.actors = actors;
     }
 

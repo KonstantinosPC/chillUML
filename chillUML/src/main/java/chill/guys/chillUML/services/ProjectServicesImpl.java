@@ -92,7 +92,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
             return;
         }
-        if(!(useCaseRepository.findByUseCaseNameAndProjectId(useCaseDTO.getUseCaseName(),useCaseDTO.getProject()).isEmpty())){
+        if(!(useCaseRepository.findByUseCaseNameAndProjectID(useCaseDTO.getUseCaseName(),useCaseDTO.getProject()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
             return;
         }
@@ -141,7 +141,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
             return;
         }
-        if(!(useCaseRepository.findByUseCaseNameAndProjectId(newName,usecase.getProjectId()).isEmpty())){
+        if(!(useCaseRepository.findByUseCaseNameAndProjectID(newName,usecase.getProjectId()).isEmpty())){
       
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
             return;
@@ -158,7 +158,7 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
-    public void editActors(int useCaseID, String newActors, RedirectAttributes redirectAttributes) {
+    public void editActors(int useCaseID, List<String> newActors, RedirectAttributes redirectAttributes) {
         UseCase usecase = useCaseRepository.findById(useCaseID).get();
         if(newActors.isEmpty()){
             redirectAttributes.addFlashAttribute("error","The Actors field must not be empty.");

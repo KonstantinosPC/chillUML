@@ -16,7 +16,7 @@ public interface ProjectServices {
     public void editProjectDescription(int projectID,String newDescription,RedirectAttributes redirectAttributes);
     public void createUseCase(UseCaseDTO useCase, RedirectAttributes redirectAttributes );
     public void editUseCaseName(int useCaseID, String newName, RedirectAttributes redirectAttributes );
-    public void editActors(int useCaseID, String newActors, RedirectAttributes redirectAttributes );
+    public void editActors(int useCaseID, List<String> newActors, RedirectAttributes redirectAttributes );
     public void editPrecondition(int useCaseID, List<String> newPostcond, RedirectAttributes redirectAttributes );
     public void editMainFlow(int useCaseID, String newMainFlow, RedirectAttributes redirectAttributes );
     public void editAltFlows(int useCaseID, List<String> newAltFlow, RedirectAttributes redirectAttributes );
