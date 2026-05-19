@@ -81,6 +81,13 @@ public class ProjectController {
 
     @PostMapping("/project/create-crc/{owner}/{name}")
     public String createCRC(@PathVariable String owner, @PathVariable String name, @ModelAttribute CrcDTO crcDTO, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes){
+        if(!userDetails.getUsername().equals(owner)){
+            redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
+            return "redirect:/project/{owner}/{name}";
+        }
+
+
+
         return "redirect:/project/{owner}/{name}";
     }
 }
