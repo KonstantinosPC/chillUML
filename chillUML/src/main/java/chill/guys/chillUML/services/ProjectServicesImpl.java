@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,8 @@ public class ProjectServicesImpl implements ProjectServices{
         project.setProjectName(projectDTO.getProjectName());
         project.setProjectDescription(projectDTO.getProjectDescription());
         project.setOwner(projectDTO.getOwnerId());
+        project.setUseCases(new ArrayList<UseCase>());
+        project.setCrcList(new ArrayList<CRC>());
         projectRepository.save(project);
         redirectAttributes.addFlashAttribute("success","The project " + project.getProjectName() + " has been created successfully");
     }
@@ -92,7 +95,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
             return;
         }
-        if(!(useCaseRepository.findByUseCaseNameAndProjectID(useCaseDTO.getUseCaseName(),useCaseDTO.getProject()).isEmpty())){
+        if(!(useCaseRepository.findByUseCaseNameAndProject(useCaseDTO.getUseCaseName(),useCaseDTO.getProject()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
             return;
         }
@@ -119,13 +122,15 @@ public class ProjectServicesImpl implements ProjectServices{
 
         UseCase usecase = new UseCase();
         usecase.setUseCaseName(useCaseDTO.getUseCaseName());
-        usecase.setProjectId(useCaseDTO.getProject());
+        usecase.setProject(useCaseDTO.getProject());
         usecase.setMainFlow(useCaseDTO.getMainFlow());
         usecase.setActors(useCaseDTO.getActors());
         usecase.setPrecond(useCaseDTO.getPreCond());
         usecase.setAltFlow(useCaseDTO.getAltFlow());
         usecase.setPostflow(useCaseDTO.getPostflow());
         useCaseRepository.save(usecase);
+        useCaseDTO.getProject().addUseCase(usecase);
+        projectRepository.save(useCaseDTO.getProject());
         redirectAttributes.addFlashAttribute("success","The Use Case " + usecase.getUseCaseName() + " has been created successfully");
 
     }
@@ -141,7 +146,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
             return;
         }
-        if(!(useCaseRepository.findByUseCaseNameAndProjectID(newName,usecase.getProjectId()).isEmpty())){
+        if(!(useCaseRepository.findByUseCaseNameAndProject(newName,usecase.getProject()).isEmpty())){
       
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
             return;
@@ -208,7 +213,7 @@ public class ProjectServicesImpl implements ProjectServices{
 
     @Override
     public List<UseCase> viewAllUseCases(Project project) {
-        return useCaseRepository.findByProjectID(project);
+        return useCaseRepository.findByProject(project);
     }
 
     @Override
@@ -233,17 +238,19 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
             return;
         }
-        if(crcRepository.findByCrcNameAndProjectId(crcDTO.getCrcName(), crcDTO.getProjectID()).isEmpty()){
+        if(crcRepository.findByCrcNameAndProject(crcDTO.getCrcName(), crcDTO.getProjectID()).isEmpty()){
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
             return;
         }
         CRC crc = new CRC();
         crc.setCrcName(crcDTO.getCrcName());
-        crc.setProjectId(crcDTO.getProjectID());
+        crc.setProject(crcDTO.getProjectID());
         crc.setCollaborators(crcDTO.getLinked_crc());
         crc.setResponsibilities(crcDTO.getResponsibilities());
         crc.setLinkedUseCases(crcDTO.getUsecases());
         crcRepository.save(crc);
+        crcDTO.getProjectID().addCRC(crc);
+        projectRepository.save(crc.getProject());
     }
 
 
@@ -262,7 +269,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
             return;
         }
-        if(crcRepository.findByCrcNameAndProjectId(newName, crc.getProjectID()).isEmpty()){
+        if(crcRepository.findByCrcNameAndProject(newName, crc.getProject()).isEmpty()){
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
             return;
         }
@@ -309,7 +316,7 @@ public class ProjectServicesImpl implements ProjectServices{
     @Override
     public String generateUsecaseDiagram(String type, Project projectID) {
         UseCaseDiagramGeneratorFactory factory = new UseCaseDiagramGeneratorFactory();
-        List<UseCase> usecases = useCaseRepository.findByProjectID(projectID);
+        List<UseCase> usecases = useCaseRepository.findByProject(projectID);
         UseCaseDiagramGenerator generator = factory.createUseCaseDiagramGenerator(type);
         return generator.generateDiagram(usecases);
     }
@@ -317,14 +324,14 @@ public class ProjectServicesImpl implements ProjectServices{
     @Override
     public String generateClassDiagram(String type, Project projectID) {
         ClassDiagramGeneratorFactory factory = new ClassDiagramGeneratorFactory();
-        List<CRC> crc = crcRepository.findByProjectId(projectID);
+        List<CRC> crc = crcRepository.findByProject(projectID);
         ClassDiagramGenerator generator = factory.createClassDiagramGenerator(type);
         return generator.generateClassDiagram(crc);
     }
 
     @Override
     public List<CRC> viewAllCRC(Project project) {
-        return crcRepository.findByProjectId(project);
+        return crcRepository.findByProject(project);
     }
 
 

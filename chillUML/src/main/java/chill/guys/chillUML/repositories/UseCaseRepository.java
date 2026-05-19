@@ -15,8 +15,13 @@ import java.util.Optional;
 @Repository
 public interface UseCaseRepository extends JpaRepository<UseCase, Integer> {
     Optional<UseCase> findById(int id);
+<<<<<<< Updated upstream
     Optional<UseCase> findByUseCaseName(String useCaseName);
     List<UseCase> findByProjectID(Project project);
     Optional<UseCase> findByUseCaseNameAndProjectID(String useCaseName, Project projectId);
+=======
+    List<UseCase> findByProject(Project project);
+    Optional<UseCase> findByUseCaseNameAndProject(String useCaseName, Project project);
+>>>>>>> Stashed changes
 
 }

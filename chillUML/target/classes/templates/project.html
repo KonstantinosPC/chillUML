@@ -45,7 +45,7 @@
             <h3>Use Case Name</h3>
             <input type="text" th:field="*{useCaseName}" placeholder="Enter UseCase Name" name="uc-title" id="uc-title" required>
             <h3>Actors</h3>
-            <input type="text" th:field="*{actors}" placeholder="Actor" name="uc-actor" id="uc-actor" required>
+            <input type="text" th:field="*{actors}" placeholder="Type an actor(s). (example: Actor1,Actor2)" name="uc-actor" id="uc-actor" required>
             <h3>Pre-Condition</h3>
             <textarea th:field="*{preCond}" name="uc-precondition" id="uc-precondition" placeholder="Type a Pre-Condition. Change Line to add an alternative flow" required></textarea>
             <h3>Main Flow</h3>
@@ -61,10 +61,11 @@
 
         <form id="edit-uc" class="edit-uc">
             <h1>Edit Use Case</h1>
-            <h3>Use Case Name</h3>
-            <input type="text" placeholder="Enter UseCase Name" name="uc-title" id="uc-title" required>
+            <h2 id="edit-uc-main-title">nibba</h2>
+            <h3 >Use Case Name</h3>
+            <input type="text" placeholder="Enter UseCase Name" name="uc-title" id="edit-uc-title" required>
             <h3>Actors</h3>
-            <input type="text" placeholder="Actor" name="uc-actor" id="uc-actor" required>
+            <input type="text" placeholder="Actor" name="uc-actor" id="edit-uc-actor" required>
             <h3>Pre-Condition</h3>
             <textarea name="uc-precondition" id="uc-precondition" placeholder="Type a Pre-Condition" required></textarea>
             <h3>Main Flow</h3>
@@ -77,6 +78,13 @@
             <button type="button" class="close"  onclick="togglePopUp('edit-uc')">Close</button>
         </form>
 
+        <form th:action="@{/project/delete-uc/{owner}/{name}(owner=${project.getOwnerId().getUsername()}, name=${project.getProjectName()})}" method="POST" id="delete-uc" class="delete-uc">
+            <h1>Delete UseCase</h1>
+            <span>Are you sure you want to delete this UseCase <span id="delete-uc-name"></span> </span>
+            <input type="hidden" name="usecaseId" id="delete-usecase">
+            <button type="button" onclick="togglePopUp('delete-usecase')">Cancel</button>
+            <button type="submit" class="delete">Delete</button>
+        </form>
 
         <form id="create-crc" class="create-crc">
             <h1>Create CRC</h1>
@@ -180,30 +188,29 @@
         <div class="tools">
             <button onclick="togglePopUp('create-uc')">+ Create Use Case</button>
             <button onclick="togglePopUp('create-crc')">+ Create CRC Card</button>
-
         </div>
         <div class="project-material">
 
             <div th:each="usecase : ${usecases}" class="uc">
                 <div class="title">
-                    <h1 th:text="${usecase.getUseCaseName()}"></h1>
-                    <button class="delete">Delete</button>
-                    <button onclick="togglePopUp('edit-uc')">Edit</button>
+                    <h1 th:text="|${usecase.getUseCaseName()} #UC${usecase.getUseCaseId()}|"></h1>
+                    <button class="delete" th:onclick="|openDeleteUseCaseModal('${usecase.getUseCaseId()}')|">Delete</button>
+                    <button th:data-id="${usecase.getUseCaseId()}"
+                            th:data-uc-name="${usecase.getUseCaseName()}"
+                            th:data-uc-actor="${usecase.getActors()}"
+
+                            onclick="editUseCase(this)">Edit</button>
                 </div>
                 <h2 class="subtitle"><b>Actor:</b></h2>
-                <h2 class="value" th:text="${usecase.getActors()}">User</h2>
+                <h2 class="value" th:each="actor : ${usecase.getActors()}" th:text="${actor}"></h2>
                 <h2 class="subtitle"><b>Pre-Condition:</b></h2>
-                <h2 class="value">The user must be logged in with his credentials and has selected a project from the homepage. Also there must exist at least one use case.</h2>
+                <h2 class="value" th:each="precondition : ${usecase.getPrecond()}" th:text="${precondition}"></h2>
                 <h2 class="subtitle"><b>Main flow:</b></h2>
-                <h2 class="value">The use case begins when the user has picked a project and has added at least one use case to this project. <br>
-                    To delete a use case, the user clicks the edit button, which is located at the top right of the use case, and selects the delete option from the drop down menu.<br>
-                    The system pops up a confirmation window, “Are you sure you want to delete this use case?” <br>
-                    2.1    If the user picks “yes”, the system deletes the use case. <br>
-                    2.2    If the user picks “no”, the system closes the pop up confirmation window.</h2>
+                <h2 class="value" th:text="${usecase.getMainFlow()}"></h2>
                 <h2 class="subtitle"><b>Alternative flow(s):</b></h2>
-                <h2 class="value">1.</h2>
+                <h2 class="value" th:each="altflow : ${usecase.getAltFlow()}" th:text="${altflow}"></h2>
                 <h2 class="subtitle"><b>Post-Condition:</b></h2>
-                <h2 class="value"> The system deletes the use case, if the user chose so.</h2>
+                <h2 class="value" th:text="${usecase.getPostflow()}"></h2>
             </div>
 
             <div th:each="crc : ${crcs}" class="crc">
@@ -262,6 +269,7 @@
     </div>
 </main>
 <script>
+
     function togglePopUp(type){
         const popUp = document.getElementById("pop-up");
         const windowed = document.getElementById(type);
@@ -274,6 +282,20 @@
             windowed.style.display = 'initial';
         }
 
+    }
+
+    function editUseCase(usecase){
+        document.getElementById("edit-uc-main-title").innerText = `${usecase.getAttribute('data-uc-name')}#UC${usecase.getAttribute('data-id')}`;
+        document.getElementById("edit-uc-title").value = usecase.getAttribute('data-uc-name');
+        usecase.getAttribute('data-uc-actor');
+        alert(usecase.getAttribute('data-uc-name'));
+        togglePopUp('edit-uc');
+    }
+
+    function openDeleteUseCaseModal(id) {
+        document.getElementById('delete-usecase').value = id;
+        //document.getElementById('delete-uc-name').innerHTML = name;
+        togglePopUp('delete-uc');
     }
 
     function toggleCheckboxArea(element) {

@@ -17,12 +17,14 @@ public class UseCase {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
-    private Project projectID;
+    private Project project;
 
     @Lob
     @Column(name = "mainflow")
     private String mainFlow;
 
+    @ElementCollection
+    @CollectionTable(name = "usecase_actors", joinColumns = @JoinColumn(name = "usecase_id"))
     @Column(name = "Actors")
     private List<String> actors;
 
@@ -43,12 +45,12 @@ public class UseCase {
 
 
 
-    public Project getProjectId() {
-        return projectID;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectId(Project projectId) {
-        this.projectID = projectId;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public String getMainFlow() {

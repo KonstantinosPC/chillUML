@@ -62,6 +62,7 @@ public class CrcRepositoryTest {
         List<UseCase> usecases = new ArrayList<>();
 
         crc.setCrcName("LoginController");
+<<<<<<< Updated upstream
         crc1.setCrcName("Collab1");
         crc2.setCrcName("Collab2");
 
@@ -83,17 +84,21 @@ public class CrcRepositoryTest {
         usecases.add(uc2);
 
         crc.setLinkedUseCases(usecases);
+=======
+        crc.setProject(project);
+>>>>>>> Stashed changes
         crcRepository.save(crc);
         crcRepository.save(crc1);
         crcRepository.save(crc2);
         useCaseRepository.save(uc1);
         useCaseRepository.save(uc2);
 
-        Optional <CRC> found = crcRepository.findByCrcNameAndProjectId("LoginController", project);
+        Optional <CRC> found = crcRepository.findByCrcNameAndProject("LoginController", project);
 
         assertTrue(found.isPresent());
         assertEquals("LoginController", found.get().getCrcName());
 
+<<<<<<< Updated upstream
         assertEquals("Chill UML Editor", found.get().getProjectId().getProjectName());
 
         assertEquals("Collab1",found.get().getCollaborators().get(0).getCrcName());
@@ -105,6 +110,9 @@ public class CrcRepositoryTest {
         assertEquals("UC1",found.get().getLinkedUseCases().get(0).getUseCaseName());
         assertEquals("UC2",found.get().getLinkedUseCases().get(1).getUseCaseName());
 
+=======
+        assertEquals("Chill UML Editor", found.get().getProject().getProjectName());
+>>>>>>> Stashed changes
     }
 
     @Test
@@ -115,7 +123,7 @@ public class CrcRepositoryTest {
 
         CRC crc = new CRC();
         crc.setCrcName("DataEncryptor");
-        crc.setProjectId(BigProject);
+        crc.setProject(BigProject);
         crcRepository.save(crc);
 
         Optional<CRC> result = crcRepository.findById(1);

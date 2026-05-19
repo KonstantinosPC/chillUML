@@ -3,8 +3,11 @@ package chill.guys.chillUML.controllers;
 import chill.guys.chillUML.DTO.CrcDTO;
 import chill.guys.chillUML.DTO.UseCaseDTO;
 import chill.guys.chillUML.domain.Project;
+import chill.guys.chillUML.domain.UseCase;
 import chill.guys.chillUML.domain.User;
 import chill.guys.chillUML.repositories.ProjectRepository;
+import chill.guys.chillUML.repositories.UseCaseRepository;
+import chill.guys.chillUML.repositories.UserRepository;
 import chill.guys.chillUML.services.ProjectServicesImpl;
 import chill.guys.chillUML.services.UserServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.lang.reflect.Array;
@@ -36,6 +36,13 @@ public class ProjectController {
     @Autowired
     ProjectRepository projectRepository;
 
+    @Autowired
+    UseCaseRepository useCaseRepository;
+
+    private List<String> stringToActors(String origin){
+        return Arrays.stream(origin.split(",")).map(String::trim).filter(step -> !step.isEmpty()).toList();
+    }
+
     private List<String> stringToList(String origin){
         return Arrays.stream(origin.split("\\r?\\n")).map(String::trim).filter(step -> !step.isEmpty()).toList();
     }
@@ -54,7 +61,6 @@ public class ProjectController {
             redirectAttributes.addFlashAttribute("critical", "This project doesn't exists");
             return "redirect:/dashboard";
         }
-
         model.addAttribute("user",currentUser);
         model.addAttribute("project",currentProject.get());
         model.addAttribute("crcs",projectServices.viewAllCRC(currentProject.get()));
@@ -65,16 +71,53 @@ public class ProjectController {
     }
 
     @PostMapping("/project/create-uc/{owner}/{name}")
-    public String createCRC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @PathVariable String name, @ModelAttribute UseCaseDTO useCaseDTO, RedirectAttributes redirectAttributes){
+    public String createUC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @PathVariable String name, @ModelAttribute UseCaseDTO useCaseDTO, RedirectAttributes redirectAttributes){
         if(!userDetails.getUsername().equals(owner)){
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
             return "redirect:/project/{owner}/{name}";
         }
 
         useCaseDTO.setProject(projectRepository.findByProjectNameAndOwnerId(name, userServices.findByUsername(userDetails.getUsername()).get()).get());
+        useCaseDTO.setActors(stringToActors(useCaseDTO.getActors().get(0)));
         useCaseDTO.setAltFlow(stringToList(useCaseDTO.getAltFlow().get(0)));
         useCaseDTO.setPreCond(stringToList(useCaseDTO.getPreCond().get(0)));
         projectServices.createUseCase(useCaseDTO,redirectAttributes);
+
+        return "redirect:/project/{owner}/{name}";
+    }
+
+    @PostMapping("/project/edit-uc/{owner}/{name}")
+    public String editUC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @PathVariable String name, @ModelAttribute UseCaseDTO useCaseDTO, RedirectAttributes redirectAttributes){
+        if(!userDetails.getUsername().equals(owner)){
+            redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
+            return "redirect:/project/{owner}/{name}";
+        }
+
+        UseCase uneditedUseCase = useCaseRepository.findByUseCaseNameAndProject(useCaseDTO.getUseCaseName(), useCaseDTO.getProject()).get();
+
+        //UseCase Name
+        if(!uneditedUseCase.getUseCaseName().equals(useCaseDTO.getUseCaseName())){
+            projectServices.editUseCaseName(uneditedUseCase.getUseCaseId(), useCaseDTO.getUseCaseName(), redirectAttributes);
+        }
+
+        //UseCase Actors
+        if(!uneditedUseCase.getActors().equals(useCaseDTO.getActors())){
+            projectServices.editActors(uneditedUseCase.getUseCaseId(), stringToActors(useCaseDTO.getActors().get(0)), redirectAttributes);
+        }
+
+
+        return "redirect:/project/{owner}/{name}";
+    }
+
+
+    @PostMapping("/project/delete-uc/{owner}/{name}")
+    public String editUC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @RequestParam("usecaseId") String useCaseId, @PathVariable String name, RedirectAttributes redirectAttributes){
+        if(!userDetails.getUsername().equals(owner)){
+            redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
+            return "redirect:/project/{owner}/{name}";
+        }
+
+        projectServices.deleteUseCase(Integer.parseInt(useCaseId),redirectAttributes);
 
         return "redirect:/project/{owner}/{name}";
     }
@@ -85,7 +128,6 @@ public class ProjectController {
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
             return "redirect:/project/{owner}/{name}";
         }
-
 
 
         return "redirect:/project/{owner}/{name}";

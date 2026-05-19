@@ -38,12 +38,12 @@ public class CRCTest {
 
         CRC crc = new CRC();
         crc.setCrcName("AuthService");
-        crc.setProjectId(project);
+        crc.setProject(project);
 
         CRC savedCrc = crcRepository.save(crc);
 
         assertTrue(savedCrc.getCrcId()>0);
         assertEquals("AuthService", savedCrc.getCrcName());
-        assertEquals("UML Project", savedCrc.getProjectId().getProjectName());
+        assertEquals("UML Project", savedCrc.getProject().getProjectName());
     }
 }

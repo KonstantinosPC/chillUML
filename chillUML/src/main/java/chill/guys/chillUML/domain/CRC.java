@@ -16,7 +16,7 @@ public class CRC {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
-    private Project projectId;
+    private Project project;
 
     @Column(name = "crc_name")
     private String crcName;
@@ -61,16 +61,13 @@ public class CRC {
     }
 
 
-    public Project getProjectID() {
-        return projectId;
+    public Project getProject() {
+        return project;
     }
 
-    public Project getProjectId() {
-        return projectId;
-    }
 
-    public void setProjectId(Project projectId) {
-        this.projectId = projectId;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public String getCrcName() {

@@ -56,9 +56,9 @@ class UseCaseTest {
         Project umlProject = new Project();
         umlProject.setProjectName("Security Module Design");
 
-        uc.setProjectId(umlProject);
-        assertNotNull(uc.getProjectId());
-        assertEquals("Security Module Design", uc.getProjectId().getProjectName());
+        uc.setProject(umlProject);
+        assertNotNull(uc.getProject());
+        assertEquals("Security Module Design", uc.getProject().getProjectName());
     }
 
 }

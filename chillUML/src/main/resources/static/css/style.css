@@ -709,7 +709,7 @@ nav {
 }
 
 /* Project Create Container */
-:is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc){
+:is(.create-project, .edit-project, .delete-project, .delete-uc, .create-uc, .edit-uc, .create-crc, .edit-crc){
     padding: 10px;
     width: 30%;
     max-height: 80%;
@@ -724,7 +724,7 @@ nav {
 }
 
 @media screen and (max-width: 900px) {
-    :is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc){
+    :is(.create-project, .edit-project, .delete-project, .delete-uc, .create-uc, .edit-uc, .create-crc, .edit-crc){
         width: 96%;
     }
 }
@@ -733,7 +733,7 @@ nav {
     width: 100%;
 }
 
-:is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc) :is(input, button, select, textarea) {
+:is(.create-project, .edit-project, .delete-project, .delete-uc, .create-uc, .edit-uc, .create-crc, .edit-crc) :is(input, button, select, textarea) {
     width: 90%;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -746,7 +746,7 @@ nav {
     font-family: sans-serif;
 }
 
-:is(.create-project, .edit-project, .delete-project, .create-uc, .edit-uc, .create-crc, .edit-crc) h3{
+:is(.create-project, .edit-project, .delete-project,.delete-uc, .create-uc, .edit-uc, .create-crc, .edit-crc) h3{
     margin: 0;
 }
 
@@ -805,11 +805,11 @@ nav {
 }
 
 
-.delete-project h1{
+:is(.delete-project,.delete-uc) h1{
     margin-bottom: 1px;
 }
 
-.delete-project h3{
+:is(.delete-project, .delete-uc) h3{
     margin: 0;
     margin-bottom: 5px;
     font-weight: lighter;
@@ -817,11 +817,11 @@ nav {
     text-transform: uppercase;
 }
 
-.delete-project button{
-    width: 40%;
+:is(.delete-project,.delete-uc) button{
+    width: 90%;
 }
 
-.delete-project .delete{
+:is(.delete-project,.delete-uc) .delete{
     color: white;
     background: #bc1717;
 }

@@ -70,17 +70,17 @@ public class UseCaseRepositoryTest {
         usecase.setPostflow("PostCondition");
 
         usecase.setAltFlow(altcond);
-        usecase.setProjectId(project);
+        usecase.setProject(project);
 
 
         useCaseRepository.save(usecase);
 
-        Optional <UseCase> found = useCaseRepository.findByUseCaseNameAndProjectID("UC1",project);
+        Optional <UseCase> found = useCaseRepository.findByUseCaseNameAndProject("UC1",project);
 
         assertTrue(found.isPresent());
         assertEquals("UC1", found.get().getUseCaseName());
 
-        assertEquals("Chill UML Editor", found.get().getProjectId().getProjectName());
+        assertEquals("Chill UML Editor", found.get().getProject().getProjectName());
 
         assertEquals("Precondition1", found.get().getPrecond().get(0));
         assertEquals("Precondition2", found.get().getPrecond().get(1));
