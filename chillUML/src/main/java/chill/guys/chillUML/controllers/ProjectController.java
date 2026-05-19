@@ -87,13 +87,20 @@ public class ProjectController {
     }
 
     @PostMapping("/project/edit-uc/{owner}/{name}")
-    public String editUC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @PathVariable String name, @ModelAttribute UseCaseDTO useCaseDTO, RedirectAttributes redirectAttributes){
+    public String editUC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @RequestParam("edit-uc-id") int useCaseId, @PathVariable String name, @ModelAttribute UseCaseDTO useCaseDTO, RedirectAttributes redirectAttributes){
         if(!userDetails.getUsername().equals(owner)){
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
             return "redirect:/project/{owner}/{name}";
         }
 
-        UseCase uneditedUseCase = useCaseRepository.findByUseCaseNameAndProject(useCaseDTO.getUseCaseName(), useCaseDTO.getProject()).get();
+        Optional<UseCase> useCaseOpt = useCaseRepository.findById(useCaseId);
+        if (useCaseOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "The Use Case you are trying to edit was not found.");
+            return "redirect:/project/{owner}/{name}";
+        }
+
+        UseCase uneditedUseCase = useCaseOpt.get();
+
 
         //UseCase Name
         if(!uneditedUseCase.getUseCaseName().equals(useCaseDTO.getUseCaseName())){
@@ -102,10 +109,30 @@ public class ProjectController {
 
         //UseCase Actors
         if(!uneditedUseCase.getActors().equals(useCaseDTO.getActors())){
-            projectServices.editActors(uneditedUseCase.getUseCaseId(), stringToActors(useCaseDTO.getActors().get(0)), redirectAttributes);
+            projectServices.editActors(useCaseId, useCaseDTO.getActors(), redirectAttributes);
         }
 
+        //UseCase PreCondition
+        if(!uneditedUseCase.getPrecond().equals(useCaseDTO.getPreCond())){
+            projectServices.editPrecondition(useCaseId, useCaseDTO.getPreCond(), redirectAttributes);
+        }
 
+        //UseCase MainFlow
+        if(!uneditedUseCase.getMainFlow().equals(useCaseDTO.getMainFlow())){
+            projectServices.editMainFlow(useCaseId, useCaseDTO.getMainFlow(), redirectAttributes);
+        }
+
+        //UseCase AltFlow
+        if(!uneditedUseCase.getAltFlow().equals(useCaseDTO.getAltFlow())){
+            projectServices.editAltFlows(useCaseId, useCaseDTO.getAltFlow(), redirectAttributes);
+        }
+
+        //UseCase PostCondition
+        if(!uneditedUseCase.getPostflow().equals(useCaseDTO.getPostflow())){
+            projectServices.editPostCondition(useCaseId, useCaseDTO.getPostflow(), redirectAttributes);
+        }
+
+        redirectAttributes.addFlashAttribute("success","The Use Case " + uneditedUseCase.getUseCaseName() + " has been updated successfully");
         return "redirect:/project/{owner}/{name}";
     }
 

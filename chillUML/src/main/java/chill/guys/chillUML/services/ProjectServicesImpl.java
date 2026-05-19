@@ -158,7 +158,6 @@ public class ProjectServicesImpl implements ProjectServices{
         }
         usecase.setUseCaseName(newName);
         useCaseRepository.save(usecase);
-        redirectAttributes.addFlashAttribute("success","The Use Case " + usecase.getUseCaseName() + " has been updated successfully");
 
     }
 
@@ -171,7 +170,6 @@ public class ProjectServicesImpl implements ProjectServices{
         }
         usecase.setActors(newActors);
         useCaseRepository.save(usecase);
-        redirectAttributes.addFlashAttribute("success","The Use Case " + usecase.getUseCaseName() + " Actors havve been updated successfully");
     }
 
     @Override
@@ -183,7 +181,7 @@ public class ProjectServicesImpl implements ProjectServices{
         }
 
         usecase.setPrecond(newPostcond);
-        redirectAttributes.addFlashAttribute("success","The Use Case " + usecase.getUseCaseName() + " Pre Conditions have been updated successfully");
+        useCaseRepository.save(usecase);
     }
 
     @Override
@@ -194,21 +192,21 @@ public class ProjectServicesImpl implements ProjectServices{
             return;
         }
         usecase.setMainFlow(newMainFlow);
-        redirectAttributes.addFlashAttribute("success","The Use Case " + usecase.getUseCaseName() + " Main Flow has been updated successfully");
+        useCaseRepository.save(usecase);
     }
 
     @Override
     public void editAltFlows(int useCaseID, List<String> newAltFlow, RedirectAttributes redirectAttributes) {
         UseCase usecase = useCaseRepository.findById(useCaseID).get();
         usecase.setAltFlow(newAltFlow);
-        redirectAttributes.addFlashAttribute("success","The Use Case " + usecase.getUseCaseName() + " Alt-Flow has been updated successfully");
+        useCaseRepository.save(usecase);
     }
 
     @Override
     public void editPostCondition(int useCaseID, String newPostCond, RedirectAttributes redirectAttributes) {
         UseCase usecase = useCaseRepository.findById(useCaseID).get();
         usecase.setPostflow(newPostCond);
-        redirectAttributes.addFlashAttribute("success","The Use Case " + usecase.getUseCaseName() + " Post Conditions have been updated successfully");
+        useCaseRepository.save(usecase);
     }
 
     @Override

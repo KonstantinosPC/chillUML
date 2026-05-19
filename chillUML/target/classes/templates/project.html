@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Project {Selected Project} | ChillUML</title>
+    <title th:text="|Project ${project.getProjectName()} ChillUML|"></title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
