@@ -140,7 +140,7 @@ public class UseCaseRepositoryTest {
 
         assertTrue(found.isPresent());
         UseCase uc = found.get();
-        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();;
+        RedirectAttributes redirectAttributes = new RedirectAttributesModelMap();
         projectServices.deleteUseCase(uc.getUseCaseId(), redirectAttributes);
         found = useCaseRepository.findByUseCaseNameAndProjectID("UC1",project);
         assertFalse(found.isPresent());

@@ -36,3 +36,4 @@ INSERT INTO projects (id, name, project_description, owner) VALUES (1, 'Chill UM
 INSERT INTO projects (id, name, project_description, owner) VALUES (2, 'Database Schema', 'Backend schema design', 3);
 
 INSERT INTO projects (id, name, project_description, owner) VALUES (3, 'Big Project', 'Top secret documentation', 1);
+
