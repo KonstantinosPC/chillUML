@@ -236,7 +236,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
             return;
         }
-        if(crcRepository.findByCrcNameAndProject(crcDTO.getCrcName(), crcDTO.getProjectID()).isEmpty()){
+        if(!crcRepository.findByCrcNameAndProject(crcDTO.getCrcName(), crcDTO.getProjectID()).isEmpty()){
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
             return;
         }
@@ -247,6 +247,12 @@ public class ProjectServicesImpl implements ProjectServices{
         crc.setResponsibilities(crcDTO.getResponsibilities());
         crc.setLinkedUseCases(crcDTO.getUsecases());
         crcRepository.save(crc);
+
+        for(CRC otherCRCs: crcDTO.getLinked_crc()){
+            otherCRCs.getCollaborators().add(crc);
+            crcRepository.save(otherCRCs);
+        }
+
         crcDTO.getProjectID().addCRC(crc);
         projectRepository.save(crc.getProject());
     }
@@ -305,12 +311,28 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
+    @Transactional
     public void deleteCrc(int crcID,RedirectAttributes redirectAttributes) {
         CRC crc = crcRepository.findById(crcID).get();
         String name = crc.getCrcName();
+
+        if(!crc.getCollaborators().isEmpty()){
+            for(CRC otherCrc : new ArrayList<>(crc.getCollaborators())){
+                otherCrc.getCollaborators().remove(crc);
+                crcRepository.save(otherCrc);
+            }
+        }
+        if (crc.getCollaborators() != null) {
+            crc.getCollaborators().clear();
+        }
+        if (crc.getLinkedUseCases() != null) {
+            crc.getLinkedUseCases().clear();
+        }
+        crcRepository.save(crc);
         crcRepository.delete(crc);
-        redirectAttributes.addFlashAttribute("success","The Use Case " + name + " has been deleted successfully");
+        redirectAttributes.addFlashAttribute("success","The CRC " + name + " has been deleted successfully");
     }
+
     @Override
     public String generateUsecaseDiagram(String type, Project projectID) {
         UseCaseDiagramGeneratorFactory factory = new UseCaseDiagramGeneratorFactory();

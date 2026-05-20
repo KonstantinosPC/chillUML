@@ -3,6 +3,7 @@ package chill.guys.chillUML.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,6 +21,18 @@ public class CRC {
 
     @Column(name = "crc_name")
     private String crcName;
+
+    @ElementCollection
+    @CollectionTable(name = "crc_responsibilities", joinColumns = @JoinColumn(name = "crc_id"))
+    private List<String> responsibilities;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "crc_linked", joinColumns = @JoinColumn(name = "crc_id"), inverseJoinColumns = @JoinColumn(name = "usecase_id"))
+    private List<UseCase> linkedUseCases;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "crc_collaborators", joinColumns = @JoinColumn(name = "crc_id"),inverseJoinColumns = @JoinColumn(name = "collaborator_id"))
+    private List<CRC> collaborators;
 
     public List<String> getResponsibilities() {
         return responsibilities;
@@ -44,17 +57,6 @@ public class CRC {
     public void setCollaborators(List<CRC> collaborators) {
         this.collaborators = collaborators;
     }
-
-    @Column(name = "crc_responsibilities")
-    private List<String> responsibilities;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @Column(name = "crc_linked")
-    private List<UseCase> linkedUseCases;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @Column(name = "crc_collaborators")
-    private List<CRC> collaborators;
 
     public int getCrcId() {
         return crcId;

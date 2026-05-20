@@ -67,6 +67,7 @@ public class ProjectController {
         model.addAttribute("crcs",projectServices.viewAllCRC(currentProject.get()));
         model.addAttribute("usecases",projectServices.viewAllUseCases(currentProject.get()));
         model.addAttribute("useCaseDTO", new UseCaseDTO());
+        model.addAttribute("crcDTO", new CrcDTO());
         return "project";
 
     }
@@ -79,7 +80,9 @@ public class ProjectController {
         }
 
         useCaseDTO.setProject(projectRepository.findByProjectNameAndOwnerId(name, userServices.findByUsername(userDetails.getUsername()).get()).get());
-        useCaseDTO.setAltFlow(stringToList(useCaseDTO.getAltFlow().get(0)));
+        if(useCaseDTO.getAltFlow().size() > 0){
+            useCaseDTO.setAltFlow(stringToList(useCaseDTO.getAltFlow().get(0)));
+        }
         useCaseDTO.setPreCond(stringToList(useCaseDTO.getPreCond().get(0)));
         projectServices.createUseCase(useCaseDTO,redirectAttributes);
 
@@ -138,7 +141,7 @@ public class ProjectController {
 
 
     @PostMapping("/project/delete-uc/{owner}/{name}")
-    public String editUC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @RequestParam("usecaseId") String useCaseId, @PathVariable String name, RedirectAttributes redirectAttributes){
+    public String deleteUC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @RequestParam("usecaseId") String useCaseId, @PathVariable String name, RedirectAttributes redirectAttributes){
         if(!userDetails.getUsername().equals(owner)){
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
             return "redirect:/project/{owner}/{name}";
@@ -155,8 +158,18 @@ public class ProjectController {
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
             return "redirect:/project/{owner}/{name}";
         }
+        crcDTO.setProjectID(projectRepository.findByProjectNameAndOwnerId(name, userServices.findByUsername(owner).get()).get());
+        projectServices.createCRC(crcDTO,redirectAttributes);
+        return "redirect:/project/{owner}/{name}";
+    }
 
-
+    @PostMapping("/project/delete-crc/{owner}/{name}")
+    public String deleteCRC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @RequestParam("crcId") String crcId, @PathVariable String name, RedirectAttributes redirectAttributes){
+        if(!userDetails.getUsername().equals(owner)){
+            redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
+            return "redirect:/project/{owner}/{name}";
+        }
+        projectServices.deleteCrc(Integer.parseInt(crcId),redirectAttributes);
         return "redirect:/project/{owner}/{name}";
     }
 }

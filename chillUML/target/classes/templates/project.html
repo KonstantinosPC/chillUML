@@ -2,6 +2,7 @@
 <head>
     <title th:text="|Project ${project.getProjectName()} ChillUML|"></title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="shortcut icon" th:href="@{/assets/image/logo.png}" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
@@ -15,7 +16,7 @@
 <main>
 
     <nav>
-        <div class="nav-left">
+        <div onclick="window.location.href='/dashboard'" style="cursor: pointer" class="nav-left">
             <div class="logo">
                 <img th:src="@{/assets/image/logo.png}" alt="">
             </div>
@@ -58,7 +59,6 @@
             <button type="button" class="close" onclick="togglePopUp('create-uc')">Close</button>
         </form>
 
-
         <form id="edit-uc" class="edit-uc" th:object="${useCaseDTO}" th:action="@{/project/edit-uc/{owner}/{name}(owner=${project.getOwnerId().getUsername()}, name=${project.getProjectName()})}" method="post">
             <h1>Edit Use Case</h1>
             <h2 id="edit-uc-main-title"></h2>
@@ -81,57 +81,52 @@
 
         <form th:action="@{/project/delete-uc/{owner}/{name}(owner=${project.getOwnerId().getUsername()}, name=${project.getProjectName()})}" method="POST" id="delete-uc" class="delete-uc">
             <h1>Delete UseCase</h1>
-            <span>Are you sure you want to delete this UseCase <span id="delete-uc-name"></span> </span>
+            <span>Are you sure you want to delete this UseCase with ID:<span id="delete-uc-name"></span> </span>
             <input type="hidden" name="usecaseId" id="delete-usecase">
             <button type="button" onclick="togglePopUp('delete-usecase')">Cancel</button>
             <button type="submit" class="delete">Delete</button>
         </form>
 
-        <form id="create-crc" class="create-crc">
+        <form th:object="${crcDTO}" th:action="@{/project/create-crc/{owner}/{name}(owner=${project.getOwnerId().getUsername()}, name=${project.getProjectName()})}" method="post" id="create-crc" class="create-crc">
             <h1>Create CRC</h1>
-            <input type="text" placeholder="Name">
+            <input type="text" th:field="*{crcName}" placeholder="CRC Name">
 
             <h3>Use Cases:</h3>
-                <div class="custom-multiselect">
-                    <div class="select-box" onclick="toggleCheckboxArea(this)">
-                        <span class="placeholder">Select Use Cases</span>
-                        <span class="material-symbols-outlined">expand_more</span>
-                    </div>
-                    <div class="checkboxes">
-                        <label><input type="checkbox" value="Class1" onchange="updateSelectText(this)">Use Case 1</label>
-                        <label><input type="checkbox" value="Class2" onchange="updateSelectText(this)">Use Case 2</label>
-                        <label><input type="checkbox" value="Class3" onchange="updateSelectText(this)">Use Case 3</label>
-                    </div>
+            <div class="custom-multiselect">
+                <div class="select-box" onclick="toggleCheckboxArea(this)">
+                    <span class="placeholder">Select Use Cases</span>
+                    <span class="material-symbols-outlined">expand_more</span>
                 </div>
+                <div class="checkboxes">
+                    <label th:each="usecase : ${usecases}"><input type="checkbox" th:field="*{usecases}" th:value="${usecase.getUseCaseId()}" onchange="updateSelectText(this)" th:text="${usecase.getUseCaseName()}"></label>
+                </div>
+            </div>
 
-                <h3>Collaborators</h3>
-                <div class="custom-multiselect">
-                    <div class="select-box" onclick="toggleCheckboxArea(this)">
-                        <span class="placeholder">Select Collaborators</span>
-                        <span class="material-symbols-outlined">expand_more</span>
-                    </div>
-                    <div class="checkboxes">
-                        <label><input type="checkbox" value="Class1" onchange="updateSelectText(this)">Use Case 1</label>
-                        <label><input type="checkbox" value="Class2" onchange="updateSelectText(this)">Use Case 2</label>
-                        <label><input type="checkbox" value="Class3" onchange="updateSelectText(this)">Use Case 3</label>
-                    </div>
+            <h3>Collaborators</h3>
+            <div class="custom-multiselect">
+                <div class="select-box" onclick="toggleCheckboxArea(this)">
+                    <span class="placeholder">Select Collaborators</span>
+                    <span class="material-symbols-outlined">expand_more</span>
                 </div>
-                <hr>
-                <table>
-                    <tr>
-                        <th>Responsibilities</th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td><input type="text" placeholder="Type in a responsibility"></td>
-                        <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
-                    </tr>
-                </table>
-                <button type="button" onclick="addRow()">+ Add Row</button>
-                <button>Create</button>
-                <button type="button" class="close" onclick="togglePopUp('create-crc')">Close</button>
+                <div class="checkboxes">
+                    <label th:each="crc : ${crcs}"><input type="checkbox" th:field="*{linked_crc}" th:value="${crc.getCrcId()}" onchange="updateSelectText(this)" th:text="${crc.getCrcName()}"></label>
+                </div>
+            </div>
+            <hr>
+            <table>
+                <tr>
+                    <th>Responsibilities</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td><input th:field="*{responsibilities[0]}" type="text" placeholder="Type in a responsibility"></td>
+                    <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
+                </tr>
+            </table>
+            <button type="button" onclick="addRow()">+ Add Row</button>
+            <button>Create</button>
+            <button type="button" class="close" onclick="togglePopUp('create-crc')">Close</button>
         </form>
-
 
         <form id="edit-crc" class="edit-crc">
             <h1>Edit CRC</h1>
@@ -177,6 +172,14 @@
                 <button>Save</button>
                 <button type="button" class="close" onclick="togglePopUp('edit-crc')">Close</button>
         </form>
+
+        <form th:action="@{/project/delete-crc/{owner}/{name}(owner=${project.getOwnerId().getUsername()}, name=${project.getProjectName()})}" method="POST" id="delete-crc" class="delete-crc">
+            <h1>Delete CRC</h1>
+            <span>Are you sure you want to delete this crc with ID:<span id="delete-crc-name"></span> </span>
+            <input type="hidden" name="crcId" id="delete-crc-card">
+            <button type="button" onclick="togglePopUp('delete-crc')">Cancel</button>
+            <button type="submit" class="delete">Delete</button>
+        </form>
     </div>
 
     <div class="selected-project">
@@ -195,7 +198,7 @@
             <div th:each="usecase : ${usecases}" class="uc">
                 <div class="title">
                     <h1 th:text="|${usecase.getUseCaseName()} #UC${usecase.getUseCaseId()}|"></h1>
-                    <button class="delete" th:onclick="|openDeleteUseCaseModal('${usecase.getUseCaseId()}')|">Delete</button>
+                    <button class="delete" th:onclick="|openDeleteUseCase('${usecase.getUseCaseId()}')|">Delete</button>
                     <button th:data-id="${usecase.getUseCaseId()}"
                             th:data-uc-name="${usecase.getUseCaseName()}"
                             th:data-uc-actor="${usecase.getActors()}"
@@ -219,23 +222,21 @@
 
             <div th:each="crc : ${crcs}" class="crc">
                 <div class="title">
-                    <h1>CRC Card #1</h1>
-                    <button class="delete">Delete</button>
+                    <h1 th:text="|${crc.getCrcName()} #CRC${crc.getCrcId()}|"></h1>
+                    <button class="delete" th:onclick="|openDeleteCRC('${crc.getCrcId()}')|">Delete</button>
                     <button onclick="togglePopUp('edit-crc')">Edit</button>
                 </div>
-                <div class="subtitle"><b>Class:</b></div>
-                <div class="value">Use Case Nigga</div>
+
                 <div class="subtitle"><b>Use Case:</b></div>
-                <div class="value">US Card #1</div>
+                <h2 class="value" th:each="linkedUsecases : ${crc.getLinkedUseCases()}" th:text="${linkedUsecases.getUseCaseName()}"></h2>
                 <div class="subtitle"><b>Collaborators:</b></div>
-                <div class="value"><td>What</td></div>
+                <h2 class="value" th:each="collaborators : ${crc.getCollaborators()}" th:text="${collaborators.getCrcName()}"></h2>
+
                 <table>
                     <tr>
                         <th>Responsibilities</th>
                     </tr>
-                    <tr>
-                        <td>Create a custom data type</td>
-                    </tr>
+                    <tr th:each="responsibility : ${crc.getResponsibilities()}"><td th:text="${responsibility}"></td></tr>
                 </table>
             </div>
 
@@ -315,10 +316,16 @@
         togglePopUp('edit-uc');
     }
 
-    function openDeleteUseCaseModal(id) {
+    function openDeleteUseCase(id) {
         document.getElementById('delete-usecase').value = id;
-        //document.getElementById('delete-uc-name').innerHTML = name;
+        document.getElementById('delete-uc-name').innerHTML = id;
         togglePopUp('delete-uc');
+    }
+
+    function openDeleteCRC(id){
+        document.getElementById('delete-crc-card').value = id;
+        document.getElementById('delete-crc-name').innerHTML = id;
+        togglePopUp('delete-crc');
     }
 
     function toggleCheckboxArea(element) {
@@ -338,8 +345,11 @@
         const checkedBoxes = container.querySelectorAll('input[type="checkbox"]:checked');
 
         if (checkedBoxes.length > 0) {
-            const values = Array.from(checkedBoxes).map(cb => cb.value);
-            placeholder.textContent = values.join(', ');
+            const selectedNames = Array.from(checkedBoxes).map(cb => {
+                const label = cb.parentElement;
+                return label.textContent.trim();
+            });
+            placeholder.textContent = selectedNames.join(', ');
 
             const row = checkbox.closest('tr');
             if (row && !row.nextElementSibling) {
@@ -363,14 +373,16 @@
         });
     }
 
+    let rowIndex = 1;
     function addRow(){
         const table = document.querySelector('#create-crc table');
         const newRow = document.createElement('tr');
         newRow.innerHTML = `
-            <td><input type="text" placeholder="Type in a responsibility"></td>
+            <td><input type="text" name="responsibilities[${rowIndex}]" placeholder="Type in a responsibility"></td>
             <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
         `;
         table.appendChild(newRow);
+        rowIndex++;
         updateDeleteButtons();
     }
 
