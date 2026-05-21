@@ -287,7 +287,7 @@ public class ProjectServicesImpl implements ProjectServices{
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
             return;
         }
-        if(crcRepository.findByCrcNameAndProject(newName, crc.getProject()).isEmpty()){
+        if(!(crcRepository.findByCrcNameAndProject(newName, crc.getProject()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
             return;
         }
@@ -308,8 +308,24 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
+    @Transactional
     public void updateCrcColaborators(int crcID,List<CRC> newColaborators, RedirectAttributes redirectAttributes) {
         CRC crc = crcRepository.findById(crcID).get();
+        for(CRC collaborator : newColaborators){
+            if(!collaborator.getCollaborators().contains(crc)){
+                collaborator.getCollaborators().add(crc);
+                crc.getCollaborators().add(collaborator);
+                crcRepository.save(collaborator);
+            }
+        }
+
+        for(CRC collaborator : new ArrayList<>(crc.getCollaborators())){
+            if(!newColaborators.contains(collaborator)){
+                collaborator.getCollaborators().remove(crc);
+                crc.getCollaborators().remove(collaborator);
+                crcRepository.save(collaborator);
+            }
+        }
         crc.setCollaborators(newColaborators);
         crcRepository.save(crc);
         redirectAttributes.addFlashAttribute("success","The Collaborators have been updated successfully");
@@ -317,9 +333,17 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
+    @Transactional
     public void updateCrcLinkedUseCases(int crcID,List<UseCase> newLinkedUseCases, RedirectAttributes redirectAttributes) {
         CRC crc = crcRepository.findById(crcID).get();
-        crc.setLinkedUseCases(newLinkedUseCases);
+
+        for(UseCase usecase: newLinkedUseCases){
+            if(!crc.getLinkedUseCases().contains(usecase)){
+                crc.getLinkedUseCases().add(usecase);
+            }
+        }
+
+        crc.getLinkedUseCases().removeIf(usecase -> !newLinkedUseCases.contains(usecase));
         crcRepository.save(crc);
         redirectAttributes.addFlashAttribute("success","The Linked UseCases have been updated successfully");
     }

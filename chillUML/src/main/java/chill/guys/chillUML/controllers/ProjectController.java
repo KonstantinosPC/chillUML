@@ -6,6 +6,7 @@ import chill.guys.chillUML.domain.CRC;
 import chill.guys.chillUML.domain.Project;
 import chill.guys.chillUML.domain.UseCase;
 import chill.guys.chillUML.domain.User;
+import chill.guys.chillUML.repositories.CrcRepository;
 import chill.guys.chillUML.repositories.ProjectRepository;
 import chill.guys.chillUML.repositories.UseCaseRepository;
 import chill.guys.chillUML.repositories.UserRepository;
@@ -41,6 +42,10 @@ public class ProjectController {
     @Autowired
     UseCaseRepository useCaseRepository;
 
+    @Autowired
+    CrcRepository crcRepository;
+
+
     private List<String> stringToActors(String origin){
         return Arrays.asList(origin.split(","));
     }
@@ -68,6 +73,8 @@ public class ProjectController {
         model.addAttribute("crcs",projectServices.viewAllCRC(currentProject.get()));
         model.addAttribute("usecases",projectServices.viewAllUseCases(currentProject.get()));
         model.addAttribute("useCaseDTO", new UseCaseDTO());
+        model.addAttribute("code");
+
         model.addAttribute("crcDTO", new CrcDTO());
         return "project";
 
@@ -140,7 +147,6 @@ public class ProjectController {
         return "redirect:/project/{owner}/{name}";
     }
 
-
     @PostMapping("/project/delete-uc/{owner}/{name}")
     public String deleteUC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @RequestParam("usecaseId") String useCaseId, @PathVariable String name, RedirectAttributes redirectAttributes){
         if(!userDetails.getUsername().equals(owner)){
@@ -165,6 +171,42 @@ public class ProjectController {
         return "redirect:/project/{owner}/{name}";
     }
 
+    @PostMapping("/project/edit-crc/{owner}/{name}")
+    public String editCRC(@PathVariable String owner, @PathVariable String name, @ModelAttribute CrcDTO crcDTO, @RequestParam("crcId") String crcId, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes){
+        if(!userDetails.getUsername().equals(owner)){
+            redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
+            return "redirect:/project/{owner}/{name}";
+        }
+
+        CRC oldCRC;
+        try{
+            oldCRC = crcRepository.findById(Integer.parseInt(crcId)).get();
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("critical","Internal Error");
+            return "redirect:/project/{owner}/{name}";
+        }
+
+        if(!(oldCRC.getCrcName().equals(crcDTO.getCrcName()))){
+            projectServices.updateCrcName(crcDTO.getCrcName(), oldCRC.getCrcId(), redirectAttributes);
+        }
+
+        if(crcDTO.getLinked_crc() == (null)) crcDTO.setLinked_crc(new ArrayList<>());
+        if(!(oldCRC.getLinkedUseCases().equals(crcDTO.getUsecases()))){
+            projectServices.updateCrcLinkedUseCases(oldCRC.getCrcId(),crcDTO.getUsecases(),redirectAttributes);
+        }
+
+        if(!(oldCRC.getCollaborators().equals(crcDTO.getLinked_crc()))){
+            projectServices.updateCrcColaborators(oldCRC.getCrcId(),crcDTO.getLinked_crc(),redirectAttributes);
+        }
+
+        if(!(oldCRC.getResponsibilities().equals(crcDTO.getResponsibilities()))){
+            projectServices.updateCrcResponsibilities(oldCRC.getCrcId(),crcDTO.getResponsibilities(),redirectAttributes);
+        }
+
+        redirectAttributes.addFlashAttribute("success","The CRC " + oldCRC.getCrcName() + " has been updated successfully");
+        return "redirect:/project/{owner}/{name}";
+    }
+
     @PostMapping("/project/delete-crc/{owner}/{name}")
     public String deleteCRC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @RequestParam("crcId") String crcId, @PathVariable String name, RedirectAttributes redirectAttributes){
         if(!userDetails.getUsername().equals(owner)){
@@ -172,6 +214,25 @@ public class ProjectController {
             return "redirect:/project/{owner}/{name}";
         }
         projectServices.deleteCrc(Integer.parseInt(crcId),redirectAttributes);
+        return "redirect:/project/{owner}/{name}";
+    }
+
+    @PostMapping("/project/gen-code/{owner}/{name}")
+    public String generateCode(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @PathVariable String name, @RequestParam("website") String website, @RequestParam("umltype") String umltype, Model model, RedirectAttributes redirectAttributes){
+        if(!userDetails.getUsername().equals(owner)){
+            redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
+            return "redirect:/project/{owner}/{name}";
+        }
+
+        Project project = projectRepository.findByProjectNameAndOwnerId(name, userServices.findByUsername(owner).get()).get();
+
+        String code = switch (umltype) {
+            case "class_diagram" -> projectServices.generateClassDiagram(website, project);
+            case "use_case_diagram" -> projectServices.generateUsecaseDiagram(website, project);
+            default -> "";
+        };
+
+        redirectAttributes.addFlashAttribute("code",code);
         return "redirect:/project/{owner}/{name}";
     }
 }

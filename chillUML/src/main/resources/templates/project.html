@@ -128,11 +128,12 @@
             <button type="button" class="close" onclick="togglePopUp('create-crc')">Close</button>
         </form>
 
-        <form id="edit-crc" class="edit-crc" th:object="${crcDTO}" th:action="@{/project/create-crc/{owner}/{name}(owner=${project.getOwnerId().getUsername()}, name=${project.getProjectName()})}" method="post">
+        <form id="edit-crc" class="edit-crc" th:object="${crcDTO}" th:action="@{/project/edit-crc/{owner}/{name}(owner=${project.getOwnerId().getUsername()}, name=${project.getProjectName()})}" method="post">
             <h1>Edit CRC</h1>
 
-            <input type="text" name="edit-crc-id">
-            <input type="text" th:field="*{crcName}" name="edit-crc-name" placeholder="CRC Name">
+            <input type="hidden" name="crcId" id="edit-crc-id">
+
+            <input type="text" th:field="*{crcName}" id="edit-crc-name" placeholder="CRC Name">
 
             <h3>Use Cases:</h3>
             <div class="custom-multiselect">
@@ -168,7 +169,7 @@
             </table>
             <button type="button" onclick="addRow()">+ Add Row</button>
             <button>Save</button>
-            <button type="button" class="close" onclick="togglePopUp('edit-crc')">Close</button>
+            <button type="button" class="close" onclick="window.location.reload()">Close</button>
         </form>
 
         <form th:action="@{/project/delete-crc/{owner}/{name}(owner=${project.getOwnerId().getUsername()}, name=${project.getProjectName()})}" method="POST" id="delete-crc" class="delete-crc">
@@ -222,14 +223,12 @@
                 <div class="title">
                     <h1 th:text="|${crc.getCrcName()} #CRC${crc.getCrcId()}|"></h1>
                     <button class="delete" th:onclick="|openDeleteCRC('${crc.getCrcId()}')|">Delete</button>
-                    <button
-                            th:data-crc-id="${crc.getCrcId()}"
-                            th:data-crc-name="${crc.getCrcName()}"
-                            th:data-crc-usecases="${crc.getLinkedUseCases()}"
-                            th:data-crc-collab="${crc.getCollaborators()}"
-                            th:data-crc-respons="${crc.getResponsibilities()}"
-                            th:data-crc-project="${crc.getProject()}"
-                            onclick="editCRC(this   )">Edit</button>
+                    <button th:data-id="${crc.getCrcId()}"
+                            th:data-name="${crc.getCrcName()}"
+                            th:data-usecases="${#strings.listJoin(crc.linkedUseCases.![useCaseId], ',')}"
+                            th:data-collab="${#strings.listJoin(crc.collaborators.![crcId], ',')}"
+                            th:data-respons="${#strings.listJoin(crc.responsibilities, ',')}"
+                            onclick="editCRC(this)">Edit</button>
                 </div>
 
                 <div class="subtitle"><b>Use Case:</b></div>
@@ -248,18 +247,18 @@
 
         </div>
         <hr>
-        <form class="generate">
-            <select name="" id="">
-                <option value="">Plant UML</option>
-                <option value="">Nomnoml</option>
+        <form th:action="@{/project/gen-code/{owner}/{name}(owner=${project.getOwnerId().getUsername()}, name=${project.getProjectName()})}" method="post"  class="generate">
+            <select name="website" id="website">
+                <option value="plantUml">Plant UML</option>
+                <option value="nomnoml">Nomnoml</option>
             </select>
-            <select name="" id="">
-                <option value="">Class Diagram</option>
-                <option value="">UseCase Diagram</option>
+            <select name="umltype" id="umltype">
+                <option value="class_diagram">Class Diagram</option>
+                <option value="use_case_diagram">UseCase Diagram</option>
             </select>
             <button>Generate Code</button>
         </form>
-        <textarea name="" id="" class="generated-code" readonly></textarea>
+        <textarea th:if="${code}" class="generated-code" th:text="${code}" readonly></textarea>
     </div>
 
 
@@ -285,8 +284,8 @@
         const windowed = document.getElementById(type);
 
         if(popUp.style.height == "100%"){
-            popUp.style.height = 0;
-            setTimeout(windowed.style.display = 'none', 5000);
+            popUp.style.height = '0';
+            windowed.style.display = 'none';
         }else{
             popUp.style.height = '100%';
             windowed.style.display = 'initial';
@@ -320,14 +319,115 @@
         document.getElementById("edit-uc-postcondition").value = usecase.getAttribute('data-uc-postcondition');
         togglePopUp('edit-uc');
     }
+    function editCRC(selectedCRC) {
+        const form = document.getElementById("edit-crc");
+        const currentCrcId = selectedCRC.getAttribute('data-id');
 
-    function editCRC(crc){
-        document.getElementById("edit-crc-id").value = crc.getAttribute('data-crc-id');
-        document.getElementById("edit-crc-name").value = crc.getAttribute('data-crc-name');
-        document.getElementById("edit-crc-usecases").value = crc.getAttribute('data-crc-usecases');
-        document.getElementById("edit-crc-collaborators").value = crc.getAttribute('data-crc-collab');
-        document.getElementById("edit-crc-responsibilities").value = crc.getAttribute('data-crc-respons');
+        // Βασικά πεδία
+        document.getElementById("edit-crc-id").value = currentCrcId;
+        document.getElementById("edit-crc-name").value = selectedCRC.getAttribute('data-name');
+
+        // === ΠΑΙΡΝΟΥΜΕ ΤΑ ΔΕΔΟΜΕΝΑ ===
+        const usecasesStr = selectedCRC.getAttribute('data-usecases') || '';
+        const collabStr   = selectedCRC.getAttribute('data-collab') || '';
+        const responsStr  = selectedCRC.getAttribute('data-respons') || '';
+
+        // Καθαρίζουμε checkboxes
+        clearAllCheckboxes();
+
+        // ==================== USE CASES ====================
+        if (usecasesStr) {
+            const usecaseIds = usecasesStr.split(',').map(id => id.trim());
+            document.querySelectorAll('#edit-crc input[name*="usecases"]').forEach(checkbox => {
+                if (usecaseIds.includes(checkbox.value)) {
+                    checkbox.checked = true;
+                    updateSelectText(checkbox);
+                }
+            });
+        }
+
+        // ==================== COLLABORATORS ====================
+        if (collabStr) {
+            const collabIds = collabStr.split(',').map(id => id.trim());
+
+            document.querySelectorAll('#edit-crc input[name*="linked_crc"]').forEach(checkbox => {
+                const val = checkbox.value.trim();
+
+                // Αποκλείουμε τον εαυτό του
+                if (val === currentCrcId) {
+                    checkbox.checked = false;
+                    return;
+                }
+
+                if (collabIds.includes(val)) {
+                    checkbox.checked = true;
+                    updateSelectText(checkbox);
+                }
+            });
+        }
+
+        // ==================== RESPONSIBILITIES ====================
+        populateResponsibilities(responsStr);
+
         togglePopUp('edit-crc');
+    }
+
+    // Βοηθητική συνάρτηση για καθάρισμα checkboxes
+    function clearAllCheckboxes() {
+        document.querySelectorAll('#edit-crc input[type="checkbox"]').forEach(cb => {
+            cb.checked = false;
+        });
+    }
+
+    // Βοηθητική συνάρτηση για Responsibilities
+    function populateResponsibilities(responsStr) {
+        const table = document.querySelector('#edit-crc table');
+        if (!table) return;
+
+        // Διαγράφουμε όλες τις γραμμές εκτός από την header
+        while (table.rows.length > 1) {
+            table.deleteRow(1);
+        }
+
+        const responsibilities = responsStr
+            ? responsStr.split(',').map(r => r.trim()).filter(r => r !== '')
+            : [];
+
+        if (responsibilities.length === 0) {
+            addEmptyResponsibilityRow(table);
+            return;
+        }
+
+        responsibilities.forEach((resp, index) => {
+            let newRow = table.insertRow(-1);
+            let cell1 = newRow.insertCell(0);
+            let cell2 = newRow.insertCell(1);
+
+            cell1.innerHTML = `
+            <input type="text"
+                   name="responsibilities[${index}]"
+                   value="${resp}"
+                   placeholder="Type in a responsibility">
+        `;
+            cell2.innerHTML = `
+            <button type="button" class="close"
+                    onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button>
+        `;
+        });
+
+        // Αν δεν υπάρχει καμία γραμμή, βάζουμε μία κενή
+        if (table.rows.length === 1) {
+            addEmptyResponsibilityRow(table);
+        }
+    }
+
+    function addEmptyResponsibilityRow(table) {
+        let newRow = table.insertRow(-1);
+        let cell1 = newRow.insertCell(0);
+        let cell2 = newRow.insertCell(1);
+
+        cell1.innerHTML = `<input type="text" name="responsibilities[0]" placeholder="Type in a responsibility">`;
+        cell2.innerHTML = `<button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button>`;
     }
 
     function openDeleteUseCase(id) {
