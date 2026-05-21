@@ -596,14 +596,14 @@ nav {
     scrollbar-width: none;
     display: flex;
     gap: 10px;
-    width: 90%;
+    width: 95%;
     overflow: hidden;
     overflow-x: scroll;
     font-family: sans-serif;
 }
 
 .project-material .crc, .project-material .uc{
-    width: 260px;
+    width: 235px;
     background: rgb(255, 244, 225);
     border-radius: 5px;
     box-shadow: 0px 0px 5px -3px black;
@@ -613,6 +613,7 @@ nav {
     overflow: hidden;
     overflow-y: scroll;
     scrollbar-width: none;
+    flex-shrink: 0;
 }
 
 .project-material .uc{
@@ -667,6 +668,10 @@ nav {
 
 }
 
+:is(.project-material .crc, .create-crc, .edit-crc, .create-uc) table{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 :is(.project-material .crc, .create-crc, .edit-crc, .create-uc) tbody{
     width: 100%;
 }

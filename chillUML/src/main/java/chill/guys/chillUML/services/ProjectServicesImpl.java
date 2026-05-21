@@ -215,9 +215,23 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
+    @Transactional
     public void deleteUseCase(int useCaseID,RedirectAttributes redirectAttributes) {
-        UseCase usecase = useCaseRepository.findById(useCaseID).get();
-        String name = usecase.getUseCaseName();
+        UseCase usecaseDeletion = useCaseRepository.findById(useCaseID).get();
+        Project project = usecaseDeletion.getProject();
+
+        if(project.getCrcList() != null){
+            for(CRC crc: new ArrayList<>(project.getCrcList())){
+                for(UseCase usecase: new ArrayList<>(crc.getLinkedUseCases())){
+                    if(usecase.equals(usecaseDeletion)){
+                        crc.getLinkedUseCases().remove(usecase);
+                        crcRepository.save(crc);
+                    }
+                }
+            }
+        }
+
+        String name = usecaseDeletion.getUseCaseName();
         useCaseRepository.deleteById(useCaseID);
         redirectAttributes.addFlashAttribute("success","The Use Case " + name + " has been deleted successfully");
     }

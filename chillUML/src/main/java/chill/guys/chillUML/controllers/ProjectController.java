@@ -2,6 +2,7 @@ package chill.guys.chillUML.controllers;
 
 import chill.guys.chillUML.DTO.CrcDTO;
 import chill.guys.chillUML.DTO.UseCaseDTO;
+import chill.guys.chillUML.domain.CRC;
 import chill.guys.chillUML.domain.Project;
 import chill.guys.chillUML.domain.UseCase;
 import chill.guys.chillUML.domain.User;
@@ -158,6 +159,7 @@ public class ProjectController {
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
             return "redirect:/project/{owner}/{name}";
         }
+        if(crcDTO.getLinked_crc() == (null)) crcDTO.setLinked_crc(new ArrayList<>());
         crcDTO.setProjectID(projectRepository.findByProjectNameAndOwnerId(name, userServices.findByUsername(owner).get()).get());
         projectServices.createCRC(crcDTO,redirectAttributes);
         return "redirect:/project/{owner}/{name}";

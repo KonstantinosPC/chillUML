@@ -128,49 +128,47 @@
             <button type="button" class="close" onclick="togglePopUp('create-crc')">Close</button>
         </form>
 
-        <form id="edit-crc" class="edit-crc">
+        <form id="edit-crc" class="edit-crc" th:object="${crcDTO}" th:action="@{/project/create-crc/{owner}/{name}(owner=${project.getOwnerId().getUsername()}, name=${project.getProjectName()})}" method="post">
             <h1>Edit CRC</h1>
-            <input type="text" placeholder="Name">
+
+            <input type="text" name="edit-crc-id">
+            <input type="text" th:field="*{crcName}" name="edit-crc-name" placeholder="CRC Name">
 
             <h3>Use Cases:</h3>
-                <div class="custom-multiselect">
-                    <div class="select-box" onclick="toggleCheckboxArea(this)">
-                        <span class="placeholder">Select Use Cases</span>
-                        <span class="material-symbols-outlined">expand_more</span>
-                    </div>
-                    <div class="checkboxes">
-                        <label><input type="checkbox" value="Class1" onchange="updateSelectText(this)">Use Case 1</label>
-                        <label><input type="checkbox" value="Class2" onchange="updateSelectText(this)">Use Case 2</label>
-                        <label><input type="checkbox" value="Class3" onchange="updateSelectText(this)">Use Case 3</label>
-                    </div>
+            <div class="custom-multiselect">
+                <div class="select-box" onclick="toggleCheckboxArea(this)">
+                    <span class="placeholder">Select Use Cases</span>
+                    <span class="material-symbols-outlined">expand_more</span>
                 </div>
+                <div class="checkboxes">
+                    <label th:each="usecase : ${usecases}"><input type="checkbox" th:field="*{usecases}" name="edit-crc-usecases" th:value="${usecase.getUseCaseId()}" onchange="updateSelectText(this)" th:text="${usecase.getUseCaseName()}"></label>
+                </div>
+            </div>
 
-                <h3>Collaborators</h3>
-                <div class="custom-multiselect">
-                    <div class="select-box" onclick="toggleCheckboxArea(this)">
-                        <span class="placeholder">Select Collaborators</span>
-                        <span class="material-symbols-outlined">expand_more</span>
-                    </div>
-                    <div class="checkboxes">
-                        <label><input type="checkbox" value="Class1" onchange="updateSelectText(this)">Use Case 1</label>
-                        <label><input type="checkbox" value="Class2" onchange="updateSelectText(this)">Use Case 2</label>
-                        <label><input type="checkbox" value="Class3" onchange="updateSelectText(this)">Use Case 3</label>
-                    </div>
+            <h3>Collaborators</h3>
+            <div class="custom-multiselect">
+                <div class="select-box" onclick="toggleCheckboxArea(this)">
+                    <span class="placeholder">Select Collaborators</span>
+                    <span class="material-symbols-outlined">expand_more</span>
                 </div>
-                <hr>
-                <table>
-                    <tr>
-                        <th>Responsibilities</th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td><input type="text" placeholder="Type in a responsibility"></td>
-                        <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
-                    </tr>
-                </table>
-                <button type="button" onclick="addRow()">+ Add Row</button>
-                <button>Save</button>
-                <button type="button" class="close" onclick="togglePopUp('edit-crc')">Close</button>
+                <div class="checkboxes">
+                    <label th:each="crc : ${crcs}"><input type="checkbox" th:field="*{linked_crc}" name="edit-crc-collaborators" th:value="${crc.getCrcId()}" onchange="updateSelectText(this)" th:text="${crc.getCrcName()}"></label>
+                </div>
+            </div>
+            <hr>
+            <table>
+                <tr>
+                    <th>Responsibilities</th>
+                    <th></th>
+                </tr>
+                <tr name="edit-crc-responsibilities">
+                    <td><input th:field="*{responsibilities[0]}" type="text" placeholder="Type in a responsibility"></td>
+                    <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
+                </tr>
+            </table>
+            <button type="button" onclick="addRow()">+ Add Row</button>
+            <button>Save</button>
+            <button type="button" class="close" onclick="togglePopUp('edit-crc')">Close</button>
         </form>
 
         <form th:action="@{/project/delete-crc/{owner}/{name}(owner=${project.getOwnerId().getUsername()}, name=${project.getProjectName()})}" method="POST" id="delete-crc" class="delete-crc">
@@ -224,7 +222,14 @@
                 <div class="title">
                     <h1 th:text="|${crc.getCrcName()} #CRC${crc.getCrcId()}|"></h1>
                     <button class="delete" th:onclick="|openDeleteCRC('${crc.getCrcId()}')|">Delete</button>
-                    <button onclick="togglePopUp('edit-crc')">Edit</button>
+                    <button
+                            th:data-crc-id="${crc.getCrcId()}"
+                            th:data-crc-name="${crc.getCrcName()}"
+                            th:data-crc-usecases="${crc.getLinkedUseCases()}"
+                            th:data-crc-collab="${crc.getCollaborators()}"
+                            th:data-crc-respons="${crc.getResponsibilities()}"
+                            th:data-crc-project="${crc.getProject()}"
+                            onclick="editCRC(this   )">Edit</button>
                 </div>
 
                 <div class="subtitle"><b>Use Case:</b></div>
@@ -314,6 +319,15 @@
         document.getElementById("edit-uc-altflow").value = autoFormat(usecase.getAttribute('data-uc-altflow'));
         document.getElementById("edit-uc-postcondition").value = usecase.getAttribute('data-uc-postcondition');
         togglePopUp('edit-uc');
+    }
+
+    function editCRC(crc){
+        document.getElementById("edit-crc-id").value = crc.getAttribute('data-crc-id');
+        document.getElementById("edit-crc-name").value = crc.getAttribute('data-crc-name');
+        document.getElementById("edit-crc-usecases").value = crc.getAttribute('data-crc-usecases');
+        document.getElementById("edit-crc-collaborators").value = crc.getAttribute('data-crc-collab');
+        document.getElementById("edit-crc-responsibilities").value = crc.getAttribute('data-crc-respons');
+        togglePopUp('edit-crc');
     }
 
     function openDeleteUseCase(id) {

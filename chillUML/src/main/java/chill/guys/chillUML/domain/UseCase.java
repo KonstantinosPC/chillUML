@@ -44,7 +44,6 @@ public class UseCase {
     private String postcond;
 
 
-
     public Project getProject() {
         return project;
     }
