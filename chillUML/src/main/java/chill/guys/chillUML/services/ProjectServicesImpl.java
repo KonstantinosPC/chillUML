@@ -372,6 +372,7 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
+    @Transactional
     public String generateUsecaseDiagram(String type, Project projectID) {
         UseCaseDiagramGeneratorFactory factory = new UseCaseDiagramGeneratorFactory();
         List<UseCase> usecases = useCaseRepository.findByProject(projectID);
@@ -380,6 +381,7 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
+    @Transactional
     public String generateClassDiagram(String type, Project projectID) {
         ClassDiagramGeneratorFactory factory = new ClassDiagramGeneratorFactory();
         List<CRC> crc = crcRepository.findByProject(projectID);

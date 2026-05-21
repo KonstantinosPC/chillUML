@@ -581,13 +581,21 @@ nav {
     transition: 100ms;
 }
 
-.selected-project .generated-code{
+.selected-project .generated-code {
     width: 90%;
-    margin: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
+    border: 0;
+    box-shadow: 0px 0px 5px -3px black;
     padding: 10px;
     border-radius: 10px;
     font-family: sans-serif;
-    resize: none;
+    resize: vertical;
+    min-height: 300px;
+    max-height: 450px;
+    outline: none;
+    background: #f7f7f7;
+    margin-bottom: 50px;
 }
 
 /* Project Material */

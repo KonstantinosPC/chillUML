@@ -3,9 +3,16 @@ package chill.guys.chillUML.controllers;
 import chill.guys.chillUML.domain.User;
 import chill.guys.chillUML.services.ProfileServicesImpl;
 import chill.guys.chillUML.services.UserServicesImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,10 +47,21 @@ public class ProfileController {
     }
 
     @PostMapping("/profile/username")
-    public String changeUsername(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("username") String newUsername, Model model, RedirectAttributes redirectAttributes){
+    public String changeUsername(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("username") String newUsername, RedirectAttributes redirectAttributes, HttpServletRequest request){
         User currentUser = userServices.findByUsername(userDetails.getUsername()).get();
         profileServices.changeUsername(currentUser, newUsername, redirectAttributes);
-        model.addAttribute("user",currentUser);
+
+        UserDetails newUser = userServices.loadUserByUsername(newUsername);
+
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(newUser, newUser.getPassword(), newUser.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+        SecurityContextRepository securityContextRepository = (SecurityContextRepository) request.getAttribute(HttpSessionSecurityContextRepository.class.getName());
+        if (securityContextRepository != null) {
+            securityContextRepository.saveContext(SecurityContextHolder.getContext(), (HttpServletRequest) request, (HttpServletResponse) request.getAttribute("jakarta.servlet.response"));
+        }
+
         return "redirect:/profile";
     }
 
