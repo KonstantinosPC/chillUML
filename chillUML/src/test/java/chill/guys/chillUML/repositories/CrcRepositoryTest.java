@@ -140,6 +140,8 @@ public class CrcRepositoryTest {
         UseCase uc2 = new UseCase();
 
         List<CRC> collab = new ArrayList<>();
+        crc1.setCollaborators(new ArrayList<>());
+        crc2.setCollaborators(new ArrayList<>());
         List<String> respons = new ArrayList<>();
         List<UseCase> usecases = new ArrayList<>();
 
@@ -159,6 +161,11 @@ public class CrcRepositoryTest {
         crc.setProject(project);
 
         crc.setCollaborators(collab);
+        crc1.getCollaborators().add(crc);
+        crc1.getCollaborators().add(crc2);
+        crc2.getCollaborators().add(crc);
+        crc2.getCollaborators().add(crc1);
+
         crc.setResponsibilities(respons);
 
         usecases.add(uc1);

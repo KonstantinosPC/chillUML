@@ -110,7 +110,7 @@ public class ProjectServicesImplTest {
         Project p = new Project();
         p.setProjectName("DelProject");
         p.setOwner(testUser);
-        p=projectRepository.save(p);
+        projectRepository.save(p);
 
         List<String> precond = new ArrayList<>();
         List<String> actors = new ArrayList<>();
@@ -139,6 +139,13 @@ public class ProjectServicesImplTest {
 
         usecase.setAltFlow(altcond);
         usecase.setProject(p);
+
+        if (p.getUseCases() == null) {
+            p.setUseCases(new ArrayList<>());
+        }
+
+        p.getUseCases().add(usecase);
+        useCaseRepository.save(usecase);
 
         useCaseRepository.save(usecase);
         projectServices.deleteProject(p.getId());

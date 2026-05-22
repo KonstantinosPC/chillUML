@@ -1,4 +1,4 @@
-DELETE FROM crc_linked_use_cases;
+DELETE FROM crc_linked;
 DELETE FROM crc_collaborators;
 DELETE FROM crc;
 DELETE FROM usecases;
