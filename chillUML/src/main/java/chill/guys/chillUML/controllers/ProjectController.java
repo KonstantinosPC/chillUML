@@ -45,12 +45,13 @@ public class ProjectController {
     CrcRepository crcRepository;
 
 
-    private List<String> stringToActors(String origin){
-        return Arrays.asList(origin.split(","));
-    }
-
-    private List<String> stringToList(String origin){
-        return Arrays.stream(origin.split("\\r?\\n")).map(String::trim).filter(step -> !step.isEmpty()).toList();
+    private List<String> stringToList(List<String> strings){
+        String toEdit = "";
+        for(String s : strings){
+            toEdit = toEdit + s + ",";
+        }
+        List<String> toReturn =  Arrays.stream(toEdit.split("\\r?\\n")).map(String::trim).filter(step -> !step.isEmpty()).toList();
+        return  toReturn;
     }
 
     @GetMapping("/project/{owner}/{name}")
@@ -88,9 +89,15 @@ public class ProjectController {
 
         useCaseDTO.setProject(projectRepository.findByProjectNameAndOwnerId(name, userServices.findByUsername(userDetails.getUsername()).get()).get());
         if(useCaseDTO.getAltFlow().size() > 0){
-            useCaseDTO.setAltFlow(stringToList(useCaseDTO.getAltFlow().get(0)));
+            useCaseDTO.setAltFlow(stringToList(useCaseDTO.getAltFlow()));
         }
-        useCaseDTO.setPreCond(stringToList(useCaseDTO.getPreCond().get(0)));
+
+        System.out.println("---------------------------------------------------------------------------------------------------------");
+        useCaseDTO.setPreCond(stringToList(useCaseDTO.getPreCond()));
+//        System.out.println(stringToList(useCaseDTO.getPreCond()));
+        useCaseDTO.setAltFlow(stringToList(useCaseDTO.getAltFlow()));
+        System.out.println(stringToList(useCaseDTO.getAltFlow()));
+        System.out.println("---------------------------------------------------------------------------------------------------------");
         projectServices.createUseCase(useCaseDTO,redirectAttributes);
 
         return "redirect:/project/{owner}/{name}";
@@ -114,22 +121,30 @@ public class ProjectController {
 
         //UseCase Name
         if(!uneditedUseCase.getUseCaseName().equals(useCaseDTO.getUseCaseName())){
-            projectServices.editUseCaseName(uneditedUseCase.getUseCaseId(), useCaseDTO.getUseCaseName(), redirectAttributes);
+            if(!projectServices.editUseCaseName(uneditedUseCase.getUseCaseId(), useCaseDTO.getUseCaseName(), redirectAttributes)){
+                return  "redirect:/project/{owner}/{name}";
+            }
         }
 
         //UseCase Actors
         if(!uneditedUseCase.getActors().equals(useCaseDTO.getActors())){
-            projectServices.editActors(useCaseId, useCaseDTO.getActors(), redirectAttributes);
+            if(!projectServices.editActors(useCaseId, useCaseDTO.getActors(), redirectAttributes)){
+                return "redirect:/project/{owner}/{name}";
+            }
         }
 
         //UseCase PreCondition
         if(!uneditedUseCase.getPrecond().equals(useCaseDTO.getPreCond())){
-            projectServices.editPrecondition(useCaseId, useCaseDTO.getPreCond(), redirectAttributes);
+            if(!projectServices.editPrecondition(useCaseId, useCaseDTO.getPreCond(), redirectAttributes)){
+                return "redirect:/project/{owner}/{name}";
+            }
         }
 
         //UseCase MainFlow
         if(!uneditedUseCase.getMainFlow().equals(useCaseDTO.getMainFlow())){
-            projectServices.editMainFlow(useCaseId, useCaseDTO.getMainFlow(), redirectAttributes);
+            if(!projectServices.editMainFlow(useCaseId, useCaseDTO.getMainFlow(), redirectAttributes)){
+                return "redirect:/project/{owner}/{name}";
+            }
         }
 
         //UseCase AltFlow

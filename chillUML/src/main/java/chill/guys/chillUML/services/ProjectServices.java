@@ -14,11 +14,11 @@ public interface ProjectServices {
     public void deleteProject(int project_id);
     public void editProjectName(int projectID,String newName, RedirectAttributes redirectAttributes);
     public void editProjectDescription(int projectID,String newDescription,RedirectAttributes redirectAttributes);
-    public void createUseCase(UseCaseDTO useCase, RedirectAttributes redirectAttributes );
-    public void editUseCaseName(int useCaseID, String newName, RedirectAttributes redirectAttributes );
-    public void editActors(int useCaseID, List<String> newActors, RedirectAttributes redirectAttributes );
-    public void editPrecondition(int useCaseID, List<String> newPostcond, RedirectAttributes redirectAttributes );
-    public void editMainFlow(int useCaseID, String newMainFlow, RedirectAttributes redirectAttributes );
+    public boolean createUseCase(UseCaseDTO useCase, RedirectAttributes redirectAttributes );
+    public boolean editUseCaseName(int useCaseID, String newName, RedirectAttributes redirectAttributes );
+    public boolean editActors(int useCaseID, List<String> newActors, RedirectAttributes redirectAttributes );
+    public boolean editPrecondition(int useCaseID, List<String> newPostcond, RedirectAttributes redirectAttributes );
+    public boolean editMainFlow(int useCaseID, String newMainFlow, RedirectAttributes redirectAttributes );
     public void editAltFlows(int useCaseID, List<String> newAltFlow, RedirectAttributes redirectAttributes );
     public void editPostCondition(int useCaseID, String newPostCond, RedirectAttributes redirectAttributes );
     public List<UseCase> viewAllUseCases(Project project);

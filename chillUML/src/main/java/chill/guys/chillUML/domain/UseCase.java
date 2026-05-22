@@ -20,7 +20,7 @@ public class UseCase {
     private Project project;
 
     @Lob
-    @Column(name = "mainflow")
+    @Column(name = "mainflow", columnDefinition = "LONGTEXT")
     private String mainFlow;
 
     @ElementCollection
@@ -31,16 +31,17 @@ public class UseCase {
 
     @ElementCollection
     @CollectionTable(name = "usecase_preconditions", joinColumns = @JoinColumn(name = "usecase_id"))
-    @Column(name = "precondition")
+    @Column(name = "precondition", columnDefinition = "LONGTEXT")
     private List<String> precond;
 
+    @Lob
     @ElementCollection
     @CollectionTable(name = "usecase_alt_flows", joinColumns = @JoinColumn(name = "usecase_id"))
-    @Column(name = "flow")
+    @Column(name = "flow", columnDefinition = "LONGTEXT")
     private List<String> altFlow;
 
     @Lob
-    @Column(name = "postcond")
+    @Column(name = "postcond", columnDefinition = "LONGTEXT")
     private String postcond;
 
 

@@ -87,38 +87,39 @@ public class ProjectServicesImpl implements ProjectServices{
     }
     @Transactional
     @Override
-    public void createUseCase(UseCaseDTO useCaseDTO, RedirectAttributes redirectAttributes) {
+    public boolean createUseCase(UseCaseDTO useCaseDTO, RedirectAttributes redirectAttributes) {
         if(useCaseDTO.getUseCaseName().isEmpty()){
             redirectAttributes.addFlashAttribute("error","The use case name must not be empty.");
-            return;
+            return false;
         }
         if(useCaseDTO.getUseCaseName().length() > 15){
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
-            return;
+            return false;
         }
         if(!(useCaseRepository.findByUseCaseNameAndProject(useCaseDTO.getUseCaseName(),useCaseDTO.getProject()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
-            return;
+            return false;
         }
 
         if(!(useCaseDTO.getUseCaseName().chars().noneMatch(ch->specialChars.indexOf(ch) >= 0))){
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
-            return;
+            return false;
         }
 
         if(useCaseDTO.getActors().isEmpty()){
             redirectAttributes.addFlashAttribute("error","The Actors field must not be empty.");
-            return;
+            return false
+                    ;
         }
 
         if(useCaseDTO.getPreCond().isEmpty()){
             redirectAttributes.addFlashAttribute("error","The Pre-condition filed must not be empty.");
-            return;
+            return false;
         }
 
         if(useCaseDTO.getMainFlow().isEmpty()){
             redirectAttributes.addFlashAttribute("error","The Main flow filed must not be empty.");
-            return;
+            return false;
         }
 
         UseCase usecase = new UseCase();
@@ -133,67 +134,70 @@ public class ProjectServicesImpl implements ProjectServices{
         useCaseDTO.getProject().addUseCase(usecase);
         projectRepository.save(useCaseDTO.getProject());
         redirectAttributes.addFlashAttribute("success","The Use Case " + usecase.getUseCaseName() + " has been created successfully");
-
+        return true;
     }
 
     @Override
-    public void editUseCaseName(int useCaseID, String newName, RedirectAttributes redirectAttributes) {
+    public boolean editUseCaseName(int useCaseID, String newName, RedirectAttributes redirectAttributes) {
         UseCase usecase = useCaseRepository.findById(useCaseID).get();
         if(newName.isEmpty()){
             redirectAttributes.addFlashAttribute("error","The use case name must not be empty.");
-            return;
+            return false;
         }
         if(newName.length() > 15){
             redirectAttributes.addFlashAttribute("error","This use case name is over 15 characters long");
-            return;
+            return false;
         }
         if(!(useCaseRepository.findByUseCaseNameAndProject(newName,usecase.getProject()).isEmpty())){
       
             redirectAttributes.addFlashAttribute("error","Same Use Case Name with an existing Use Case");
-            return;
+            return false;
         }
 
         if(!(newName.chars().noneMatch(ch->specialChars.indexOf(ch) >= 0))){
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
-            return;
+            return false;
         }
         usecase.setUseCaseName(newName);
         useCaseRepository.save(usecase);
-
+        return true;
     }
 
     @Override
-    public void editActors(int useCaseID, List<String> newActors, RedirectAttributes redirectAttributes) {
+    public boolean editActors(int useCaseID, List<String> newActors, RedirectAttributes redirectAttributes) {
         UseCase usecase = useCaseRepository.findById(useCaseID).get();
         if(newActors.isEmpty()){
             redirectAttributes.addFlashAttribute("error","The Actors field must not be empty.");
-            return;
+            return false;
         }
         usecase.setActors(newActors);
         useCaseRepository.save(usecase);
+        return true;
     }
 
     @Override
-    public void editPrecondition(int useCaseID, List<String> newPostcond, RedirectAttributes redirectAttributes) {
+    public boolean editPrecondition(int useCaseID, List<String> newPostcond, RedirectAttributes redirectAttributes) {
         UseCase usecase = useCaseRepository.findById(useCaseID).get();
         if(newPostcond.isEmpty()){
             redirectAttributes.addFlashAttribute("error","The Pre-condition filed must not be empty.");
-            return;
+            return false;
         }
 
         usecase.setPrecond(newPostcond);
         useCaseRepository.save(usecase);
+        return true;
     }
 
     @Override
-    public void editMainFlow(int useCaseID, String newMainFlow, RedirectAttributes redirectAttributes) {
+    public boolean editMainFlow(int useCaseID, String newMainFlow, RedirectAttributes redirectAttributes) {
         UseCase usecase = useCaseRepository.findById(useCaseID).get();
         if(newMainFlow.isEmpty()){
             redirectAttributes.addFlashAttribute("error","The Main flow filed must not be empty.");
-            return;
+            return false;
         }
         usecase.setMainFlow(newMainFlow);
         useCaseRepository.save(usecase);
+        return true;
     }
 
     @Override
