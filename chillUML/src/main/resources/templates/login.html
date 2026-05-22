@@ -29,6 +29,10 @@
             </form>
 
             <div class="notifications">
+                <div th:if="${error}" class="notification error">
+                    <span class="material-symbols-outlined">close</span>
+                    <p th:text="${error}">This user already exists</p>
+                </div>
             </div>
         </main>
     </body>

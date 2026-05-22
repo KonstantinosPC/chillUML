@@ -40,7 +40,7 @@
                     <input type="checkbox" name="" id="terms" required style="width: initial;">
                     <label for="terms" >Agree to the <a href="">Terms and Conditions</a></label>
                 </div>
-                <button id="submit">Submit</button>
+                <button id="submit" disabled>Submit</button>
                 <p>Already have an account? <a th:href="@{/auth/login}">Sign In</a></p>
             </form>
 
@@ -60,11 +60,12 @@
         <script>
             
             const passwordInput = document.getElementById('password');
-            const confPassword = document.getElementById('confpassword');
+            const confPassword = document.getElementById("confirmPassword");
             const strengthBar = document.getElementById('strength-bar');
             const charLength = document.getElementById('char-length');
             const hasNumber = document.getElementById('has-number');
             const hasSpecial = document.getElementById('has-special');
+            const submitBtn = document.getElementById('submit');
 
             passwordInput.addEventListener('input', () => {
                 const val = passwordInput.value;
@@ -103,15 +104,18 @@
                 if (percentage === 100){
                     passwordInput.style.border = "solid 0.1px green";
                 }else{
-                    passwordInput.style.border = "none";
+                    passwordInput.style.border = "solid 0.1px red";
                 }
             });
+
             confPassword.addEventListener('input', () => {
                 const val = confPassword.value;
                 if (val === passwordInput.value){
                     confPassword.style.border = "solid 0.1px green";
+                    submitBtn.disabled = false;
                 }else{
                     confPassword.style.border = "solid 0.1px red";
+                    submitBtn.disabled = true;
                 }
             });
         </script>

@@ -123,7 +123,7 @@
                     <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
                 </tr>
             </table>
-            <button type="button" onclick="addRow()">+ Add Row</button>
+            <button type="button" onclick="addCreateRow()">+ Add Row</button>
             <button>Create</button>
             <button type="button" class="close" onclick="togglePopUp('create-crc')">Close</button>
         </form>
@@ -167,7 +167,7 @@
                     <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
                 </tr>
             </table>
-            <button type="button" onclick="addRow()">+ Add Row</button>
+            <button type="button" onclick="addEditRow()">+ Add Row</button>
             <button>Save</button>
             <button type="button" class="close" onclick="window.location.reload()">Close</button>
         </form>
@@ -319,6 +319,8 @@
         document.getElementById("edit-uc-postcondition").value = usecase.getAttribute('data-uc-postcondition');
         togglePopUp('edit-uc');
     }
+
+    let rowEditIndex = 1;
     function editCRC(selectedCRC) {
         const form = document.getElementById("edit-crc");
         const currentCrcId = selectedCRC.getAttribute('data-id');
@@ -342,6 +344,7 @@
                 }
             });
         }
+        updateDeleteButtons();
 
         if (collabStr) {
             const collabIds = collabStr.split(',').map(id => id.trim());
@@ -349,9 +352,12 @@
             document.querySelectorAll('#edit-crc input[name*="linked_crc"]').forEach(checkbox => {
                 const val = checkbox.value.trim();
 
-
                 if (val === currentCrcId) {
                     checkbox.checked = false;
+                    const label = checkbox.parentNode;
+                    if(label){
+                        label.remove();
+                    }
                     return;
                 }
 
@@ -359,12 +365,26 @@
                     checkbox.checked = true;
                     updateSelectText(checkbox);
                 }
+
+
+            });
+        }else{
+            document.querySelectorAll('#edit-crc input[name*="linked_crc"]').forEach(checkbox => {
+                const val = checkbox.value.trim();
+
+                if (val === currentCrcId) {
+                    const label = checkbox.parentNode;
+                    if(label){
+                        label.remove();
+                    }
+                    return;
+                }
             });
         }
 
 
         populateResponsibilities(responsStr);
-
+        updateEditDeleteButtons();
         togglePopUp('edit-crc');
     }
 
@@ -398,6 +418,8 @@
             let cell1 = newRow.insertCell(0);
             let cell2 = newRow.insertCell(1);
 
+            rowEditIndex = index + 1;
+
             cell1.innerHTML = `
             <input type="text"
                    name="responsibilities[${index}]"
@@ -410,7 +432,6 @@
         `;
         });
 
-        // Αν δεν υπάρχει καμία γραμμή, βάζουμε μία κενή
         if (table.rows.length === 1) {
             addEmptyResponsibilityRow(table);
         }
@@ -469,7 +490,7 @@
         }
     }
 
-    function updateDeleteButtons() {
+    function updateCreateDeleteButtons() {
         const table = document.querySelector('#create-crc table');
         const rows = table.querySelectorAll('tr');
         const dataRows = Array.from(rows).slice(1);
@@ -482,20 +503,59 @@
         });
     }
 
-    let rowIndex = 1;
-    function addRow(){
+    function updateEditDeleteButtons() {
+        const table = document.querySelector('#edit-crc table');
+        const rows = table.querySelectorAll('tr');
+        const dataRows = Array.from(rows).slice(1);
+
+        dataRows.forEach(row => {
+            const deleteBtn = row.querySelector('.close');
+            if (deleteBtn) {
+                deleteBtn.style.display = dataRows.length <= 1 ? 'none' : 'inline-block';
+            }
+        });
+    }
+
+    function updateDeleteButtons(row) {
+        const table = row?.parentNode?.parentNode;
+        const parent = table?.parentNode;
+
+        if(parent){
+            if(parent.id === 'edit-crc'){
+                updateEditButtons();
+            }else if(parent.id === 'create-crc'){
+                updateCreateButtons();
+            }
+        }
+    }
+
+    let rowCreateIndex = 1;
+    function addCreateRow(){
         const table = document.querySelector('#create-crc table');
         const newRow = document.createElement('tr');
         newRow.innerHTML = `
-            <td><input type="text" name="responsibilities[${rowIndex}]" placeholder="Type in a responsibility"></td>
+            <td><input type="text" name="responsibilities[${rowCreateIndex}]" placeholder="Type in a responsibility"></td>
             <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
         `;
         table.appendChild(newRow);
-        rowIndex++;
-        updateDeleteButtons();
+        rowCreateIndex++;
+        updateCreateDeleteButtons();
     }
 
-    updateDeleteButtons();
+    function addEditRow(){
+        const table = document.querySelector('#edit-crc table');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td><input type="text" name="responsibilities[${rowEditIndex}]" placeholder="Type in a responsibility"></td>
+            <td><button type="button" class="close" onclick="this.closest('tr').remove(); updateDeleteButtons();">❌</button></td>
+        `;
+        table.appendChild(newRow);
+        rowEditIndex++;
+        updateEditDeleteButtons();
+    }
+
+    updateCreateDeleteButtons();
+
 
 </script>
 </body>

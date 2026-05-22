@@ -230,6 +230,12 @@ nav {
     transition: 500ms;
 }
 
+.login button:disabled{
+    background: gray;
+    color: white;
+    transition: 500ms;
+}
+
 .login button:hover{
     background: rgb(0, 116, 158);
     text-shadow: 0px 0px 9px white;

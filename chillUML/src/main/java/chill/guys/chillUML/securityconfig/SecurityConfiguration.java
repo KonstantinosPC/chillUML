@@ -16,6 +16,9 @@ import org.springframework.security.crypto.password.MessageDigestPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.servlet.DispatcherType;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.FlashMap;
+import org.springframework.web.servlet.FlashMapManager;
+import org.springframework.web.servlet.support.SessionFlashMapManager;
 
 @Configuration
 @EnableWebSecurity
@@ -56,7 +59,13 @@ public class SecurityConfiguration {
                 .formLogin(form -> form
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
-                        .failureUrl("/auth/login?error=true")
+                        .failureHandler((request, response, exception) -> {
+                            FlashMap flashMap = new FlashMap();
+                            flashMap.put("error", "Invalid username or password. Please try again.");
+                            FlashMapManager flashMapManager = new SessionFlashMapManager();
+                            flashMapManager.saveOutputFlashMap(flashMap, request, response);
+                            response.sendRedirect("/auth/login");
+                        })
                         .successHandler(customSecurityConfiguration)
                         .usernameParameter("username")
                         .passwordParameter("password")

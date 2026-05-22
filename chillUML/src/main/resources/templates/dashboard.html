@@ -83,28 +83,28 @@
                         <input class="project-checkbox" type="checkbox" th:data-id="${project.getId()}" th:data-name="${project.getProjectName()}" th:data-desc="${project.getProjectDescription()}">
                         <a class="project-name" th:href="@{/project/{owner}/{id}(id=${project.getProjectName()},owner=${project.getOwnerId().getUsername()})}" ><span th:text="${project.getProjectName()}"></span></a>
                         <span class="project-owner" th:text="${project.getOwnerId().getUsername()}" >KonstantinosPC</span>
-                        <span class="project-edition">10 Dec 2025</span>
+<!--                        <span class="project-edition">10 Dec 2025</span>-->
                     </div>
                 </div>
 
-                <h1 class="shared-project">
-                    Shared Projects
-                </h1>
+<!--                <h1 class="shared-project">-->
+<!--                    Shared Projects-->
+<!--                </h1>-->
 
-                <div class="project-list">
-                    <div class="project">
-                        <input type="checkbox">
-                        <span class="project-name">Project D</span>
-                        <span class="project-owner">Tasos</span>
-                        <span class="project-edition">30 Jan 2026</span>
-                    </div>
-                    <div class="project">
-                        <input type="checkbox">
-                        <span class="project-name">Project E</span>
-                        <span class="project-owner">Anagno</span>
-                        <span class="project-edition">2 Jan 2026</span>
-                    </div>
-                </div>
+<!--                <div class="project-list">-->
+<!--                    <div class="project">-->
+<!--                        <input type="checkbox">-->
+<!--                        <span class="project-name">Project D</span>-->
+<!--                        <span class="project-owner">Tasos</span>-->
+<!--                        <span class="project-edition">30 Jan 2026</span>-->
+<!--                    </div>-->
+<!--                    <div class="project">-->
+<!--                        <input type="checkbox">-->
+<!--                        <span class="project-name">Project E</span>-->
+<!--                        <span class="project-owner">Anagno</span>-->
+<!--                        <span class="project-edition">2 Jan 2026</span>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
 
 
