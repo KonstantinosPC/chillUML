@@ -9,9 +9,27 @@ public class UseCaseDTO {
     private String mainFlow;
     private List<String> actors;
     private Project project;
+    private String stringPreCond;
+    private String stringAltFlow;
     private List<String> preCond;
     private List<String> altFlow;
     private String postflow;
+
+    public void setStringPreCond(String preCond){
+        this.stringPreCond = preCond;
+    }
+
+    public String getStringPreCond(){
+        return this.stringPreCond;
+    }
+
+    public void setStringAltFlow(String altFlow){
+        this.stringAltFlow = altFlow;
+    }
+
+    public String getStringAltFlow(){
+        return stringAltFlow;
+    }
 
     public Project getProject() {
         return project;

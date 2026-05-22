@@ -242,22 +242,22 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
-    public void createCRC(CrcDTO crcDTO, RedirectAttributes redirectAttributes) {
+    public boolean createCRC(CrcDTO crcDTO, RedirectAttributes redirectAttributes) {
         if(crcDTO.getCrcName().isEmpty()){
             redirectAttributes.addFlashAttribute("error","This Crc name can not be empty");
-            return;
+            return false;
         }
         if(crcDTO.getCrcName().length() > 15){
             redirectAttributes.addFlashAttribute("error","This Crc name is over 15 characters long");
-            return;
+            return false;
         }
         if(!(crcDTO.getCrcName().chars().noneMatch(ch->specialChars.indexOf(ch) >= 0))){
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
-            return;
+            return false;
         }
         if(!crcRepository.findByCrcNameAndProject(crcDTO.getCrcName(), crcDTO.getProjectID()).isEmpty()){
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
-            return;
+            return false;
         }
         CRC crc = new CRC();
         crc.setCrcName(crcDTO.getCrcName());
@@ -274,32 +274,33 @@ public class ProjectServicesImpl implements ProjectServices{
 
         crcDTO.getProjectID().addCRC(crc);
         projectRepository.save(crc.getProject());
+        redirectAttributes.addFlashAttribute("success","The " + crc.getCrcName() + " has been created successfully");
+        return true;
     }
 
 
     @Override
-    public void updateCrcName(String newName, int crcID,RedirectAttributes redirectAttributes) {
+    public boolean updateCrcName(String newName, int crcID,RedirectAttributes redirectAttributes) {
         CRC crc = crcRepository.findById(crcID).get();
         if(newName.isEmpty()){
             redirectAttributes.addFlashAttribute("error","This Crc name can not be empty");
-            return;
+            return false;
         }
         if(newName.length() > 15){
             redirectAttributes.addFlashAttribute("error","This Crc name is over 15 characters long");
-            return;
+            return false;
         }
         if(!(newName.chars().noneMatch(ch->specialChars.indexOf(ch) >= 0))){
             redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
-            return;
+            return false;
         }
         if(!(crcRepository.findByCrcNameAndProject(newName, crc.getProject()).isEmpty())){
             redirectAttributes.addFlashAttribute("error","This Crc name already exists in this project");
-            return;
+            return false;
         }
         crc.setCrcName(newName);
         crcRepository.save(crc);
-        redirectAttributes.addFlashAttribute("success","The Crcs " + newName + " name has been updated successfully");
-
+        return true;
     }
 
 
@@ -308,8 +309,6 @@ public class ProjectServicesImpl implements ProjectServices{
         CRC crc = crcRepository.findById(crcID).get();
         crc.setResponsibilities(newResponsibiities);
         crcRepository.save(crc);
-        redirectAttributes.addFlashAttribute("success","The Responsibilities have been updated successfully");
-
     }
 
     @Override
@@ -333,7 +332,6 @@ public class ProjectServicesImpl implements ProjectServices{
         }
         crc.setCollaborators(newColaborators);
         crcRepository.save(crc);
-        redirectAttributes.addFlashAttribute("success","The Collaborators have been updated successfully");
 
     }
 
@@ -350,7 +348,6 @@ public class ProjectServicesImpl implements ProjectServices{
 
         crc.getLinkedUseCases().removeIf(usecase -> !newLinkedUseCases.contains(usecase));
         crcRepository.save(crc);
-        redirectAttributes.addFlashAttribute("success","The Linked UseCases have been updated successfully");
     }
 
     @Override

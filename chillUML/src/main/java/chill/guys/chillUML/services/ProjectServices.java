@@ -23,8 +23,8 @@ public interface ProjectServices {
     public void editPostCondition(int useCaseID, String newPostCond, RedirectAttributes redirectAttributes );
     public List<UseCase> viewAllUseCases(Project project);
     public void deleteUseCase(int useCaseID, RedirectAttributes redirectAttributes);
-    public void createCRC(CrcDTO crc,RedirectAttributes redirectAttributes);
-    public void updateCrcName(String newName,int crcID,RedirectAttributes redirectAttributes);
+    public boolean createCRC(CrcDTO crc,RedirectAttributes redirectAttributes);
+    public boolean updateCrcName(String newName,int crcID,RedirectAttributes redirectAttributes);
     public void updateCrcResponsibilities(int crcID, List<String> newResponsibiities,RedirectAttributes redirectAttributes);
     public void updateCrcColaborators(int crcID,List<CRC> newColaborators,RedirectAttributes redirectAttributes);
     public void updateCrcLinkedUseCases(int crcID,List<UseCase> newLinkedUseCases,RedirectAttributes redirectAttributes);

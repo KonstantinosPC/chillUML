@@ -12,6 +12,7 @@ import chill.guys.chillUML.repositories.UseCaseRepository;
 import chill.guys.chillUML.repositories.UserRepository;
 import chill.guys.chillUML.services.ProjectServices;
 import chill.guys.chillUML.services.UserServices;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,13 +46,19 @@ public class ProjectController {
     CrcRepository crcRepository;
 
 
-    private List<String> stringToList(List<String> strings){
-        String toEdit = "";
-        for(String s : strings){
-            toEdit = toEdit + s + ",";
+    private List<String> stringToList(String origin){
+        List<String> toReturn = new ArrayList<>();
+
+        if(origin != null && !origin.trim().isEmpty()){
+            String[] lines = origin.split("\\r?\\n");
+            for(String line: lines){
+                if(!line.trim().isEmpty()){
+                    toReturn.add(line.trim());
+                }
+            }
         }
-        List<String> toReturn =  Arrays.stream(toEdit.split("\\r?\\n")).map(String::trim).filter(step -> !step.isEmpty()).toList();
-        return  toReturn;
+
+        return toReturn;
     }
 
     @GetMapping("/project/{owner}/{name}")
@@ -88,16 +95,12 @@ public class ProjectController {
         }
 
         useCaseDTO.setProject(projectRepository.findByProjectNameAndOwnerId(name, userServices.findByUsername(userDetails.getUsername()).get()).get());
-        if(useCaseDTO.getAltFlow().size() > 0){
-            useCaseDTO.setAltFlow(stringToList(useCaseDTO.getAltFlow()));
+
+        if(!useCaseDTO.getStringAltFlow().isEmpty()){
+            useCaseDTO.setAltFlow(stringToList(useCaseDTO.getStringAltFlow()));
         }
 
-        System.out.println("---------------------------------------------------------------------------------------------------------");
-        useCaseDTO.setPreCond(stringToList(useCaseDTO.getPreCond()));
-//        System.out.println(stringToList(useCaseDTO.getPreCond()));
-        useCaseDTO.setAltFlow(stringToList(useCaseDTO.getAltFlow()));
-        System.out.println(stringToList(useCaseDTO.getAltFlow()));
-        System.out.println("---------------------------------------------------------------------------------------------------------");
+        useCaseDTO.setPreCond(stringToList(useCaseDTO.getStringPreCond()));
         projectServices.createUseCase(useCaseDTO,redirectAttributes);
 
         return "redirect:/project/{owner}/{name}";
@@ -134,8 +137,8 @@ public class ProjectController {
         }
 
         //UseCase PreCondition
-        if(!uneditedUseCase.getPrecond().equals(useCaseDTO.getPreCond())){
-            if(!projectServices.editPrecondition(useCaseId, useCaseDTO.getPreCond(), redirectAttributes)){
+        if(!uneditedUseCase.getPrecond().equals(stringToList(useCaseDTO.getStringPreCond()))){
+            if(!projectServices.editPrecondition(useCaseId, stringToList(useCaseDTO.getStringPreCond()), redirectAttributes)){
                 return "redirect:/project/{owner}/{name}";
             }
         }
@@ -148,8 +151,8 @@ public class ProjectController {
         }
 
         //UseCase AltFlow
-        if(!uneditedUseCase.getAltFlow().equals(useCaseDTO.getAltFlow())){
-            projectServices.editAltFlows(useCaseId, useCaseDTO.getAltFlow(), redirectAttributes);
+        if(!uneditedUseCase.getAltFlow().equals(stringToList(useCaseDTO.getStringAltFlow()))){
+            projectServices.editAltFlows(useCaseId, stringToList(useCaseDTO.getStringAltFlow()), redirectAttributes);
         }
 
         //UseCase PostCondition
@@ -201,10 +204,14 @@ public class ProjectController {
         }
 
         if(!(oldCRC.getCrcName().equals(crcDTO.getCrcName()))){
-            projectServices.updateCrcName(crcDTO.getCrcName(), oldCRC.getCrcId(), redirectAttributes);
+            if(!projectServices.updateCrcName(crcDTO.getCrcName(), oldCRC.getCrcId(), redirectAttributes)){
+                redirectAttributes.addFlashAttribute("error","CRC name couldn't be changed");
+                return "redirect:/project/{owner}/{name}";
+            }
         }
 
         if(crcDTO.getLinked_crc() == (null)) crcDTO.setLinked_crc(new ArrayList<>());
+
         if(!(oldCRC.getLinkedUseCases().equals(crcDTO.getUsecases()))){
             projectServices.updateCrcLinkedUseCases(oldCRC.getCrcId(),crcDTO.getUsecases(),redirectAttributes);
         }

@@ -48,11 +48,11 @@
             <h3>Actors</h3>
             <input type="text" th:field="*{actors}" placeholder="Type an actor(s). (example: Actor1,Actor2)" name="uc-actor" id="uc-actor" required>
             <h3>Pre-Condition</h3>
-            <textarea th:field="*{preCond}" name="uc-precondition" id="uc-precondition" placeholder="Type a Pre-Condition. Change Line to add an alternative flow" required></textarea>
+            <textarea th:field="*{stringPreCond}" name="create-uc-precondition" id="uc-precondition" placeholder="Type a Pre-Condition. Change Line to add an alternative flow" required></textarea>
             <h3>Main Flow</h3>
             <textarea name="uc-mainflow" th:field="*{mainFlow}" id="uc-mainflow" placeholder="Type a Main Flow" required></textarea>
             <h3>Alternative Flow</h3>
-            <textarea name="uc-altflow" th:field="*{altFlow}" id="uc-altflow" placeholder="Type an alternative flow. Change Line to add an alternative flow"></textarea>
+            <textarea name="create-uc-altflow" th:field="*{stringAltFlow}" id="uc-altflow" placeholder="Type an alternative flow. Change Line to add an alternative flow"></textarea>
             <h3>Post Condition</h3>
             <textarea name="uc-postcondition" th:field="*{postflow}" id="uc-postcondition" placeholder="Type a Post Condition" required></textarea>
             <button>Create</button>
@@ -68,11 +68,11 @@
             <h3>Actors</h3>
             <input type="text" th:field="*{actors}" placeholder="Actor" name="uc-actor" id="edit-uc-actor" required>
             <h3>Pre-Condition</h3>
-            <textarea th:field="*{preCond}" name="uc-precondition" id="edit-uc-precondition" placeholder="Type a Pre-Condition" required></textarea>
+            <textarea th:field="*{stringPreCond}" name="uc-precondition" id="edit-uc-precondition" placeholder="Type a Pre-Condition" required></textarea>
             <h3>Main Flow</h3>
             <textarea th:field="*{mainFlow}" name="uc-mainflow" id="edit-uc-mainflow" placeholder="Type a Main Flow" required></textarea>
             <h3>Alternative Flow</h3>
-            <textarea th:field="*{altFlow}" name="uc-altflow" id="edit-uc-altflow" placeholder="Type an alternative flow"></textarea>
+            <textarea th:field="*{stringAltFlow}" name="uc-altflow" id="edit-uc-altflow" placeholder="Type an alternative flow"></textarea>
             <h3>Post Condition</h3>
             <textarea th:field="*{postflow}" name="uc-postcondition" id="edit-uc-postcondition" placeholder="Type a Post Condition" required></textarea>
             <button>Save</button>
