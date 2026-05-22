@@ -1,6 +1,8 @@
 package chill.guys.chillUML.services;
 
 import chill.guys.chillUML.DTO.*;
+import chill.guys.chillUML.DatagramGenerators.ClassDiagramGenerator;
+import chill.guys.chillUML.DatagramGenerators.UseCaseDiagramGenerator;
 import chill.guys.chillUML.domain.*;
 import chill.guys.chillUML.factories.*;
 import chill.guys.chillUML.repositories.*;
@@ -11,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProjectServicesImpl implements ProjectServices{

@@ -1,8 +1,8 @@
 package chill.guys.chillUML.factories;
 
-import chill.guys.chillUML.domain.ClassDiagramGenerator;
-import chill.guys.chillUML.domain.NomnomlClassDiagramGenerator;
-import chill.guys.chillUML.domain.PlantUMLClassDiagramGenerator;
+import chill.guys.chillUML.DatagramGenerators.ClassDiagramGenerator;
+import chill.guys.chillUML.DatagramGenerators.NomnomlClassDiagramGenerator;
+import chill.guys.chillUML.DatagramGenerators.PlantUMLClassDiagramGenerator;
 
 public class ClassDiagramGeneratorFactory {
     public ClassDiagramGenerator createClassDiagramGenerator(String type){

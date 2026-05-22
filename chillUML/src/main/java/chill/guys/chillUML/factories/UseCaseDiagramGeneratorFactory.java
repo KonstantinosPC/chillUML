@@ -1,8 +1,8 @@
 package chill.guys.chillUML.factories;
 
-import chill.guys.chillUML.domain.NomnomlUseCaseDiagramGenerator;
-import chill.guys.chillUML.domain.PlantUMLUseCaseDiagramGenerator;
-import chill.guys.chillUML.domain.UseCaseDiagramGenerator;
+import chill.guys.chillUML.DatagramGenerators.NomnomlUseCaseDiagramGenerator;
+import chill.guys.chillUML.DatagramGenerators.PlantUMLUseCaseDiagramGenerator;
+import chill.guys.chillUML.DatagramGenerators.UseCaseDiagramGenerator;
 
 public class UseCaseDiagramGeneratorFactory {
     public UseCaseDiagramGenerator createUseCaseDiagramGenerator(String type){

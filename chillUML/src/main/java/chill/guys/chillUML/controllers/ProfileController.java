@@ -1,8 +1,8 @@
 package chill.guys.chillUML.controllers;
 
 import chill.guys.chillUML.domain.User;
-import chill.guys.chillUML.services.ProfileServicesImpl;
-import chill.guys.chillUML.services.UserServicesImpl;
+import chill.guys.chillUML.services.ProfileServices;
+import chill.guys.chillUML.services.UserServices;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -25,10 +24,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ProfileController {
 
     @Autowired
-    UserServicesImpl userServices;
+    UserServices userServices;
 
     @Autowired
-    ProfileServicesImpl profileServices;
+    ProfileServices profileServices;
 
     @GetMapping("/profile")
     public String toProfile(@AuthenticationPrincipal UserDetails userDetails, Model model){

@@ -1,4 +1,6 @@
-package chill.guys.chillUML.domain;
+package chill.guys.chillUML.DatagramGenerators;
+
+import chill.guys.chillUML.domain.CRC;
 
 import java.util.List;
 

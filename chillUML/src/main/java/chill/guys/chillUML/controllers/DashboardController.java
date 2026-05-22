@@ -4,8 +4,8 @@ import chill.guys.chillUML.DTO.ProjectDTO;
 import chill.guys.chillUML.domain.Project;
 import chill.guys.chillUML.domain.User;
 import chill.guys.chillUML.repositories.ProjectRepository;
-import chill.guys.chillUML.services.ProjectServicesImpl;
-import chill.guys.chillUML.services.UserServicesImpl;
+import chill.guys.chillUML.services.ProjectServices;
+import chill.guys.chillUML.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,10 +24,10 @@ import java.util.List;
 public class DashboardController {
 
     @Autowired
-    UserServicesImpl userServices;
+    UserServices userServices;
 
     @Autowired
-    ProjectServicesImpl projectServices;
+    ProjectServices projectServices;
 
     @Autowired
     ProjectRepository projectRepository;

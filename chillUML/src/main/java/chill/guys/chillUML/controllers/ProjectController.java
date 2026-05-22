@@ -10,13 +10,12 @@ import chill.guys.chillUML.repositories.CrcRepository;
 import chill.guys.chillUML.repositories.ProjectRepository;
 import chill.guys.chillUML.repositories.UseCaseRepository;
 import chill.guys.chillUML.repositories.UserRepository;
-import chill.guys.chillUML.services.ProjectServicesImpl;
-import chill.guys.chillUML.services.UserServicesImpl;
+import chill.guys.chillUML.services.ProjectServices;
+import chill.guys.chillUML.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -31,10 +30,10 @@ import java.util.Optional;
 public class ProjectController {
 
     @Autowired
-    UserServicesImpl userServices;
+    UserServices userServices;
 
     @Autowired
-    ProjectServicesImpl projectServices;
+    ProjectServices projectServices;
 
     @Autowired
     ProjectRepository projectRepository;

@@ -3,7 +3,7 @@ package chill.guys.chillUML.controllers;
 
 import chill.guys.chillUML.DTO.RegistrationForm;
 import chill.guys.chillUML.domain.User;
-import chill.guys.chillUML.services.UserServicesImpl;
+import chill.guys.chillUML.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    UserServicesImpl userServices;
+    UserServices userServices;
 
     @GetMapping("/auth/login")
     public String showLogin(){
