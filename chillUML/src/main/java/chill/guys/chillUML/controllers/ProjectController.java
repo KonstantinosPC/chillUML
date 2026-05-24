@@ -205,7 +205,6 @@ public class ProjectController {
 
         if(!(oldCRC.getCrcName().equals(crcDTO.getCrcName()))){
             if(!projectServices.updateCrcName(crcDTO.getCrcName(), oldCRC.getCrcId(), redirectAttributes)){
-                redirectAttributes.addFlashAttribute("error","CRC name couldn't be changed");
                 return "redirect:/project/{owner}/{name}";
             }
         }

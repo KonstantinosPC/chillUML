@@ -244,7 +244,7 @@ public class ProjectServicesImpl implements ProjectServices{
     @Override
     public boolean createCRC(CrcDTO crcDTO, RedirectAttributes redirectAttributes) {
         if(crcDTO.getCrcName().isEmpty()){
-            redirectAttributes.addFlashAttribute("error","This Crc name can not be empty");
+            redirectAttributes.addFlashAttribute("error","The Crc name can not be empty");
             return false;
         }
         if(crcDTO.getCrcName().length() > 15){
@@ -252,7 +252,7 @@ public class ProjectServicesImpl implements ProjectServices{
             return false;
         }
         if(!(crcDTO.getCrcName().chars().noneMatch(ch->specialChars.indexOf(ch) >= 0))){
-            redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
+            redirectAttributes.addFlashAttribute("error","The Crc name must not contain special characters.");
             return false;
         }
         if(!crcRepository.findByCrcNameAndProject(crcDTO.getCrcName(), crcDTO.getProjectID()).isEmpty()){
@@ -291,7 +291,7 @@ public class ProjectServicesImpl implements ProjectServices{
             return false;
         }
         if(!(newName.chars().noneMatch(ch->specialChars.indexOf(ch) >= 0))){
-            redirectAttributes.addFlashAttribute("error","The use case name must not contain special characters.");
+            redirectAttributes.addFlashAttribute("error","The CRC name must not contain special characters.");
             return false;
         }
         if(!(crcRepository.findByCrcNameAndProject(newName, crc.getProject()).isEmpty())){
