@@ -283,7 +283,7 @@ public class ProjectServicesImpl implements ProjectServices{
     public boolean updateCrcName(String newName, int crcID,RedirectAttributes redirectAttributes) {
         CRC crc = crcRepository.findById(crcID).get();
         if(newName.isEmpty()){
-            redirectAttributes.addFlashAttribute("error","This Crc name can not be empty");
+            redirectAttributes.addFlashAttribute("error","The Crc name can not be empty");
             return false;
         }
         if(newName.length() > 15){
