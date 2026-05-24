@@ -25,6 +25,10 @@
             max-width: 500px;
             width: 90%;
         }
+        .error-container img{
+            max-width: 100%;
+            max-height: 300px;
+        }
         .error-code {
             font-size: 80px;
             font-weight: 800;
@@ -72,19 +76,28 @@
 <body>
 
 <div class="error-container">
-    <h1 class="error-code" th:text="${status ?: 'Error'}">404</h1>
+    <img id="error-image" src="./assets/img/logo.png" alt="">
+    <h1 class="error-code" id="error-code" th:text="${status ?: 'Error'}">404</h1>
 
     <h2 class="error-title" th:text="${error ?: 'Άγνωστο Σφάλμα'}">Not Found</h2>
 
-    <p class="error-message">Ουπς! Φαίνεται πως τα πράγματα δεν πήγαν τόσο "chill" όσο περιμέναμε.</p>
+    <p class="error-message">Ουπς! Φαίνεται πως τα πράγματα δεν πήγαν τόσο "chill".</p>
 
-    <div class="error-details" th:if="${path}">
-        <strong>Διαδρομή:</strong> <span th:text="${path}">/unknown</span><br>
-        <span th:if="${message}"><strong>Μήνυμα:</strong> <span th:text="${message}">Λεπτομέρειες...</span></span>
-    </div>
-
-    <a th:href="@{/auth/login}" class="btn">Επιστροφή στο Login</a>
+    <a th:href="@{/dashboard}" class="btn">Επιστροφή στο Dashboard</a>
 </div>
+
+<script>
+    const errorCode = document.getElementById("error-code");
+    const errorImage = document.getElementById("error-image");
+
+    const code = errorCode.innerText.trim();
+
+    const errorImages = {
+        "404": "./assets/image/error404.png",
+        "403": "./assets/image/error403.png",
+    };
+    errorImage.src = errorImages[code] || "./assets/image/error500.png";
+</script>
 
 </body>
 </html>
