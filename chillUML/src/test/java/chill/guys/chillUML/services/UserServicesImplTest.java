@@ -45,7 +45,7 @@ public class UserServicesImplTest {
     public void testIsUserPresent() {
         assertTrue(userServices.isUserPresent("kgeorgiou"));
 
-        assertFalse(userServices.isUserPresent("Stamos"));
+        assertFalse(userServices.isUserPresent("tranos"));
     }
 
 
