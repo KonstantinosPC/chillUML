@@ -64,9 +64,9 @@ public class ProjectController {
     @GetMapping("/project/{owner}/{name}")
     public String toProject(@PathVariable String owner ,@PathVariable String name, @AuthenticationPrincipal UserDetails userDetails, Model model, RedirectAttributes redirectAttributes){
         User currentUser = userServices.findByUsername(userDetails.getUsername()).get();
-        Optional<Project> currentProject = projectRepository.findByProjectNameAndOwnerId(name, currentUser);
+        Optional<Project> currentProject = projectRepository.findByProjectNameAndOwnerId(name, userServices.findByUsername(owner).get());
 
-        if(!currentUser.getUsername().equals(owner)){
+        if(!currentUser.getUsername().equals(owner) && projectRepository.findByIdAndSharedUsersContains(currentProject.get().getId(), currentUser).isEmpty()){
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours or the owner hasn't shared it with you");
             return "redirect:/dashboard";
         }
@@ -75,6 +75,7 @@ public class ProjectController {
             redirectAttributes.addFlashAttribute("critical", "This project doesn't exists");
             return "redirect:/dashboard";
         }
+
         model.addAttribute("user",currentUser);
         model.addAttribute("project",currentProject.get());
         model.addAttribute("crcs",projectServices.viewAllCRC(currentProject.get()));

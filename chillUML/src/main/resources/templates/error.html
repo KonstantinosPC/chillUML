@@ -76,7 +76,7 @@
 <body>
 
 <div class="error-container">
-    <img id="error-image" src="./assets/img/logo.png" alt="">
+    <img id="error-image" src="/assets/img/logo.png" alt="">
     <h1 class="error-code" id="error-code" th:text="${status ?: 'Error'}">404</h1>
 
     <h2 class="error-title" th:text="${error ?: 'Άγνωστο Σφάλμα'}">Not Found</h2>
@@ -93,10 +93,10 @@
     const code = errorCode.innerText.trim();
 
     const errorImages = {
-        "404": "./assets/image/error404.png",
-        "403": "./assets/image/error403.png",
+        "404": "/assets/image/error404.png",
+        "403": "/assets/image/error403.png",
     };
-    errorImage.src = errorImages[code] || "./assets/image/error500.png";
+    errorImage.src = errorImages[code] || "/assets/image/error500.png";
 </script>
 
 </body>

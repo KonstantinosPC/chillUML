@@ -13,10 +13,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProjectServicesImpl implements ProjectServices{
     String specialChars = "+*/%=!<>&|^~(){}[];,.?:@_$";
+
+    @Autowired
+    private UserServices userServices;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -53,6 +57,34 @@ public class ProjectServicesImpl implements ProjectServices{
     @Override
     public List<Project> viewAllProjects(User ownerId) {
         return projectRepository.findByOwnerId(ownerId);
+    }
+
+    @Override
+    public List<Project> viewAllSharedProjects(User sharedId){
+        return projectRepository.findBySharedUsersContains(sharedId);
+    }
+
+    @Override
+    public void updateSharedUser(int projectId, List<String> sharedUsers, RedirectAttributes redirectAttributes){
+        Project project = projectRepository.findById(projectId).get();
+        if(sharedUsers.isEmpty()){
+            return;
+        }
+
+        for(String user : sharedUsers){
+            Optional<User> userToAdd = userServices.findByEmail(user);
+            if(userToAdd.isEmpty()){
+                redirectAttributes.addFlashAttribute("error","There is no user with this email<br>" + user);
+                return;
+            }
+
+            if(!project.getSharedUsers().contains(userToAdd.get())){
+                project.addSharedUser(userToAdd.get());
+            }
+
+        }
+
+        return;
     }
 
     @Override

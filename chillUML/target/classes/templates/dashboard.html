@@ -55,6 +55,7 @@
                 <input type="hidden" name="edit-id" id="edit-id">
                 <input type="text" name="edit-name" id="edit-name" placeholder="Project Name">
                 <textarea name="edit-description" id="edit-description" placeholder="Project Description"></textarea>
+                <input type="text" name="edit-shared-users" id="edit-shared-users" placeholder="Shared Users (ex. users1@mail.to)">
                 <button type="submit">Submit Changes</button>
                 <button onclick="togglePopUp('edit-project')" class="close" type="button">Close</button>
             </form>
@@ -80,31 +81,23 @@
                 </div>
                 <div class="project-list">
                     <div th:each="project : ${projects}" class="project">
-                        <input class="project-checkbox" type="checkbox" th:data-id="${project.getId()}" th:data-name="${project.getProjectName()}" th:data-desc="${project.getProjectDescription()}">
+                        <input class="project-checkbox" type="checkbox" th:data-id="${project.getId()}" th:data-name="${project.getProjectName()}" th:data-shared="${#strings.listJoin(project.getSharedUsers().![email], ',')}" th:data-desc="${project.getProjectDescription()}">
                         <a class="project-name" th:href="@{/project/{owner}/{id}(id=${project.getProjectName()},owner=${project.getOwnerId().getUsername()})}" ><span th:text="${project.getProjectName()}"></span></a>
                         <span class="project-owner" th:text="${project.getOwnerId().getUsername()}" >KonstantinosPC</span>
 <!--                        <span class="project-edition">10 Dec 2025</span>-->
                     </div>
                 </div>
 
-<!--                <h1 class="shared-project">-->
-<!--                    Shared Projects-->
-<!--                </h1>-->
+                <h1 th:if="sharedProjects" class="shared-project">
+                    Shared Projects
+                </h1>
+                <div th:each="project : ${sharedProjects}" class="project">
+<!--                    <input class="project-checkbox" type="checkbox" th:data-id="${project.getId()}" th:data-name="${project.getProjectName()}" th:data-desc="${project.getProjectDescription()}">-->
+                    <a class="project-name" th:href="@{/project/{owner}/{id}(id=${project.getProjectName()},owner=${project.getOwnerId().getUsername()})}" ><span th:text="${project.getProjectName()}"></span></a>
+                    <span class="project-owner" th:text="${project.getOwnerId().getUsername()}" >KonstantinosPC</span>
+                    <!--                        <span class="project-edition">10 Dec 2025</span>-->
+                </div>
 
-<!--                <div class="project-list">-->
-<!--                    <div class="project">-->
-<!--                        <input type="checkbox">-->
-<!--                        <span class="project-name">Project D</span>-->
-<!--                        <span class="project-owner">Tasos</span>-->
-<!--                        <span class="project-edition">30 Jan 2026</span>-->
-<!--                    </div>-->
-<!--                    <div class="project">-->
-<!--                        <input type="checkbox">-->
-<!--                        <span class="project-name">Project E</span>-->
-<!--                        <span class="project-owner">Anagno</span>-->
-<!--                        <span class="project-edition">2 Jan 2026</span>-->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
 
 
@@ -215,10 +208,12 @@
                 const id = selected.dataset.id;
                 const name = selected.dataset.name;
                 const desc = selected.dataset.desc;
+                const shared = selected.dataset.shared;
 
                 document.getElementById("edit-project-info").innerText = `${name} | #${id}`;
                 document.getElementById("edit-id").value = id;
-                document.getElementById("edit-name").value = name;
+                document.getElementById("edit-name").value = name
+                document.getElementById("edit-shared-users").value = shared;
                 document.getElementById("edit-description").value = desc;
 
                 togglePopUp('edit-project');

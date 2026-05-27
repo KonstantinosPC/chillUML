@@ -41,8 +41,10 @@ public class DashboardController {
     public String toDashboard(@AuthenticationPrincipal UserDetails userDetails, Model model){
         User currentUser = userServices.findByUsername(userDetails.getUsername()).orElse(null);
         List<Project> userProjects = projectServices.viewAllProjects(currentUser);
+        List<Project> sharedProjects = projectServices.viewAllSharedProjects(currentUser);
         model.addAttribute("user",currentUser);
         model.addAttribute("projects",userProjects);
+        model.addAttribute("sharedProjects",sharedProjects);
         return "dashboard";
     }
 
@@ -57,10 +59,16 @@ public class DashboardController {
     }
 
     @PostMapping("/project/edit-project")
-    public String editProject(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("edit-id")int id, @RequestParam("edit-name")String projectName, @RequestParam("edit-description")String projectDescription, RedirectAttributes redirectAttributes){
+    public String editProject(@AuthenticationPrincipal UserDetails userDetails, @RequestParam("edit-id")int id, @RequestParam("edit-name")String projectName, @RequestParam("edit-description")String projectDescription, @RequestParam("edit-shared-users") List<String> sharedUsers, RedirectAttributes redirectAttributes){
+
+        if(!(projectRepository.findById(id).get().getSharedUsers().contains(sharedUsers))){
+            projectServices.updateSharedUser(id, sharedUsers,redirectAttributes);
+        }
+
         if(!(projectRepository.findById(id).get().getProjectName().equals(projectName))){
             projectServices.editProjectName(id, projectName, redirectAttributes);
         }
+
         projectServices.editProjectDescription(id, projectDescription, redirectAttributes);
         return "redirect:/dashboard";
     }

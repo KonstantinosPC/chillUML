@@ -1,7 +1,9 @@
 package chill.guys.chillUML.domain;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "projects")
@@ -26,6 +28,10 @@ public class Project {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CRC> crcList;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "shared_users",joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> sharedUsers = new HashSet<>();
 
 
     public int getId() {
@@ -78,5 +84,17 @@ public class Project {
 
     public void addUseCase(UseCase useCase){
         this.useCases.add(useCase);
+    }
+
+    public Set<User> getSharedUsers() {
+        return sharedUsers;
+    }
+
+    public void setSharedUsers(Set<User> sharedUsers) {
+        this.sharedUsers = sharedUsers;
+    }
+
+    public void addSharedUser(User sharedUser){
+        this.sharedUsers.add(sharedUser);
     }
 }
