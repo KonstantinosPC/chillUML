@@ -12,7 +12,7 @@ public interface ProjectServices {
     public void createProject(ProjectDTO projectDTO, RedirectAttributes redirectAttributes);
     public List<Project> viewAllProjects(User ownerId);
     public List<Project> viewAllSharedProjects(User sharedId);
-    public void updateSharedUser(int projectId, List<String> sharedUsers, RedirectAttributes redirectAttributes);
+    public void updateSharedUser(int projectId, List<String> sharedUsersEmails, RedirectAttributes redirectAttributes);
     public void deleteProject(int project_id);
     public void editProjectName(int projectID,String newName, RedirectAttributes redirectAttributes);
     public void editProjectDescription(int projectID,String newDescription,RedirectAttributes redirectAttributes);

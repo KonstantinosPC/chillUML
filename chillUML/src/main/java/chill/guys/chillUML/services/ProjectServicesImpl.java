@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProjectServicesImpl implements ProjectServices{
@@ -65,25 +63,38 @@ public class ProjectServicesImpl implements ProjectServices{
     }
 
     @Override
-    public void updateSharedUser(int projectId, List<String> sharedUsers, RedirectAttributes redirectAttributes){
+    public void updateSharedUser(int projectId, List<String> sharedUsersEmails, RedirectAttributes redirectAttributes){
         Project project = projectRepository.findById(projectId).get();
-        if(sharedUsers.isEmpty()){
-            return;
+        if (sharedUsersEmails == null) {
+            sharedUsersEmails = new ArrayList<>();
         }
 
-        for(String user : sharedUsers){
-            Optional<User> userToAdd = userServices.findByEmail(user);
-            if(userToAdd.isEmpty()){
-                redirectAttributes.addFlashAttribute("error","There is no user with this email<br>" + user);
+        Set<User> incomingUsers = new HashSet<>();
+        for (String email : sharedUsersEmails) {
+            if (email.trim().isEmpty()) continue;
+
+            Optional<User> userOpt = userServices.findByEmail(email);
+            if (userOpt.isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "There is no user with this email:<br>" + email);
                 return;
             }
-
-            if(!project.getSharedUsers().contains(userToAdd.get())){
-                project.addSharedUser(userToAdd.get());
-            }
-
+            incomingUsers.add(userOpt.get());
         }
 
+        Set<User> currentSharedUsers = new HashSet<>(project.getSharedUsers());
+
+        for (User currentUser : currentSharedUsers) {
+            if (!incomingUsers.contains(currentUser)) {
+                project.getSharedUsers().remove(currentUser);
+            }
+        }
+
+        for (User incomingUser : incomingUsers) {
+            if (!currentSharedUsers.contains(incomingUser)) {
+                project.addSharedUser(incomingUser);
+            }
+        }
+        projectRepository.save(project);
         return;
     }
 

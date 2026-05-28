@@ -63,6 +63,7 @@ public class DashboardController {
 
         if(!(projectRepository.findById(id).get().getSharedUsers().contains(sharedUsers))){
             projectServices.updateSharedUser(id, sharedUsers,redirectAttributes);
+            redirectAttributes.addFlashAttribute("success", "Updated Shared Users List");
         }
 
         if(!(projectRepository.findById(id).get().getProjectName().equals(projectName))){

@@ -90,7 +90,7 @@ public class ProjectController {
 
     @PostMapping("/project/create-uc/{owner}/{name}")
     public String createUC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @PathVariable String name, @ModelAttribute UseCaseDTO useCaseDTO, RedirectAttributes redirectAttributes){
-        if(!userDetails.getUsername().equals(owner)){
+        if(!userDetails.getUsername().equals(owner) && projectRepository.findByIdAndSharedUsersContains(projectRepository.findByProjectName(name).get().getId(), userServices.findByUsername(userDetails.getUsername()).get()).isEmpty()){
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
             return "redirect:/project/{owner}/{name}";
         }
@@ -109,7 +109,7 @@ public class ProjectController {
 
     @PostMapping("/project/edit-uc/{owner}/{name}")
     public String editUC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @RequestParam("edit-uc-id") int useCaseId, @PathVariable String name, @ModelAttribute UseCaseDTO useCaseDTO, RedirectAttributes redirectAttributes){
-        if(!userDetails.getUsername().equals(owner)){
+        if(!userDetails.getUsername().equals(owner) && projectRepository.findByIdAndSharedUsersContains(projectRepository.findByProjectName(name).get().getId(), userServices.findByUsername(userDetails.getUsername()).get()).isEmpty()){
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
             return "redirect:/project/{owner}/{name}";
         }
@@ -167,7 +167,7 @@ public class ProjectController {
 
     @PostMapping("/project/delete-uc/{owner}/{name}")
     public String deleteUC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @RequestParam("usecaseId") String useCaseId, @PathVariable String name, RedirectAttributes redirectAttributes){
-        if(!userDetails.getUsername().equals(owner)){
+        if(!userDetails.getUsername().equals(owner) && projectRepository.findByIdAndSharedUsersContains(projectRepository.findByProjectName(name).get().getId(), userServices.findByUsername(userDetails.getUsername()).get()).isEmpty()){
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
             return "redirect:/project/{owner}/{name}";
         }
@@ -179,7 +179,7 @@ public class ProjectController {
 
     @PostMapping("/project/create-crc/{owner}/{name}")
     public String createCRC(@PathVariable String owner, @PathVariable String name, @ModelAttribute CrcDTO crcDTO, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes){
-        if(!userDetails.getUsername().equals(owner)){
+        if(!userDetails.getUsername().equals(owner) && projectRepository.findByIdAndSharedUsersContains(projectRepository.findByProjectName(name).get().getId(), userServices.findByUsername(userDetails.getUsername()).get()).isEmpty()){
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
             return "redirect:/project/{owner}/{name}";
         }
@@ -191,7 +191,7 @@ public class ProjectController {
 
     @PostMapping("/project/edit-crc/{owner}/{name}")
     public String editCRC(@PathVariable String owner, @PathVariable String name, @ModelAttribute CrcDTO crcDTO, @RequestParam("crcId") String crcId, @AuthenticationPrincipal UserDetails userDetails, RedirectAttributes redirectAttributes){
-        if(!userDetails.getUsername().equals(owner)){
+        if(!userDetails.getUsername().equals(owner) && projectRepository.findByIdAndSharedUsersContains(projectRepository.findByProjectName(name).get().getId(), userServices.findByUsername(userDetails.getUsername()).get()).isEmpty()){
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
             return "redirect:/project/{owner}/{name}";
         }
@@ -230,7 +230,7 @@ public class ProjectController {
 
     @PostMapping("/project/delete-crc/{owner}/{name}")
     public String deleteCRC(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @RequestParam("crcId") String crcId, @PathVariable String name, RedirectAttributes redirectAttributes){
-        if(!userDetails.getUsername().equals(owner)){
+        if(!userDetails.getUsername().equals(owner) && projectRepository.findByIdAndSharedUsersContains(projectRepository.findByProjectName(name).get().getId(), userServices.findByUsername(userDetails.getUsername()).get()).isEmpty()){
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
             return "redirect:/project/{owner}/{name}";
         }
@@ -240,7 +240,7 @@ public class ProjectController {
 
     @PostMapping("/project/gen-code/{owner}/{name}")
     public String generateCode(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String owner, @PathVariable String name, @RequestParam("website") String website, @RequestParam("umltype") String umltype, Model model, RedirectAttributes redirectAttributes){
-        if(!userDetails.getUsername().equals(owner)){
+        if(!userDetails.getUsername().equals(owner) && projectRepository.findByIdAndSharedUsersContains(projectRepository.findByProjectName(name).get().getId(), userServices.findByUsername(userDetails.getUsername()).get()).isEmpty()){
             redirectAttributes.addFlashAttribute("critical", "This project isn't yours");
             return "redirect:/project/{owner}/{name}";
         }
